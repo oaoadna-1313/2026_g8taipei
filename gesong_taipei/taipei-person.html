@@ -1,0 +1,1458 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>【八上閱思龍門】歌SONG臺北・音樂地誌互動教學平台</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Noto Serif TC & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Noto Serif TC"', 'serif'],
+            sans: ['"Noto Sans TC"', 'sans-serif'],
+            kaiti: ['"DFKai-SB"', '"BiauKai"', '"KaiTi"', 'serif']
+          },
+          keyframes: {
+            spin_slow: {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' }
+            },
+            pulse_soft: {
+              '0%, 100%': { opacity: 1, transform: 'scale(1)' },
+              '50%': { opacity: 0.85, transform: 'scale(1.03)' }
+            }
+          },
+          animation: {
+            'spin-slow': 'spin_slow 18s linear infinite',
+            'pulse-soft': 'pulse_soft 2s ease-in-out infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom handwriting font style for teacher answers */
+    .font-handwriting {
+      font-family: "DFKai-SB", "BiauKai", "KaiTi", "Noto Serif TC", serif;
+      letter-spacing: 0.08em;
+    }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    
+    /* Blank box styles */
+    .blank-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 4rem;
+      min-height: 2.1rem;
+      padding: 0.15rem 0.6rem;
+      margin: 0.15rem 0.25rem;
+      background-color: #ffffff;
+      border: 1.5px solid #94a3b8;
+      border-radius: 0.375rem;
+      vertical-align: middle;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+    .blank-box:hover {
+      border-color: #8b5cf6;
+      background-color: #f5f3ff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.15);
+    }
+    .blank-box.revealed {
+      border-color: #fca5a5;
+      background-color: #fff1f2;
+      box-shadow: 0 1px 3px 0 rgba(225, 29, 72, 0.1);
+    }
+    .blank-box.revealed:hover {
+      border-color: #f87171;
+      background-color: #ffe4e6;
+    }
+    
+    /* Print optimizations */
+    @media print {
+      header, footer, .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .worksheet-card {
+        border: 2px solid #000000 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+      .blank-box {
+        border: 1.5px solid #000000 !important;
+        background: transparent !important;
+      }
+      .blank-box.revealed .revealed-text {
+        color: #dc2626 !important;
+      }
+    }
+    
+    /* Vinyl arm pivot */
+    .vinyl-arm {
+      transform-origin: 85% 15%;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .vinyl-arm.playing {
+      transform: rotate(26deg);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-purple-100 selection:text-purple-900">
+
+  <!-- ==================== STICKY HEADER (yuesilongmen-web-title-spec) ==================== -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Brand & Title (閱思龍門標準品牌標題) -->
+      <div class="flex items-center space-x-3">
+        <a href="index.html" class="flex items-center space-x-2 group" title="返回歌SONG臺北教學首頁">
+          <img src="assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-10 h-10 object-contain rounded-full shadow-sm group-hover:rotate-12 transition-transform duration-300">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-serif font-bold text-lg sm:text-xl text-slate-900 tracking-wide">歌SONG臺北</span>
+              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">八上閱思龍門・音樂地誌</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium hidden md:block">聆聽城市心跳・穿梭流行金曲與臺北地誌記憶</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Reveal All Toggle -->
+        <button id="toggleAllBtn" onclick="toggleAllBlanks()" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 shadow-xs cursor-pointer active:scale-95">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span id="toggleAllBtnText">一鍵揭曉教師版</span>
+        </button>
+        <!-- Reset Blanks -->
+        <button onclick="resetAllBlanks()" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 shadow-xs cursor-pointer active:scale-95">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span class="hidden sm:inline">重置空白</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full space-y-6">
+
+    <!-- Top Banner & Song Carousel Selector -->
+    <div class="bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 rounded-2xl p-5 sm:p-6 text-white shadow-xl relative overflow-hidden">
+      <!-- Background Decorative Lights -->
+      <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute right-1/3 -top-10 w-48 h-48 bg-pink-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 relative z-10">
+        <!-- Left: Logo Banner -->
+        <div class="flex items-center gap-4">
+          <img src="assets/logo-gesong-taipei.png" alt="歌SONG臺北" class="h-12 sm:h-16 w-auto object-contain filter drop-shadow-md">
+          <div class="hidden sm:block border-l border-white/20 pl-4">
+            <h1 class="text-sm sm:text-base font-serif font-bold text-purple-200 tracking-wide">臺北城市聲響與地誌文學</h1>
+            <p class="text-xs text-slate-300 mt-0.5">點選下方歌曲卡片，邊聽音樂邊完成歌詞填空與深度鑑賞</p>
+          </div>
+        </div>
+
+        <!-- Right: Status / Teacher Mode Badge -->
+        <div class="flex items-center gap-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-purple-200">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span id="currentModeLabel">學生自修填空模式</span>
+          </div>
+          <a href="#reflectionSec" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-600/80 hover:bg-purple-600 text-xs font-semibold text-white transition-all">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>心得探究區</span>
+          </a>
+        </div>
+      </div>
+
+            <!-- Song Navigation & Worksheet Quick Action Bar -->
+      <div class="mt-5 pt-4 border-t border-white/15 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <!-- Left: Song Navigation Pills / Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none flex-1 min-w-0" id="songTabsContainer">
+          <!-- Rendered via JS -->
+        </div>
+
+        <!-- Right (紅框處): 學用學習單 與 教用學習單 按鈕 -->
+        <div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+          <button type="button" onclick="openWorksheetModal('student')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 bg-amber-500/25 hover:bg-amber-500/40 text-amber-100 border border-amber-400/50 hover:border-amber-300 shadow-sm hover:shadow active:scale-95 cursor-pointer" title="查看或下載學用學習單PDF">
+            <i class="fa-solid fa-file-pen text-amber-300 text-xs"></i>
+            <span>學用學習單</span>
+          </button>
+          <button type="button" onclick="openWorksheetModal('teacher')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 bg-rose-500/25 hover:bg-rose-500/40 text-rose-100 border border-rose-400/50 hover:border-rose-300 shadow-sm hover:shadow active:scale-95 cursor-pointer" title="查看或下載教用學習單PDF（教師版）">
+            <i class="fa-solid fa-graduation-cap text-rose-300 text-xs"></i>
+            <span>教用學習單</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Song Hero & Core Teaching Board (Grid Layout) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- Left Column: Audio Player & Song Info Card (Sticky on desktop, 4 cols) -->
+      <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-24">
+
+        <!-- ==================== PLAYER CARD ==================== -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
+          <!-- Card Header & Mood Badge -->
+          <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
+            <div class="flex items-center space-x-2">
+              <span id="playerOrderBadge" class="px-2 py-0.5 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">第一曲</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="playerTagBadge" class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-amber-100 text-amber-800">治癒系</span>
+              <!-- MV Switch Button if video available -->
+              <button id="videoToggleBtn" onclick="toggleVideoMode()" class="hidden px-2 py-0.5 text-xs font-bold rounded-md bg-rose-600 hover:bg-rose-700 text-white transition-colors cursor-pointer flex items-center gap-1 shadow-xs" title="切換MV視頻播放">
+                <i class="fa-solid fa-video"></i>
+                <span id="videoToggleText">MV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Player Body: Visualizer / Vinyl Record -->
+          <div class="p-6 flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-950 text-white relative overflow-hidden">
+            <!-- Background Glow -->
+            <div id="playerGlow" class="absolute w-44 h-44 bg-purple-500/25 rounded-full blur-3xl transition-all duration-500 pointer-events-none"></div>
+
+            <!-- Video Player Container (Hidden by default) -->
+            <div id="videoContainer" class="hidden w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner mb-4 relative z-10">
+              <video id="videoPlayer" class="w-full h-full object-contain" controls>
+                您的瀏覽器不支援影片播放。
+              </video>
+            </div>
+
+            <!-- Vinyl Record Turntable Animation (Shown in audio mode) -->
+            <div id="vinylContainer" class="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center my-2 select-none z-10">
+              <!-- Vinyl Disc -->
+              <div id="vinylDisc" class="w-full h-full rounded-full bg-slate-950 border-4 border-slate-800 shadow-2xl flex items-center justify-center relative overflow-hidden transition-transform duration-500">
+                <!-- Concentric Grooves -->
+                <div class="absolute inset-2 rounded-full border border-slate-800/80"></div>
+                <div class="absolute inset-5 rounded-full border border-slate-800/60"></div>
+                <div class="absolute inset-8 rounded-full border border-slate-800/40"></div>
+                <div class="absolute inset-12 rounded-full border border-slate-800/30"></div>
+                <!-- Vinyl Label (Center) -->
+                <div id="vinylLabel" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 flex flex-col items-center justify-center text-center p-2 shadow-inner border-2 border-white/20">
+                  <i class="fa-solid fa-music text-white text-base drop-shadow"></i>
+                  <span id="vinylSongTitle" class="text-[10px] font-bold text-white tracking-tight line-clamp-1 mt-0.5">台北天晴</span>
+                </div>
+                <!-- Center Hole -->
+                <div class="absolute w-3.5 h-3.5 rounded-full bg-slate-950 border border-slate-700 shadow-inner"></div>
+              </div>
+
+              <!-- Turntable Needle Arm -->
+              <div id="vinylArm" class="vinyl-arm absolute -top-4 right-2 w-14 h-32 pointer-events-none z-20">
+                <div class="w-4 h-4 rounded-full bg-slate-400 border border-slate-300 shadow absolute top-0 right-0"></div>
+                <div class="w-1.5 h-24 bg-gradient-to-b from-slate-300 to-slate-400 shadow rounded-full absolute top-2 right-1.5 transform rotate-6"></div>
+                <div class="w-3 h-5 bg-rose-500 rounded-sm shadow absolute bottom-4 right-3.5 border border-white/20"></div>
+              </div>
+            </div>
+
+            <!-- Song Title & Artist -->
+            <div class="text-center mt-3 z-10">
+              <h2 id="playerSongTitle" class="text-xl sm:text-2xl font-serif font-black text-white tracking-wide">台北天晴</h2>
+              <p id="playerArtist" class="text-xs sm:text-sm text-purple-200 mt-1 font-medium">演唱：嚴正嵐・2014</p>
+            </div>
+
+            <!-- Progress Bar & Scrubber -->
+            <div class="w-full mt-5 space-y-1.5 z-10">
+              <div class="relative w-full h-2 bg-slate-800 rounded-full cursor-pointer group" id="progressBarContainer" onclick="seekAudio(event)">
+                <div id="progressBar" class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-0 transition-all duration-100 group-hover:brightness-110"></div>
+                <!-- Scrubber Handle -->
+                <div id="progressHandle" class="absolute top-1/2 -translate-y-1/2 -ml-1.5 w-3.5 h-3.5 bg-white rounded-full shadow-md border border-purple-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+              </div>
+              <!-- Time Readout -->
+              <div class="flex justify-between items-center text-[11px] font-mono text-slate-400">
+                <span id="currentTime">00:00</span>
+                <span id="totalDuration">--:--</span>
+              </div>
+            </div>
+
+            <!-- Playback Control Buttons -->
+            <div class="flex items-center justify-center gap-4 mt-4 z-10">
+              <!-- Rewind 5s -->
+              <button onclick="skipTime(-5)" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all flex items-center justify-center text-xs cursor-pointer active:scale-90" title="倒退 5 秒">
+                <i class="fa-solid fa-rotate-left"></i>
+              </button>
+              <!-- Prev Song -->
+              <button onclick="prevSong()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all flex items-center justify-center text-xs cursor-pointer active:scale-90" title="上一首">
+                <i class="fa-solid fa-backward-step"></i>
+              </button>
+              <!-- Play / Pause Main Button -->
+              <button id="playPauseBtn" onclick="togglePlayPause()" class="w-14 h-14 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg shadow-purple-500/30 transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center text-xl cursor-pointer" title="播放 / 暫停">
+                <i id="playIcon" class="fa-solid fa-play ml-1"></i>
+              </button>
+              <!-- Next Song -->
+              <button onclick="nextSong()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all flex items-center justify-center text-xs cursor-pointer active:scale-90" title="下一首">
+                <i class="fa-solid fa-forward-step"></i>
+              </button>
+              <!-- Forward 5s -->
+              <button onclick="skipTime(5)" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all flex items-center justify-center text-xs cursor-pointer active:scale-90" title="快進 5 秒">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
+            </div>
+
+            <!-- Bottom Secondary Bar: Volume & Speed -->
+            <div class="flex items-center justify-between w-full mt-4 pt-3 border-t border-white/10 text-xs text-slate-300 z-10">
+              <!-- Volume Control -->
+              <div class="flex items-center space-x-2">
+                <button onclick="toggleMute()" class="text-slate-300 hover:text-white text-xs cursor-pointer" id="muteBtn" title="靜音切換">
+                  <i id="volumeIcon" class="fa-solid fa-volume-high"></i>
+                </button>
+                <input id="volumeSlider" type="range" min="0" max="1" step="0.05" value="0.9" oninput="changeVolume(this.value)" class="w-16 sm:w-20 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-400">
+              </div>
+
+              <!-- Speed Selector -->
+              <div class="flex items-center space-x-1">
+                <span class="text-[11px] text-slate-400 mr-1">倍速:</span>
+                <button onclick="setSpeed(0.8, this)" class="speed-btn px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/10 hover:bg-white/20 text-slate-300">0.8x</button>
+                <button onclick="setSpeed(1.0, this)" class="speed-btn px-1.5 py-0.5 rounded text-[10px] font-mono bg-purple-600 text-white font-bold">1.0x</button>
+                <button onclick="setSpeed(1.2, this)" class="speed-btn px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/10 hover:bg-white/20 text-slate-300">1.2x</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Song Meta & Geopoetic Background Description -->
+          <div class="p-5 space-y-3 bg-white">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-info text-purple-600"></i>
+              <span>歌曲背景與地誌導讀</span>
+            </h3>
+            <p id="playerSongIntro" class="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
+              這座城市有著吐不完的苦水，但也有著大好天空值得我們去積累。下過雨後的臺北，空氣洗去塵埃，張開雙臂迎向天晴，體現青春在挫折中尋覓希望的堅韌。
+            </p>
+            <div class="pt-2 border-t border-slate-100 flex flex-wrap gap-y-1 text-[11px] text-slate-500">
+              <span class="w-1/2" id="metaLyricist">作詞：嚴正嵐</span>
+              <span class="w-1/2" id="metaComposer">作曲：嚴正嵐</span>
+              <span class="w-1/2" id="metaArtist">演唱：嚴正嵐</span>
+              <span class="w-1/2" id="metaYear">發行：2014-11</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Switch Checklist (7 Songs Grid) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+          <h4 class="text-xs font-bold text-slate-600 mb-2.5 flex items-center justify-between">
+            <span class="flex items-center gap-1.5">
+              <i class="fa-solid fa-list-check text-indigo-600"></i>
+              <span>全系列歌曲學習地圖 (7首)</span>
+            </span>
+            <span class="text-[11px] text-purple-600 font-semibold" id="overallCompletion">進度 0/7</span>
+          </h4>
+          <div class="space-y-1.5" id="songListMenu">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Interactive Worksheet (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- ==================== WORKSHEET CARD ==================== -->
+        <div class="worksheet-card bg-white rounded-2xl border-2 border-slate-800 shadow-lg p-5 sm:p-8 relative transition-all duration-300">
+
+          <!-- Worksheet Top Header -->
+          <div class="flex items-center justify-between border-b-2 border-slate-800 pb-4 mb-6">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-serif font-black text-xl shadow-xs">
+                <i class="fa-solid fa-folder-open text-base"></i>
+              </div>
+              <div>
+                <h2 id="sheetTitle" class="text-xl sm:text-2xl font-serif font-black text-slate-900 tracking-wide">【台北天晴】</h2>
+                <p id="sheetCredits" class="text-xs text-slate-600 mt-1">作詞：嚴正嵐  作曲：嚴正嵐  演唱：嚴正嵐  2014-11</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lyrics Display Area -->
+          <div class="space-y-4 text-base sm:text-lg leading-loose font-serif text-slate-800 tracking-wide" id="lyricsContainer">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Vocabulary Section (查一查，下面的詞語是什麼意思？) -->
+          <div id="vocabSection" class="mt-8 pt-6 border-t-2 border-dashed border-slate-300">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="text-lg text-purple-700"><i class="fa-solid fa-book-open"></i></span>
+              <h3 class="font-serif font-bold text-base sm:text-lg text-slate-900">查一查，下面的詞語是什麼意思？</h3>
+            </div>
+            <div class="space-y-4" id="vocabContainer">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Worksheet Thinking Questions Section (找一找、想一想、說一說) -->
+          <div id="reflectionSec" class="mt-8 pt-6 border-t-2 border-slate-800 space-y-5">
+            <!-- Header Row: Title on Left, Student Info on Right -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <h3 class="font-serif font-bold text-base sm:text-lg text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-comments text-indigo-600"></i>
+                <span>課堂深層探究與回饋分享</span>
+              </h3>
+
+              <!-- Student Info Fields (班級、座號、姓名) -->
+              <div class="flex items-center gap-2 sm:gap-3 text-xs font-medium text-slate-700 bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-lg shadow-2xs self-start sm:self-auto">
+                <div class="flex items-center">
+                  <span>班級：</span>
+                  <input type="text" id="stuClass" placeholder="如 801" oninput="saveStudentInfo('class', this.value)" class="w-14 px-1.5 py-0.5 text-xs bg-white border-b-2 border-slate-400 focus:border-purple-600 focus:outline-none text-center font-bold font-sans">
+                </div>
+                <div class="flex items-center">
+                  <span>座號：</span>
+                  <input type="text" id="stuSeat" placeholder="如 08" oninput="saveStudentInfo('seat', this.value)" class="w-12 px-1.5 py-0.5 text-xs bg-white border-b-2 border-slate-400 focus:border-purple-600 focus:outline-none text-center font-bold font-sans">
+                </div>
+                <div class="flex items-center">
+                  <span>姓名：</span>
+                  <input type="text" id="stuName" placeholder="如 王小明" oninput="saveStudentInfo('name', this.value)" class="w-20 px-1.5 py-0.5 text-xs bg-white border-b-2 border-slate-400 focus:border-purple-600 focus:outline-none text-center font-bold font-sans">
+                </div>
+              </div>
+            </div>
+
+            <!-- Question 1 & 2 Dual Columns -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Q1 -->
+              <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                <label class="font-serif font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                  <i class="fa-regular fa-folder text-purple-600"></i>
+                  <span>找一找，這首歌不錯的句子有哪些？</span>
+                </label>
+                <textarea id="q1Input" rows="3" placeholder="請在此記錄令你感動或寫作精妙的歌詞金句..." oninput="saveNote('q1', this.value)" class="w-full text-xs sm:text-sm bg-white border border-slate-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none font-sans"></textarea>
+              </div>
+
+              <!-- Q2 -->
+              <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                <label class="font-serif font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                  <i class="fa-regular fa-folder text-purple-600"></i>
+                  <span>想一想，這首歌想表達什麼？</span>
+                </label>
+                <textarea id="q2Input" rows="3" placeholder="請寫下創作者透過旋律與歌詞傳遞的情感核心..." oninput="saveNote('q2', this.value)" class="w-full text-xs sm:text-sm bg-white border border-slate-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none font-sans"></textarea>
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+              <label class="font-serif font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                <i class="fa-regular fa-folder text-purple-600"></i>
+                <span>說一說，聽完這首歌你有什麼感想？</span>
+              </label>
+              <textarea id="q3Input" rows="2" placeholder="談談你在旋律或歌詞裡看見了什麼樣的臺北？或是引發了你的何種生活共鳴？" oninput="saveNote('q3', this.value)" class="w-full text-xs sm:text-sm bg-white border border-slate-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none font-sans"></textarea>
+            </div>
+
+            <!-- Emotion Chips -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2.5">
+              <label class="font-serif font-bold text-xs sm:text-sm text-slate-800 flex items-center gap-1.5">
+                <i class="fa-regular fa-folder text-purple-600"></i>
+                <span>這首歌讓我覺得：</span>
+              </label>
+              <div class="flex flex-wrap gap-2 text-xs" id="emotionContainer">
+                <button onclick="toggleEmotion(this, '很開心')" class="emotion-chip px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-amber-50 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer">
+                  <span>😊</span>
+                  <span>很開心</span>
+                </button>
+                <button onclick="toggleEmotion(this, '溫馨感動')" class="emotion-chip px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-rose-50 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer">
+                  <span>💖</span>
+                  <span>溫馨感動</span>
+                </button>
+                <button onclick="toggleEmotion(this, '有啟發')" class="emotion-chip px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer">
+                  <span>💡</span>
+                  <span>有啟發</span>
+                </button>
+                <button onclick="toggleEmotion(this, '拍案叫絕')" class="emotion-chip px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-indigo-50 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer">
+                  <span>👏</span>
+                  <span>拍案叫絕</span>
+                </button>
+                <button onclick="toggleEmotion(this, '很感傷')" class="emotion-chip px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-blue-50 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer">
+                  <span>😢</span>
+                  <span>很感傷</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Action footer for worksheet -->
+            <div class="flex items-center justify-between pt-3 text-xs text-slate-500 no-print">
+              <span id="savedIndicator" class="text-emerald-600 font-medium opacity-0 transition-opacity">
+                <i class="fa-solid fa-check mr-1"></i>筆記已自動儲存至本機
+              </span>
+              <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="clearCurrentNotes()" class="text-slate-400 hover:text-slate-600 underline cursor-pointer">清空本曲筆記</button>
+                <button id="copyAnswersBtn" onclick="copyCurrentAnswers()" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 shadow-xs cursor-pointer active:scale-95" title="一鍵複製題目與回答內容">
+                  <i id="copyBtnIcon" class="fa-solid fa-copy"></i>
+                  <span id="copyBtnText">一鍵複製回答</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== FOOTER (yuesilongmen-web-title-spec) ==================== -->
+  <footer class="bg-slate-100 text-slate-600 py-6 border-t border-slate-200 mt-16 print:hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Left: Logo, Title & Tagline -->
+        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3 text-center sm:text-left">
+          <div class="flex items-center space-x-2">
+            <img src="assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-8 h-8 rounded-full shadow-sm">
+            <span class="font-serif font-bold text-slate-800 text-base">八上閱思龍門・歌SONG臺北</span>
+          </div>
+          <span class="hidden sm:inline text-slate-300">|</span>
+          <span class="text-xs text-slate-500 font-medium">聆聽城市心跳・穿梭流行金曲與臺北地誌記憶</span>
+        </div>
+
+        <!-- Right: Copyright -->
+        <div class="flex flex-wrap items-center justify-center sm:justify-end gap-x-2 gap-y-0.5 text-center sm:text-right text-xs">
+          <span class="text-slate-800 font-bold shrink-0">© 2026 學思軒</span>
+          <span class="font-sans text-slate-700 font-medium tracking-wide text-xs">
+            &gt;&lt;&gt; &gt;&lt;&gt; &gt;&lt;&gt; ˙˙˙本網頁由黃于珊老師利用Google antigravity 2.0生成製作，僅供教學使用。˙˙˙&lt;&gt;&lt; &lt;&gt;&lt; &lt;&gt;&lt;
+          </span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Invisible Audio Element -->
+  <audio id="audioPlayer" preload="auto"></audio>
+
+  <!-- ==================== CLIENT LOGIC SCRIPT ==================== -->
+  <script>
+    // All Songs Data
+    const songsData = [{"id": "taipei-sunny", "title": "台北天晴", "artist": "嚴正嵐", "lyricist": "嚴正嵐", "composer": "嚴正嵐", "year": "2014-11", "album": "台北天晴 單曲", "tag": "治癒系・雨後臺北", "order": "第一曲", "sheet": "學習單 第一回", "audio": "media/taipei-sunny.mp3", "video": null, "bgGradient": "from-amber-500 via-orange-500 to-rose-500", "lightBg": "bg-amber-50/70 border-amber-200", "intro": "這座城市有著吐不完的苦水，但也有著大好天空值得我們去積累。下過雨後的臺北，空氣洗去塵埃，張開雙臂迎向天晴，體現青春在挫折中尋覓希望的堅韌。", "lyrics": [[{"t": "真心 誰給  台北 不回"}], [{"t": "這城市有著吐不完"}, {"b": "苦水", "h": "2字"}, {"t": "  到處是惹人戀愛的"}, {"b": "玫瑰", "h": "2字"}], [{"t": "渴望他從來不曾入睡  要我們去"}, {"b": "追", "h": "1字"}], [{"type": "space"}], [{"t": "張開你的"}, {"b": "雙臂", "h": "2字"}, {"t": "  這裡有大好天空飛  "}, {"b": "遍體鱗傷", "h": "4字"}, {"t": "才無悔  去"}, {"b": "積累", "h": "2字"}], [{"t": "鬆開緊"}, {"b": "皺", "h": "1字"}, {"t": "的眉  任由雨水打落在雙眼  "}, {"b": "雨過天晴", "h": "4字"}, {"t": "的台北  最美"}]], "vocab": [{"term": "遍體鱗傷", "chars": [{"c": "遍", "z": "ㄅㄧㄢˋ"}, {"c": "體", "z": "ㄊㄧˇ"}, {"c": "鱗", "z": "ㄌㄧㄣˊ"}, {"c": "傷", "z": "ㄕㄤ"}], "meaning": "滿身都是傷痕。"}, {"term": "雨過天晴", "chars": [{"c": "雨", "z": "ㄩˇ"}, {"c": "過", "z": "ㄍㄨㄛˋ"}, {"c": "天", "z": "ㄊㄧㄢ"}, {"c": "晴", "z": "ㄑㄧㄥˊ"}], "meaning": "下過雨後天空放晴。亦用以比喻經過黑暗或動亂之後轉為光明平靜。"}]}, {"id": "taipei-tune", "title": "台北調", "artist": "南西樂團", "lyricist": "南西樂團", "composer": "南西樂團", "year": "2014-11", "album": "臺北調 專輯", "tag": "律動感・都會節奏", "order": "第二曲", "sheet": "學習單 第二回", "audio": "media/taipei-tune.mp3", "video": null, "bgGradient": "from-blue-500 via-indigo-600 to-violet-600", "lightBg": "bg-blue-50/70 border-blue-200", "intro": "清早捷運進行曲、沿路單車叮噹、校園民歌與辦公室搖滾，夕陽蕭邦圓舞曲到東區disco與萬華那卡西。將多元交織的臺北生活聲響，譜寫成一首節奏分明、手舞足蹈的城市交響曲。", "lyrics": [[{"t": "清早捷運滴答滴滴唱著軍隊進行曲  沿路單車叮噹叮叮彷彿應和這匆匆"}], [{"t": "校園彈著民歌組曲  辦公室播著流行搖滾曲  唱出你的好心情"}], [{"type": "space"}], [{"t": "夕陽裡來來往往腳步踏出蕭邦圓舞曲  "}, {"b": "霓虹燈", "h": "3字"}, {"t": "照亮這城市就是你我的舞台"}], [{"t": "東區跳著disco舞曲  萬華搖著懷舊那卡西  我一點都不想停"}], [{"type": "space"}], [{"t": "這城市正在唱歌  你想要怎樣的和"}], [{"t": "這台北 什麼調 怎麼調  怎麼調 你來挑  都愛到"}, {"b": "無可救藥", "h": "4字"}], [{"type": "space"}], [{"t": "這城市正在唱歌  需要你輕聲的哼"}], [{"t": "這台北 什麼調 怎麼調  每一步 用心挑  都令人"}, {"b": "意想不到", "h": "4字"}], [{"type": "space"}], [{"t": "哦啊哦哎啊哦嘿  哦啊哦哎啊哦嘿  哦啊哦哎啊哦嘿  哦啊哦哎啊"}], [{"type": "space"}], [{"t": "這台北 什麼調 怎麼調  跟著我一起跳  快樂地"}, {"b": "手舞足蹈", "h": "4字"}], [{"t": "這台北 什麼調 怎麼調  有你有我的笑  都聽來"}, {"b": "格外美妙", "h": "4字"}]], "vocab": [{"term": "手舞足蹈", "chars": [{"c": "手", "z": "ㄕㄡˇ"}, {"c": "舞", "z": "ㄨˇ"}, {"c": "足", "z": "ㄗㄨˊ"}, {"c": "蹈", "z": "ㄉㄠˋ"}], "meaning": "手、腳舞動跳躍，形容非常高興喜悅。"}]}, {"id": "taipei-sky", "title": "台北的天空", "artist": "王芷蕾 / 李翊君", "lyricist": "陳克華", "composer": "陳復明", "year": "1985-03", "album": "台北的天空", "tag": "時代金曲・溫暖鄉愁", "order": "第三曲", "sheet": "學習單 第三回", "audio": "media/taipei-sky.mp3", "video": "media/taipei-sky.mp4", "bgGradient": "from-cyan-500 via-sky-600 to-blue-700", "lightBg": "bg-cyan-50/70 border-cyan-200", "intro": "1980年代最具代表性的臺北意象神曲。無論走過多少青春滄桑，走遍天涯異鄉，台北的天空總有我們年輕的笑容與共享的角落，是所有離人與歸人心中最深情的歸宿。", "lyrics": [[{"b": "風", "h": "1字"}, {"t": "好像倦了  "}, {"b": "雲", "h": "1字"}, {"t": "好像累了  這世界再沒有  屬於自己的"}, {"b": "夢想", "h": "2字"}], [{"t": "我走過"}, {"b": "青春", "h": "2字"}, {"t": "  我失落"}, {"b": "年少", "h": "2字"}, {"t": "  如今我又再回到  "}, {"b": "思念", "h": "2字"}, {"t": "的地方"}], [{"type": "space"}], [{"t": "台北的天空  有我"}, {"b": "年輕", "h": "2字"}, {"t": "的笑容  還有我們休息和共享的"}, {"b": "角落", "h": "2字"}], [{"t": "台北的天空  常在你我的心中  多少風雨的歲月  我只願和你  "}, {"b": "度過", "h": "2字"}], [{"type": "space"}], [{"b": "風", "h": "1字"}, {"t": "也曾溫暖  "}, {"b": "雨", "h": "1字"}, {"t": "也曾輕柔  這世界又好像  充滿熟悉的"}, {"b": "陽光", "h": "2字"}], [{"t": "我走過"}, {"b": "異鄉", "h": "2字"}, {"t": "  我走過"}, {"b": "滄桑", "h": "2字"}, {"t": "  如今我又再回到  "}, {"b": "自己", "h": "2字"}, {"t": "的地方"}], [{"type": "space"}], [{"t": "台北的天空  有我年輕的笑容  還有我們休息和共享的角落"}], [{"t": "台北的天空  常在你我的心中  多少風雨的歲月  我只願和你  度過"}]], "vocab": [{"term": "滄桑", "chars": [{"c": "滄", "z": "ㄘㄤ"}, {"c": "桑", "z": "ㄙㄤ"}], "meaning": "比喻世事變化無常。"}]}, {"id": "taipei-person", "title": "台北人", "artist": "阿超", "lyricist": "阿超", "composer": "阿超", "year": "2014-01", "album": "寂寞的台北 單曲", "tag": "深情獨白・寂寞與自由", "order": "第四曲", "sheet": "學習單 第四回", "audio": "media/taipei-person.mp3", "video": null, "bgGradient": "from-purple-600 via-fuchsia-600 to-pink-600", "lightBg": "bg-purple-50/70 border-purple-200", "intro": "以細膩敏銳的文字描摹身為臺北人的矛盾心境——沒有異鄉鄉愁，口中想念顯得空洞；繁華便利卻步調匆促。懂自由之前，往往得先學會懂寂寞。", "lyrics": [[{"t": "我來自台北  "}, {"b": "寂寞", "h": "2字"}, {"t": "的台北  這裡的人怎麼還不睡"}], [{"t": "他的宵夜  搭配你的早點  無盡地"}, {"b": "迴圈", "h": "2字"}], [{"t": "台北  "}, {"b": "嶄新", "h": "2字"}, {"t": "的一天  上班族奔忙著疲倦  走不完斑馬線  你在等誰"}], [{"type": "space"}], [{"t": "沒有"}, {"b": "鄉愁", "h": "2字"}, {"t": "的我  口中的想念顯得空洞  只能找個假期出遠門走走"}], [{"t": "站在陌生的路口  想像著你說的"}, {"b": "遼闊", "h": "2字"}, {"t": "  寫張明信片給我  在台北的我"}], [{"type": "space"}], [{"t": "你到了台北  這樣的台北  不眠的夜  "}, {"b": "喧鬧", "h": "2字"}, {"t": "的街"}], [{"t": "美麗的臉帶著"}, {"b": "侵略", "h": "2字"}, {"t": "氣味  靠近你身邊"}], [{"type": "space"}], [{"t": "台北  繁華的危險  全天候"}, {"b": "盛放", "h": "2字"}, {"t": "的方便  你是否會懷念  那個從前"}], [{"type": "space"}], [{"t": "沒有鄉愁的我  口中的想念顯得空洞  只能找個假期出遠門走走"}], [{"t": "站在陌生的路口  想像著你說的遼闊  寫張明信片給我  在台北的我"}], [{"type": "space"}], [{"t": "啦啦啦啦啦啦啦啦  原來懂"}, {"b": "自由", "h": "2字"}, {"t": "  啦啦啦啦啦啦啦啦  是先懂"}, {"b": "寂寞", "h": "2字"}], [{"t": "當歷史不能再從頭  還能為明天做什麼"}], [{"t": "記得你曾說過  讓我們"}, {"b": "離家出走", "h": "4字"}], [{"type": "space"}], [{"t": "記得你曾說過  讓我們"}, {"b": "離家出走", "h": "4字"}]], "vocab": []}, {"id": "taipei-crash", "title": "台北直直撞", "artist": "李英宏 aka DJ Didilong", "lyricist": "李英宏", "composer": "李英宏", "year": "2016-05", "album": "台北直直撞 專輯", "tag": "嘻哈潮流・都會叢林現形記", "order": "第五曲", "sheet": "學習單 第五回", "audio": "media/taipei-crash.mp3", "video": "media/taipei-crash.mp4", "bgGradient": "from-red-600 via-rose-600 to-amber-600", "lightBg": "bg-rose-50/70 border-rose-200", "intro": "以台語饒舌混合復古迪斯可與放克，生動刻畫市民大道、基隆路尖峰塞車的焦躁，與高房價、22K青年在大富翁般金錢遊戲中的生存困境，犀利幽默、節奏極強。", "lyrics": [[{"t": "我直直撞 我直直撞 我直直撞 我直直撞 我直直撞 我直直撞 我直直撞 我直直撞"}], [{"type": "space"}], [{"t": "Crussin' Down The Street With My Moto"}], [{"t": "台北市的馬路總是坑坑洞洞  一路上的綠燈把握時間穿梭"}], [{"t": "我家的方向就在 WEST WEST YO  騎進市民大道像是進入災區"}], [{"t": "節奏太緊急像死亡要逼近  基隆路是一條 不能靠近的禁地 我不需要成為其中阻塞的血液"}], [{"t": "AWW 禮拜五的晚上 趕路的朋友們 都市的心臟 血壓升高吧 Pump it up 繼續的塞吧 大聲罵"}], [{"t": "AWW 禮拜五的晚上 趕路的朋友們 都市的心臟 血壓升高吧 Pump it up 繼續的塞吧 大聲罵"}], [{"type": "space"}], [{"t": "我直直撞 我直直撞 我直直撞 我直直撞 我直直撞 我直直撞 我直直撞 我直直撞"}], [{"t": "台北 直直撞  台北 直直撞  台北 直直撞  台北 直直撞"}], [{"t": "台北 直直撞  台北 直直撞  台北 直直撞  台北 直直撞"}], [{"type": "space"}], [{"t": "整個台北的土地蓋的直直撞  22K 的數字買不起任何一棟"}], [{"t": "這樣的遊戲好比在玩大富翁  奢華的賓利停在松江路的恩主公"}], [{"t": "WOW 這個都市裡 進步的科技多了一隻眼睛  讓我看到了野蠻的文明 同時辦到了把它當作武器"}], [{"t": "大馬路上我們都心急  按喇叭會破壞我們心情  為了生活突然靠邊停 差點車禍講了三字經 喔"}], [{"type": "space"}], [{"t": "我直直撞 我直直撞 我直直撞 我直直撞 我直直撞 我直直撞 我直直撞 我直直撞"}], [{"t": "台北 直直撞  台北 直直撞  台北 直直撞  台北 直直撞"}], [{"t": "台北 直直撞  台北 直直撞  台北 直直撞  台北 直直撞"}]], "vocab": []}, {"id": "moving-forward", "title": "向前走", "artist": "林強", "lyricist": "林強", "composer": "林強", "year": "1990-12", "album": "向前走 專輯", "tag": "經典台語搖滾・北漂打拚精神", "order": "延伸探索", "sheet": "教材特輯", "audio": "media/moving-forward.mp3", "video": null, "bgGradient": "from-emerald-600 via-teal-600 to-cyan-700", "lightBg": "bg-emerald-50/70 border-emerald-200", "intro": "台灣新音樂運動里程碑！告別故鄉彰化、搭上北上列車的熱血青年，在「台北車頭到了啦」的廣播聲中迎向現代都會與未知挑戰，鼓舞無數離鄉追夢人的心。", "lyrics": [[{"t": "<span class=\"w-5 h-5 rounded bg-purple-100 text-purple-800 text-xs font-bold inline-flex items-center justify-center mr-1.5 select-none font-sans\">A</span>火車漸漸在啟動 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[火車漸漸欲起行]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Hué-tshia tsiām-tsiām beh khí-kiânn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>再會我的故鄉和親戚 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[再會我的故鄉佮親情]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Tsài-huē guá ê kòo-hiong kap tshin-tsiânn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>親愛的父母再會吧 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[親愛的父母再會吧]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Tshin-ài ê pe-bú tsài-huē--lah", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>一起的朋友告辭啦 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[鬥陣的朋友告辭啦]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Tàu-tīn ê pîng-iú kò-sî--lah", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>我要去台北奮鬥 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[阮欲來去台北拍拼]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Guá beh lâi khì Tâi-pak phah-piànn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>據說那裡什麼都好 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[聽人講瞎米好康的攏佇遐]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Thiann lâng kóng siánn-mi̍h hó-khang--ê lóng tī hia", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>朋友笑我是愛做白日夢的傻子 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[朋友笑我是愛做眠夢的憨囝]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Pîng-iú tshiò guá sī ài tsuè bîn-bāng ê gōng-kiánn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>不管如何 路是自己走 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[不管如何 路是家己走]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Put-kuán jû-hô, lōo sī ka-tī kiânn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"type": "space"}], [{"t": "<span class=\"w-5 h-5 rounded bg-purple-100 text-purple-800 text-xs font-bold inline-flex items-center justify-center mr-1.5 select-none font-sans\">B</span>OH!再會吧! ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!再會吧]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Tsài-huē lah!", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!什麼都不怕 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!啥咪攏毋驚]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Siánn-mi̍h lóng m̄ kiann", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!再會吧! ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!再會吧]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Tsài-huē lah!", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!向前行 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!向前行]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Hiòng tsiân kiânn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"type": "space"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>車站一站一站過去啦 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[車站一站一站過去啦]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Tshia-tsām tsi̍t-tsām tsi̍t-tsām kuè--khì lah", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>風景一幕一幕好像電影 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[風景一幕一幕親像電影]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Hong-kíng tsi̍t-bōo tsi̍t-bōo tshin-tshiūnn tiān-iánn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>把自己當作是男主角來演 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[把自己當作是男主角來搬]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Kā ka-tī tòng-tsuè sī lâm-tsú-kak lâi puann", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>雲遊四海可比是小飛俠 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[雲遊四海可比是小飛俠]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Hûn-iû sù-hái khó-pí sī 『小飛俠』", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>不管是幼稚還是樂觀 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[不管是幼稚也是樂觀]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Put-kuán sī iù-tì iā-sī lo̍k-kuan", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>後果若如何 自己就來擔 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[後果若安怎 自己就來擔]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Hiō-kó nā an-tsuánn, ka-tī tio̍h lâi tann", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>原諒不孝的孩子吧 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[原諒不孝的囝兒吧]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Guân-liōng put-hàu ê kiánn-jî--lah", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>趁我還年輕趕緊來奮鬥 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[趁我還少年趕緊來拍拚]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Thàn guá koh siàu-liân kuánn-kín lâi phah-piànn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"type": "space"}], [{"t": "<span class=\"w-5 h-5 rounded bg-purple-100 text-purple-800 text-xs font-bold inline-flex items-center justify-center mr-1.5 select-none font-sans\">B</span>OH!再會吧! ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!再會吧]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Tsài-huē lah!", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!什麼都不怕 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!啥咪攏毋驚]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Siánn-mi̍h lóng m̄ kiann", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!再會吧! ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!再會吧]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Tsài-huē lah!", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!向前行 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!向前行]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Hiòng tsiân kiânn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"type": "space"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>台北台北台北車站到啦 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[台北台北台北車頭到啦]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Tâi-pak Tâi-pak Tâi-pak-tshia-thâu kàu--ah lah", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>要下車的旅客請趕緊下車 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[欲落車的旅客請趕緊落車]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Beh lo̍h-tshia ê lú-kheh tshiánn kuán-kín lo̍h-tshia", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>前面是現代的台北車頭 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[頭前是現代的台北車頭]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Thâu-tsîng sī hiān-tāi ê Tâi-pak tshia-thâu", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>我的理想和希望都在這 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[我的理想佮希望攏佇遮]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Guá ê lí-sióng kap hi-bāng lóng tī tsia", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>一棟一棟的高樓大廈 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[一棟一棟的『高樓大廈』]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Tsi̍t-tòng tsi̍t-tòng ê 『高樓大廈』", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>不知有住多少像我一樣的傻子 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[不知有住偌濟像我這種的戇囝]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "M̄-tsai ū tuà guā-tsē tshiūnn guá tsit-tsióng ê gōng-kiánn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>以前聽人唱台北不是我的家 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[卡早聽人唱『台北不是我的家』]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Khah-tsá thiann lâng tshiùnn 『台北不是我的家』", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>但是我一點都沒感覺 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[但是我一點攏無感覺]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Tān-sī guá tsi̍t-tiám-á lóng bô kám-kak", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"type": "space"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!什麼都不怕 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!啥咪攏毋驚]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Siánn-mi̍h lóng m̄ kiann", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!向前行 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!向前行]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Hiòng tsiân kiânn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!什麼都不怕 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!啥咪攏毋驚]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Siánn-mi̍h lóng m̄ kiann", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}], [{"t": "<span class=\"text-purple-400 font-bold mr-1.5 select-none\">•</span>OH!向前行 ", "cls": "font-serif text-slate-800 font-medium inline-flex items-center"}, {"t": "[OH!向前行]", "cls": "font-serif font-bold text-rose-600 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded shadow-2xs mx-1 inline-block"}], [{"t": "Oh! Hiòng tsiân kiânn", "lineCls": "lyric-tailo-line text-blue-600 font-sans font-medium text-sm sm:text-base tracking-wider pl-6 sm:pl-7 -mt-0.5 mb-2.5 flex items-center gap-1.5", "cls": "inline-block text-blue-600 font-sans font-medium"}]], "vocab": []}, {"id": "lukang-town", "title": "鹿港小鎮", "artist": "羅大佑", "lyricist": "羅大佑", "composer": "羅大佑", "year": "1982-04", "album": "之乎者也 專輯", "tag": "時代巨作・傳統與文明的反思", "order": "延伸探索", "sheet": "教材特輯", "audio": "media/lukang-town.mp3", "video": null, "bgGradient": "from-stone-600 via-zinc-700 to-slate-800", "lightBg": "bg-stone-50/70 border-stone-200", "intro": "羅大佑首張個人專輯震撼之作。「台北不是我的家，我的家鄉沒有霓虹燈」，強烈的吉他狂飆與批判吶喊，深刻反思工商業都市文明帶給傳統小鎮與離鄉青年的衝擊與失落。", "lyrics": [[{"t": "假如你先生來自鹿港小鎮  請問你是否看見我的爹娘"}], [{"t": "我家就住在媽祖廟的後面  賣著香火的那家小雜貨店"}], [{"type": "space"}], [{"t": "假如你先生來自鹿港小鎮  請問你是否看見我的愛人"}], [{"t": "想當年我離家時她一十八  有一顆善良的心和一卷長髮"}], [{"type": "space"}], [{"t": "台北不是我的家  我的家鄉沒有霓虹燈"}], [{"t": "鹿港的街道  鹿港的漁村  媽祖廟裡燒香的人們"}], [{"type": "space"}], [{"t": "台北不是我的家  我的家鄉沒有霓虹燈"}], [{"t": "鹿港的清晨  鹿港的黃昏  徘徊在文明裡的人們"}], [{"type": "space"}], [{"t": "假如你先生回到鹿港小鎮  請問你是否告訴我的爹娘"}], [{"t": "台北不是我想像的黃金天堂  都市裡沒有當初我的夢想"}], [{"type": "space"}], [{"t": "在夢裡我再度回到鹿港小鎮  廟裡膜拜的人們依然虔誠"}], [{"t": "歲月掩不住爹娘純樸的笑容  夢中的姑娘依然長髮迎空"}], [{"type": "space"}], [{"t": "台北不是我的家  我的家鄉沒有霓虹燈"}], [{"t": "鹿港的街道  鹿港的漁村  媽祖廟裡燒香的人們"}], [{"type": "space"}], [{"t": "台北不是我的家  我的家鄉沒有霓虹燈"}], [{"t": "鹿港的清晨  鹿港的黃昏  徘徊在文明裡的人們"}], [{"type": "space"}], [{"t": "再度我唱起這首歌  我的歌中和有風雨聲"}], [{"t": "歸不得的家園  鹿港的小鎮  當年離家的年輕人"}], [{"type": "space"}], [{"t": "台北不是我的家  我的家鄉沒有霓虹燈"}], [{"t": "繁榮的都市  過渡的小鎮  徘徊在文明裡的人們"}], [{"type": "space"}], [{"t": "聽說他們挖走了家鄉的紅磚砌上了水泥牆"}], [{"t": "家鄉的人們得到他們想要的  卻又失去他們擁有的"}], [{"t": "門上的一塊斑駁的木板刻著這麼幾句話"}], [{"t": "子子孫孫永寶用  世世代代傳香火"}], [{"t": "鹿港的小鎮"}]], "vocab": []}];
+    let currentSongIndex = 0;
+    let isPlaying = false;
+    let isTeacherMode = false;
+    let isVideoMode = false;
+    let revealedBlanks = new Set(); // Track revealed blank IDs
+    let revealedVocab = new Set();  // Track revealed vocab indices
+
+    // Find initial song index
+    const initialSongId = "taipei-person";
+    const foundIdx = songsData.findIndex(s => s.id === initialSongId);
+    if (foundIdx !== -1) currentSongIndex = foundIdx;
+
+    // DOM Elements
+    const audio = document.getElementById('audioPlayer');
+    const video = document.getElementById('videoPlayer');
+    const videoContainer = document.getElementById('videoContainer');
+    const vinylContainer = document.getElementById('vinylContainer');
+    const videoToggleBtn = document.getElementById('videoToggleBtn');
+    const videoToggleText = document.getElementById('videoToggleText');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playIcon = document.getElementById('playIcon');
+    const vinylDisc = document.getElementById('vinylDisc');
+    const vinylArm = document.getElementById('vinylArm');
+    const progressBar = document.getElementById('progressBar');
+    const progressHandle = document.getElementById('progressHandle');
+    const currentTimeEl = document.getElementById('currentTime');
+    const totalDurationEl = document.getElementById('totalDuration');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeIcon = document.getElementById('volumeIcon');
+
+    // Initialize App
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTabs();
+      renderSongListMenu();
+      loadSong(currentSongIndex, false);
+      setupAudioEvents();
+      setupVideoEvents();
+      loadSavedNotes();
+    });
+
+    // Render Song Navigation Tabs
+    function renderTabs() {
+      const container = document.getElementById('songTabsContainer');
+      container.innerHTML = songsData.map((song, idx) => {
+        const isActive = idx === currentSongIndex;
+        return `
+          <button onclick="switchSong(${idx}, false)" class="song-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${isActive ? 'bg-white text-purple-950 shadow-md font-bold ring-2 ring-purple-300' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}">
+            <span class="w-1.5 h-1.5 rounded-full ${isActive ? 'bg-purple-600' : 'bg-slate-300'}"></span>
+            <span>${song.title}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    // Render Quick Switch Menu
+    function renderSongListMenu() {
+      const container = document.getElementById('songListMenu');
+      container.innerHTML = songsData.map((song, idx) => {
+        const isActive = idx === currentSongIndex;
+        const isThisPlaying = isActive && isPlaying;
+        return `
+          <div onclick="switchSong(${idx}, false)" class="group p-2 rounded-lg text-xs flex items-center justify-between cursor-pointer transition-all ${isActive ? 'bg-purple-50 text-purple-900 font-bold border border-purple-200 shadow-2xs' : 'hover:bg-slate-50 text-slate-700'}">
+            <div class="flex items-center gap-2 min-w-0">
+              <!-- Dedicated Play / Pause Button in List -->
+              <button onclick="event.stopPropagation(); toggleListPlay(${idx})" 
+                      class="w-6 h-6 rounded-full flex items-center justify-center transition-all shrink-0 cursor-pointer ${isThisPlaying ? 'bg-purple-600 text-white shadow-xs' : isActive ? 'bg-purple-200 text-purple-700 hover:bg-purple-600 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-purple-600 hover:text-white group-hover:bg-purple-100 group-hover:text-purple-700'}" 
+                      title="${isThisPlaying ? '暫停播放' : '立即播放《' + song.title + '》'}">
+                <i class="fa-solid ${isThisPlaying ? 'fa-pause text-[10px]' : 'fa-play text-[9px] ml-0.5'}"></i>
+              </button>
+              <span class="w-4 text-center font-mono text-[11px] ${isActive ? 'text-purple-600 font-bold' : 'text-slate-400'}">${idx + 1}</span>
+              <span class="truncate">${song.title}</span>
+            </div>
+            <div class="flex items-center gap-2 text-[10px] shrink-0">
+              <span class="text-slate-400">${song.artist}</span>
+              ${song.video ? '<i class="fa-solid fa-video text-rose-500" title="具備MV"></i>' : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Switch Song (defaults to autoPlay = false)
+    function switchSong(index, autoPlay = false) {
+      if (index < 0 || index >= songsData.length) return;
+      currentSongIndex = index;
+      renderTabs();
+      renderSongListMenu();
+      loadSong(currentSongIndex, autoPlay);
+    }
+
+    // Toggle Play from List Button
+    function toggleListPlay(index) {
+      if (index === currentSongIndex) {
+        togglePlayPause();
+      } else {
+        switchSong(index, true);
+      }
+    }
+
+    function prevSong() {
+      const newIdx = (currentSongIndex - 1 + songsData.length) % songsData.length;
+      switchSong(newIdx, isPlaying);
+    }
+
+    function nextSong() {
+      const newIdx = (currentSongIndex + 1) % songsData.length;
+      switchSong(newIdx, isPlaying);
+    }
+
+    // Load Song Data into View
+    function loadSong(index, autoPlay = false) {
+      const song = songsData[index];
+      
+      // Reset blank trackers for this song unless in teacher mode
+      if (!isTeacherMode) {
+        revealedBlanks.clear();
+        revealedVocab.clear();
+      }
+
+      // Stop any current playing media
+      audio.pause();
+      audio.currentTime = 0;
+      video.pause();
+      video.currentTime = 0;
+
+      // Always reset back to Vinyl Audio Mode when loading a new song
+      isVideoMode = false;
+      videoContainer.classList.add('hidden');
+      vinylContainer.classList.remove('hidden');
+      videoToggleText.textContent = "MV";
+
+      // Reset progress bar display
+      progressBar.style.width = '0%';
+      progressHandle.style.left = '0%';
+      currentTimeEl.textContent = '00:00';
+      totalDurationEl.textContent = '--:--';
+
+      // Player Info
+      document.getElementById('playerOrderBadge').textContent = song.order;
+      document.getElementById('playerTagBadge').textContent = song.tag;
+      document.getElementById('playerSongTitle').textContent = song.title;
+      document.getElementById('vinylSongTitle').textContent = song.title;
+      document.getElementById('playerArtist').textContent = `演唱：${song.artist}・${song.year.split('-')[0]}`;
+      document.getElementById('playerSongIntro').textContent = song.intro;
+      document.getElementById('metaLyricist').textContent = `作詞：${song.lyricist}`;
+      document.getElementById('metaComposer').textContent = `作曲：${song.composer}`;
+      document.getElementById('metaArtist').textContent = `演唱：${song.artist}`;
+      document.getElementById('metaYear').textContent = `發行：${song.year}`;
+
+      // Worksheet Info
+      document.getElementById('sheetTitle').textContent = `【${song.title}】`;
+      document.getElementById('sheetCredits').textContent = `作詞：${song.lyricist}  作曲：${song.composer}  演唱：${song.artist}  ${song.year}`;
+
+      // Video Source & Toggle Button Visibility
+      if (song.video) {
+        videoToggleBtn.classList.remove('hidden');
+        video.src = song.video;
+        video.load();
+      } else {
+        videoToggleBtn.classList.add('hidden');
+        video.removeAttribute('src');
+        video.load();
+      }
+
+      // Update Audio Source
+      audio.src = song.audio;
+      audio.load();
+
+      // Render Lyrics
+      renderLyrics(song);
+
+      // Render Vocabulary
+      renderVocabulary(song);
+
+      // Load Note Fields
+      loadSavedNotes();
+
+      // Update completion label
+      document.getElementById('overallCompletion').textContent = `進行中 (${index + 1}/${songsData.length})`;
+
+      if (autoPlay) {
+        playMedia();
+      } else {
+        pauseMedia();
+      }
+    }
+
+    // Toggle Video vs Audio Mode
+    function toggleVideoMode() {
+      const song = songsData[currentSongIndex];
+      if (!song.video) return;
+
+      isVideoMode = !isVideoMode;
+      if (isVideoMode) {
+        // Switch to Video
+        audio.pause();
+        videoContainer.classList.remove('hidden');
+        vinylContainer.classList.add('hidden');
+        videoToggleText.textContent = "黑膠";
+        video.currentTime = audio.currentTime;
+        if (isPlaying) video.play();
+      } else {
+        // Switch to Vinyl Audio
+        video.pause();
+        videoContainer.classList.add('hidden');
+        vinylContainer.classList.remove('hidden');
+        videoToggleText.textContent = "MV";
+        audio.currentTime = video.currentTime;
+        if (isPlaying) audio.play();
+      }
+    }
+
+    // Render Lyrics with Blank Boxes
+    function renderLyrics(song) {
+      const container = document.getElementById('lyricsContainer');
+      let html = '';
+      let blankCounter = 0;
+
+      // Special Legend Guide for dialect songs with Tai-lo (like 向前走)
+      if (song.id === 'moving-forward') {
+        html += `
+          <div class="mb-5 p-3.5 bg-gradient-to-r from-rose-50/90 via-sky-50/90 to-slate-50 border border-slate-300 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs shadow-2xs">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold shadow-2xs">
+                <i class="fa-solid fa-language text-xs"></i>
+              </span>
+              <span class="font-bold text-slate-900 text-sm font-serif">雙軌語文對照指南：</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+              <span class="inline-flex items-center gap-1.5 text-slate-700 font-serif font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+                <span>華語意譯原意</span>
+              </span>
+              <span class="inline-flex items-center gap-1.5 text-rose-700 font-bold font-serif bg-white border border-rose-300 px-2 py-0.5 rounded shadow-2xs">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
+                <span>[ 台語正字 (紅框) ]</span>
+              </span>
+              <span class="inline-flex items-center gap-1.5 text-blue-700 font-medium font-sans bg-white border border-blue-300 px-2 py-0.5 rounded shadow-2xs">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                <span>台羅拼音 (藍框)</span>
+              </span>
+            </div>
+          </div>
+        `;
+      }
+
+      song.lyrics.forEach((line) => {
+        if (line.type === 'space' || (Array.isArray(line) && line[0] && line[0].type === 'space')) {
+          html += '<div class="h-3.5 sm:h-4"></div>';
+          return;
+        }
+
+        const lineClass = (Array.isArray(line) && line[0] && line[0].lineCls)
+          ? line[0].lineCls
+          : 'lyric-line py-1 flex flex-wrap items-center leading-relaxed';
+
+        html += `<div class="${lineClass}">`;
+        line.forEach((chunk) => {
+          if (chunk.t) {
+            const cls = chunk.cls ? chunk.cls : 'inline-block';
+            html += `<span class="${cls}">${chunk.t}</span>`;
+          } else if (chunk.b) {
+            blankCounter++;
+            const blankId = `${song.id}-b-${blankCounter}`;
+            const isRevealed = isTeacherMode || revealedBlanks.has(blankId);
+            html += `
+              <span id="${blankId}" onclick="toggleBlank('${blankId}', '${chunk.b}')" class="blank-box ${isRevealed ? 'revealed' : ''}" title="點擊翻開/隱藏答案">
+                ${isRevealed 
+                  ? `<span class="revealed-text font-handwriting text-rose-600 font-bold text-lg sm:text-xl animate-in">${chunk.b}</span>` 
+                  : `<span class="placeholder text-xs text-slate-400 font-sans tracking-normal">[ ${chunk.h} ]</span>`
+                }
+              </span>
+            `;
+          }
+        });
+        html += '</div>';
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Toggle Single Blank Box
+    function toggleBlank(blankId, word) {
+      const el = document.getElementById(blankId);
+      if (!el) return;
+
+      if (revealedBlanks.has(blankId)) {
+        revealedBlanks.delete(blankId);
+        el.classList.remove('revealed');
+        // Find hint by searching the span
+        el.innerHTML = `<span class="placeholder text-xs text-slate-400 font-sans tracking-normal">[ ${word.length}字 ]</span>`;
+      } else {
+        revealedBlanks.add(blankId);
+        el.classList.add('revealed');
+        el.innerHTML = `<span class="revealed-text font-handwriting text-rose-600 font-bold text-lg sm:text-xl animate-in">${word}</span>`;
+      }
+    }
+
+    // Render Vocabulary (查一查)
+    function renderVocabulary(song) {
+      const sec = document.getElementById('vocabSection');
+      const container = document.getElementById('vocabContainer');
+
+      if (!song.vocab || song.vocab.length === 0) {
+        sec.classList.add('hidden');
+        return;
+      }
+      sec.classList.remove('hidden');
+
+      container.innerHTML = song.vocab.map((item, idx) => {
+        const vocabId = `${song.id}-v-${idx}`;
+        const isRevealed = isTeacherMode || revealedVocab.has(vocabId);
+        
+        // Zhuyin character boxes
+        const charBoxes = item.chars.map(c => `
+          <div class="inline-flex flex-col items-center justify-center w-8 h-10 border border-slate-700 bg-white text-center rounded-xs shadow-2xs">
+            <span class="text-sm font-serif font-black text-slate-900 leading-tight">${c.c}</span>
+            <span class="text-[9px] text-slate-500 font-sans leading-none -mt-0.5">${c.z}</span>
+          </div>
+        `).join('');
+
+        return `
+          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-50 transition-all">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+              <!-- Characters with Phonetics -->
+              <div class="flex items-center gap-1 shrink-0">
+                ${charBoxes}
+                <span class="font-serif font-bold text-slate-800 ml-1">：</span>
+              </div>
+              <!-- Meaning Definition Box -->
+              <div id="${vocabId}" onclick="toggleVocab('${vocabId}')" class="flex-grow p-2.5 rounded-lg border-1.5 border-dashed ${isRevealed ? 'border-rose-300 bg-rose-50/50' : 'border-slate-300 bg-white hover:border-purple-300'} cursor-pointer transition-all">
+                ${isRevealed 
+                  ? `<span class="font-handwriting text-rose-600 font-bold text-sm sm:text-base leading-relaxed">${item.meaning}</span>` 
+                  : `<span class="text-xs text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-hand-pointer text-purple-400"></i>點擊查閱詞義注釋 (學生作答區)</span>`
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Toggle Single Vocabulary Meaning
+    function toggleVocab(vocabId) {
+      const song = songsData[currentSongIndex];
+      const idx = parseInt(vocabId.split('-v-')[1]);
+      const item = song.vocab[idx];
+      const el = document.getElementById(vocabId);
+      if (!el || !item) return;
+
+      if (revealedVocab.has(vocabId)) {
+        revealedVocab.delete(vocabId);
+        el.className = "flex-grow p-2.5 rounded-lg border-1.5 border-dashed border-slate-300 bg-white hover:border-purple-300 cursor-pointer transition-all";
+        el.innerHTML = `<span class="text-xs text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-hand-pointer text-purple-400"></i>點擊查閱詞義注釋 (學生作答區)</span>`;
+      } else {
+        revealedVocab.add(vocabId);
+        el.className = "flex-grow p-2.5 rounded-lg border-1.5 border-dashed border-rose-300 bg-rose-50/50 cursor-pointer transition-all";
+        el.innerHTML = `<span class="font-handwriting text-rose-600 font-bold text-sm sm:text-base leading-relaxed">${item.meaning}</span>`;
+      }
+    }
+
+    // Reveal All Blanks for Current Song
+    function revealCurrentSongAnswers() {
+      const song = songsData[currentSongIndex];
+      let blankCounter = 0;
+      song.lyrics.forEach(line => {
+        if (line.type !== 'space') {
+          line.forEach(chunk => {
+            if (chunk.b) {
+              blankCounter++;
+              revealedBlanks.add(`${song.id}-b-${blankCounter}`);
+            }
+          });
+        }
+      });
+      if (song.vocab) {
+        song.vocab.forEach((_, idx) => revealedVocab.add(`${song.id}-v-${idx}`));
+      }
+      renderLyrics(song);
+      renderVocabulary(song);
+    }
+
+    // Toggle Global Teacher Mode (All blanks everywhere revealed)
+    function toggleAllBlanks() {
+      isTeacherMode = !isTeacherMode;
+      const btnText = document.getElementById('toggleAllBtnText');
+      const modeLabel = document.getElementById('currentModeLabel');
+
+      if (isTeacherMode) {
+        btnText.textContent = "切換回學生空白版";
+        modeLabel.textContent = "教師解答全揭示模式";
+        modeLabel.parentElement.classList.replace('bg-white/10', 'bg-rose-500/20');
+        modeLabel.parentElement.classList.replace('text-purple-200', 'text-rose-200');
+        revealCurrentSongAnswers();
+      } else {
+        btnText.textContent = "一鍵揭曉教師版";
+        modeLabel.textContent = "學生自修填空模式";
+        modeLabel.parentElement.classList.replace('bg-rose-500/20', 'bg-white/10');
+        modeLabel.parentElement.classList.replace('text-rose-200', 'text-purple-200');
+        resetAllBlanks();
+      }
+    }
+
+    // Reset All Blanks
+    function resetAllBlanks() {
+      revealedBlanks.clear();
+      revealedVocab.clear();
+      renderLyrics(songsData[currentSongIndex]);
+      renderVocabulary(songsData[currentSongIndex]);
+    }
+
+    // ==================== AUDIO & VIDEO PLAYBACK ====================
+    function togglePlayPause() {
+      if (isPlaying) {
+        pauseMedia();
+      } else {
+        playMedia();
+      }
+    }
+
+    function playMedia() {
+      const target = isVideoMode ? video : audio;
+      const playPromise = target.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.warn('Playback deferred or error:', err);
+          isPlaying = false;
+          playIcon.className = 'fa-solid fa-play ml-1';
+          vinylDisc.classList.remove('animate-spin-slow');
+          vinylArm.classList.remove('playing');
+          renderSongListMenu();
+        });
+      }
+    }
+
+    function pauseMedia() {
+      if (isVideoMode) {
+        video.pause();
+      } else {
+        audio.pause();
+      }
+      isPlaying = false;
+      playIcon.className = 'fa-solid fa-play ml-1';
+      vinylDisc.classList.remove('animate-spin-slow');
+      vinylArm.classList.remove('playing');
+      renderSongListMenu();
+    }
+
+    function skipTime(seconds) {
+      const target = isVideoMode ? video : audio;
+      target.currentTime = Math.max(0, Math.min(target.duration || 0, target.currentTime + seconds));
+    }
+
+    function seekAudio(e) {
+      const target = isVideoMode ? video : audio;
+      if (!target.duration) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const ratio = clickX / rect.width;
+      target.currentTime = ratio * target.duration;
+    }
+
+    function changeVolume(val) {
+      audio.volume = val;
+      video.volume = val;
+      if (val == 0) {
+        volumeIcon.className = 'fa-solid fa-volume-xmark';
+      } else if (val < 0.5) {
+        volumeIcon.className = 'fa-solid fa-volume-low';
+      } else {
+        volumeIcon.className = 'fa-solid fa-volume-high';
+      }
+    }
+
+    function toggleMute() {
+      const target = isVideoMode ? video : audio;
+      target.muted = !target.muted;
+      if (target.muted) {
+        volumeIcon.className = 'fa-solid fa-volume-xmark text-rose-400';
+      } else {
+        changeVolume(volumeSlider.value);
+      }
+    }
+
+    function setSpeed(rate, btn) {
+      audio.playbackRate = rate;
+      video.playbackRate = rate;
+      document.querySelectorAll('.speed-btn').forEach(b => {
+        b.className = 'speed-btn px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/10 hover:bg-white/20 text-slate-300';
+      });
+      btn.className = 'speed-btn px-1.5 py-0.5 rounded text-[10px] font-mono bg-purple-600 text-white font-bold';
+    }
+
+    function setupAudioEvents() {
+      audio.addEventListener('play', () => {
+        isPlaying = true;
+        playIcon.className = 'fa-solid fa-pause';
+        vinylDisc.classList.add('animate-spin-slow');
+        vinylArm.classList.add('playing');
+        renderSongListMenu();
+      });
+      audio.addEventListener('pause', () => {
+        if (!isVideoMode) {
+          isPlaying = false;
+          playIcon.className = 'fa-solid fa-play ml-1';
+          vinylDisc.classList.remove('animate-spin-slow');
+          vinylArm.classList.remove('playing');
+          renderSongListMenu();
+        }
+      });
+      audio.addEventListener('timeupdate', () => {
+        if (!isVideoMode) updateProgress(audio.currentTime, audio.duration);
+      });
+      audio.addEventListener('loadedmetadata', () => {
+        if (!isVideoMode) totalDurationEl.textContent = formatTime(audio.duration);
+      });
+      audio.addEventListener('ended', () => {
+        pauseMedia();
+        audio.currentTime = 0;
+      });
+    }
+
+    function setupVideoEvents() {
+      video.addEventListener('play', () => {
+        isPlaying = true;
+        playIcon.className = 'fa-solid fa-pause';
+        renderSongListMenu();
+      });
+      video.addEventListener('pause', () => {
+        if (isVideoMode) {
+          isPlaying = false;
+          playIcon.className = 'fa-solid fa-play ml-1';
+          renderSongListMenu();
+        }
+      });
+      video.addEventListener('timeupdate', () => {
+        if (isVideoMode) updateProgress(video.currentTime, video.duration);
+      });
+      video.addEventListener('loadedmetadata', () => {
+        if (isVideoMode) totalDurationEl.textContent = formatTime(video.duration);
+      });
+      video.addEventListener('ended', () => {
+        pauseMedia();
+        video.currentTime = 0;
+      });
+    }
+
+    function updateProgress(current, duration) {
+      if (!duration || isNaN(duration)) return;
+      const pct = (current / duration) * 100;
+      progressBar.style.width = `${pct}%`;
+      progressHandle.style.left = `${pct}%`;
+      currentTimeEl.textContent = formatTime(current);
+      totalDurationEl.textContent = formatTime(duration);
+    }
+
+    function formatTime(sec) {
+      if (isNaN(sec)) return '00:00';
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    // ==================== LOCAL STORAGE / NOTES ====================
+    function saveStudentInfo(field, value) {
+      localStorage.setItem(`gesong_stu_${field}`, value);
+      showSavedIndicator();
+    }
+
+    function saveNote(field, value) {
+      const songId = songsData[currentSongIndex].id;
+      const key = `gesong_taipei_${songId}_${field}`;
+      localStorage.setItem(key, value);
+      showSavedIndicator();
+    }
+
+    function loadSavedNotes() {
+      // Load student info (class, seat, name)
+      const c = localStorage.getItem('gesong_stu_class') || '';
+      const s = localStorage.getItem('gesong_stu_seat') || '';
+      const n = localStorage.getItem('gesong_stu_name') || '';
+      const classEl = document.getElementById('stuClass');
+      const seatEl = document.getElementById('stuSeat');
+      const nameEl = document.getElementById('stuName');
+      if (classEl) classEl.value = c;
+      if (seatEl) seatEl.value = s;
+      if (nameEl) nameEl.value = n;
+
+      const songId = songsData[currentSongIndex].id;
+      ['q1', 'q2', 'q3'].forEach(f => {
+        const key = `gesong_taipei_${songId}_${f}`;
+        const val = localStorage.getItem(key) || '';
+        const el = document.getElementById(`${f}Input`);
+        if (el) el.value = val;
+      });
+
+      // Load saved emotion
+      const emotionKey = `gesong_taipei_${songId}_emotion`;
+      const savedEmotion = localStorage.getItem(emotionKey);
+      document.querySelectorAll('.emotion-chip').forEach(btn => {
+        if (btn.innerText.includes(savedEmotion)) {
+          setChipActive(btn, true);
+        } else {
+          setChipActive(btn, false);
+        }
+      });
+    }
+
+    function toggleEmotion(btn, emotionName) {
+      const songId = songsData[currentSongIndex].id;
+      const emotionKey = `gesong_taipei_${songId}_emotion`;
+      const current = localStorage.getItem(emotionKey);
+
+      document.querySelectorAll('.emotion-chip').forEach(b => setChipActive(b, false));
+
+      if (current === emotionName) {
+        localStorage.removeItem(emotionKey);
+      } else {
+        localStorage.setItem(emotionKey, emotionName);
+        setChipActive(btn, true);
+      }
+      showSavedIndicator();
+    }
+
+    function setChipActive(btn, active) {
+      if (active) {
+        btn.classList.add('bg-purple-100', 'border-purple-400', 'text-purple-900', 'font-bold', 'shadow-xs');
+        btn.classList.remove('bg-white', 'text-slate-700');
+      } else {
+        btn.classList.remove('bg-purple-100', 'border-purple-400', 'text-purple-900', 'font-bold', 'shadow-xs');
+        btn.classList.add('bg-white', 'text-slate-700');
+      }
+    }
+
+    function clearCurrentNotes() {
+      if (!confirm('確定要清空目前這首歌的課堂筆記與情緒紀錄嗎？')) return;
+      const songId = songsData[currentSongIndex].id;
+      ['q1', 'q2', 'q3', 'emotion'].forEach(f => {
+        localStorage.removeItem(`gesong_taipei_${songId}_${f}`);
+      });
+      loadSavedNotes();
+    }
+
+    function copyCurrentAnswers() {
+      const song = songsData[currentSongIndex];
+      const stuClass = document.getElementById('stuClass') ? document.getElementById('stuClass').value.trim() : '';
+      const stuSeat = document.getElementById('stuSeat') ? document.getElementById('stuSeat').value.trim() : '';
+      const stuName = document.getElementById('stuName') ? document.getElementById('stuName').value.trim() : '';
+      const q1 = document.getElementById('q1Input').value.trim();
+      const q2 = document.getElementById('q2Input').value.trim();
+      const q3 = document.getElementById('q3Input').value.trim();
+      const emotion = localStorage.getItem(`gesong_taipei_${song.id}_emotion`) || '未選擇';
+
+      const copyContent = `【八上閱思龍門・歌SONG臺北】《${song.title}》課堂探究與心得回答
+班級：${stuClass || '（未填寫）'} ｜ 座號：${stuSeat || '（未填寫）'} ｜ 姓名：${stuName || '（未填寫）'}
+演唱：${song.artist} ｜ 作詞：${song.lyricist} ｜ 作曲：${song.composer}
+
+【問題一】找一找，這首歌不錯的句子有哪些？
+${q1 || '（尚未填寫）'}
+
+【問題二】想一想，這首歌想表達什麼？
+${q2 || '（尚未填寫）'}
+
+【問題三】說一說，聽完這首歌你有什麼感想？
+${q3 || '（尚未填寫）'}
+
+【情緒共鳴】這首歌讓我覺得：
+${emotion}
+`;
+
+      const btn = document.getElementById('copyAnswersBtn');
+      const icon = document.getElementById('copyBtnIcon');
+      const textSpan = document.getElementById('copyBtnText');
+
+      const onSuccess = () => {
+        btn.classList.replace('bg-purple-50', 'bg-emerald-50');
+        btn.classList.replace('text-purple-700', 'text-emerald-700');
+        btn.classList.replace('border-purple-200', 'border-emerald-300');
+        icon.className = 'fa-solid fa-check text-emerald-600';
+        textSpan.textContent = '已複製到剪貼簿！';
+
+        setTimeout(() => {
+          btn.classList.replace('bg-emerald-50', 'bg-purple-50');
+          btn.classList.replace('text-emerald-700', 'text-purple-700');
+          btn.classList.replace('border-emerald-300', 'border-purple-200');
+          icon.className = 'fa-solid fa-copy';
+          textSpan.textContent = '一鍵複製回答';
+        }, 2000);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(copyContent).then(onSuccess).catch(err => {
+          console.warn('Clipboard writeText failed, fallback:', err);
+          fallbackCopyText(copyContent, onSuccess);
+        });
+      } else {
+        fallbackCopyText(copyContent, onSuccess);
+      }
+    }
+
+    function fallbackCopyText(text, cb) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        cb();
+      } catch (e) {
+        alert('請手動選取複製文字：\n\n' + text);
+      }
+      document.body.removeChild(ta);
+    }
+
+    function showSavedIndicator() {
+      const el = document.getElementById('savedIndicator');
+      if (el) {
+        el.style.opacity = '1';
+        clearTimeout(window.savedTimeout);
+        window.savedTimeout = setTimeout(() => {
+          el.style.opacity = '0';
+        }, 2000);
+      }
+    }
+
+    // Keyboard Shortcuts (Space to play/pause)
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        togglePlayPause();
+      }
+    });
+  </script>
+  <!-- ==================== WORKSHEET DOWNLOAD & PREVIEW MODAL ==================== -->
+  <div id="worksheetModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 space-y-4 max-h-[90vh] overflow-y-auto border border-slate-200 shadow-2xl relative animate-in fade-in duration-200 text-left">
+      <!-- Close Button -->
+      <button onclick="closeWorksheetModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-sm transition-colors cursor-pointer" title="關閉視窗">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 pr-8">
+        <div id="wsModalIconBox" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-xs">
+          <i id="wsModalIcon" class="fa-solid fa-file-pen"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span id="wsModalBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold">單元</span>
+            <span id="wsModalTypeTag" class="px-2 py-0.5 rounded-full text-[10px] font-bold">學用學習單</span>
+          </div>
+          <h3 id="wsModalTitle" class="text-lg sm:text-xl font-serif font-bold text-slate-900 mt-1 truncate">學習單線上預覽與下載</h3>
+        </div>
+      </div>
+
+      <!-- Hint banner -->
+      <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between gap-2">
+        <span class="flex items-center gap-1.5">
+          <i class="fa-regular fa-lightbulb text-amber-500"></i>
+          點擊「線上預覽」另開分頁檢視，點擊「下載」儲存 PDF。
+        </span>
+        <span class="text-[10px] text-slate-400 font-mono shrink-0">PDF 格式</span>
+      </div>
+
+      <!-- Worksheets Container -->
+      <div id="wsModalList" class="space-y-2.5">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">學思軒・閱思龍門專用教材</span>
+        <button onclick="closeWorksheetModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer">
+          關閉視窗
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Worksheet Modal System
+    const unitWorksheetMeta = {"unitName":"八上・歌SONG臺北","badgeClass":"bg-sky-100 text-sky-800","songs":[{"artist":"嚴正嵐","title":"台北天晴","teacher":"worksheet-taipei-sunny-teacher.pdf","id":1,"student":"worksheet-taipei-sunny-student.pdf"},{"artist":"南西樂團","title":"台北調","teacher":"worksheet-taipei-tune-teacher.pdf","id":2,"student":"worksheet-taipei-tune-student.pdf"},{"artist":"王芷蕾","title":"台北的天空","teacher":"worksheet-taipei-sky-teacher.pdf","id":3,"student":"worksheet-taipei-sky-student.pdf"},{"artist":"李英宏","title":"台北直直撞","teacher":"worksheet-taipei-crash-teacher.pdf","id":4,"student":"worksheet-taipei-crash-student.pdf"},{"artist":"黃品源","title":"台北人","teacher":"worksheet-taipei-person-teacher.pdf","id":5,"student":"worksheet-taipei-person-student.pdf"}],"all":{"title":"歌SONG臺北 全單元完整學習單","teacher":"worksheet-all-teacher.pdf","student":"worksheet-all-student.pdf"}};
+
+    function openWorksheetModal(type) {
+      const isStudent = (type === 'student');
+      const typeText = isStudent ? '學用學習單' : '教用學習單';
+      const iconClass = isStudent ? 'fa-solid fa-file-pen' : 'fa-solid fa-graduation-cap';
+      const iconBoxBg = isStudent ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800';
+      const typeTagBg = isStudent ? 'bg-amber-500 text-white' : 'bg-slate-800 text-white';
+
+      document.getElementById('wsModalBadge').textContent = unitWorksheetMeta.unitName;
+      document.getElementById('wsModalBadge').className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold ' + unitWorksheetMeta.badgeClass;
+
+      document.getElementById('wsModalTypeTag').textContent = typeText;
+      document.getElementById('wsModalTypeTag').className = 'px-2 py-0.5 rounded-full text-[10px] font-bold ' + typeTagBg;
+
+      document.getElementById('wsModalTitle').textContent = unitWorksheetMeta.unitName + '・' + typeText;
+
+      const iconBox = document.getElementById('wsModalIconBox');
+      iconBox.className = 'w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-xs ' + iconBoxBg;
+      document.getElementById('wsModalIcon').className = iconClass;
+
+      let listHtml = '';
+
+      // 1. 全單元完整學習單 (合輯)
+      if (unitWorksheetMeta.all && unitWorksheetMeta.all[type]) {
+        listHtml += '<div class="p-3.5 rounded-2xl bg-amber-50/80 border-2 border-amber-300 shadow-2xs space-y-2">' +
+          '<div class="flex items-center justify-between">' +
+            '<div class="flex items-center gap-2">' +
+              '<span class="px-2 py-0.5 rounded-md text-[10px] font-black bg-amber-600 text-white">推薦首選</span>' +
+              '<span class="font-bold text-slate-900 text-xs sm:text-sm">' + unitWorksheetMeta.all.title + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<p class="text-[11px] text-slate-500 leading-tight">全單元曲目合輯・歌詞挖洞・田字格注音與深層探究學習單</p>' +
+          '<div class="flex items-center gap-2 pt-1">' +
+            '<a href="' + unitWorksheetMeta.all[type] + '" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-100/70 border border-amber-300 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">' +
+              '<i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>' +
+              '<span>線上預覽 (另開新分頁)</span>' +
+            '</a>' +
+            '<a href="' + unitWorksheetMeta.all[type] + '" download class="py-1.5 px-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all" title="下載 PDF">' +
+              '<i class="fa-solid fa-download text-[10px]"></i>' +
+              '<span>下載</span>' +
+            '</a>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // 2. 單曲個別學習單
+      listHtml += '<div class="pt-1">' +
+        '<div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">' +
+          '<span>單曲個別學習單 (' + unitWorksheetMeta.songs.length + ' 首)</span>' +
+          '<span class="text-slate-400 font-normal text-[10px]">可獨立預覽或下載</span>' +
+        '</div>' +
+        '<div class="space-y-1.5">';
+
+      unitWorksheetMeta.songs.forEach(function(song, idx) {
+        const fileUrl = song[type];
+        const isCurrent = (typeof currentSongIndex !== 'undefined' && idx === currentSongIndex);
+        const cardBg = isCurrent ? 'bg-amber-50/70 border-amber-300 ring-1 ring-amber-300' : 'bg-slate-50 hover:bg-slate-100/80 border-slate-200';
+        const numBg = isCurrent ? 'bg-amber-500 text-white' : 'bg-white text-slate-700 border border-slate-200';
+        const currentBadge = isCurrent ? '<span class="px-1.5 py-0.2 text-[9px] font-bold bg-amber-200 text-amber-900 rounded">目前播放</span>' : '';
+
+        listHtml += '<div class="p-2.5 rounded-xl ' + cardBg + ' border transition-all flex items-center justify-between gap-2">' +
+          '<div class="flex items-center gap-2.5 min-w-0">' +
+            '<span class="w-5 h-5 rounded-full ' + numBg + ' text-[10px] font-bold flex items-center justify-center shrink-0">' + song.id + '</span>' +
+            '<div class="min-w-0">' +
+              '<div class="flex items-center gap-1.5">' +
+                '<span class="font-bold text-slate-800 text-xs truncate">' + song.title + '</span>' +
+                currentBadge +
+              '</div>' +
+              '<div class="text-[10px] text-slate-400 truncate">' + song.artist + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="flex items-center gap-1.5 shrink-0">' +
+            '<a href="' + fileUrl + '" target="_blank" rel="noopener noreferrer" class="py-1 px-2.5 rounded-lg bg-white hover:bg-slate-200/70 border border-slate-200 text-slate-700 font-medium text-xs flex items-center gap-1 transition-all" title="線上預覽">' +
+              '<i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>' +
+              '<span>預覽</span>' +
+            '</a>' +
+            '<a href="' + fileUrl + '" download class="py-1 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-medium text-xs flex items-center gap-1 transition-all" title="下載 PDF">' +
+              '<i class="fa-solid fa-download text-[10px]"></i>' +
+              '<span>下載</span>' +
+            '</a>' +
+          '</div>' +
+        '</div>';
+      });
+
+      listHtml += '</div></div>';
+
+      document.getElementById('wsModalList').innerHTML = listHtml;
+
+      const modal = document.getElementById('worksheetModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeWorksheetModal() {
+      const modal = document.getElementById('worksheetModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    window.addEventListener('click', function(e) {
+      const wsModal = document.getElementById('worksheetModal');
+      if (e.target === wsModal) {
+        closeWorksheetModal();
+      }
+    });
+
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeWorksheetModal();
+      }
+    });
+  </script>
+</body>
+</html>

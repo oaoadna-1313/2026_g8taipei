@@ -1,0 +1,1553 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎙️ 臺灣議言堂_從一則新聞談起 寫作指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#F8FAFC',      /* 輕盈的紙張白 */
+                        ink: '#1E293B',        /* 沉穩深藍灰 (象徵理性) */
+                        primary: '#2563EB',    /* 邏輯藍 (主色調) */
+                        secondary: '#D97706',  /* 洞見橘 (代表觀點、光芒) */
+                        tertiary: '#059669',   /* 實證綠 (代表舉例、事實) */
+                        highlight: '#DBEAFE',  /* 淺藍底色 */
+                        danger: '#E11D48',     /* 警示紅 */
+                        teacher: '#334155',    /* 教師區預設底色 */
+                        'teacher-light': '#475569' /* 教師區展開底色 */
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap');
+        
+        body {
+            background-color: #F8FAFC;
+            color: #1E293B;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+        .step-transition { transition: all 0.5s ease-in-out; }
+        .tab-btn { transition: all 0.2s ease; }
+        .tab-btn:not(.active):hover { background-color: #EFF6FF; }
+        .tab-btn.active {
+            background-color: #1E293B !important;
+            color: #F8FAFC !important;
+            border-left: 4px solid #2563EB;
+        }
+        .checklist-item { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .checklist-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Loading Animation */
+        .dot-flashing {
+            position: relative;
+            width: 10px; height: 10px; border-radius: 5px;
+            background-color: #2563EB; color: #2563EB;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: ''; display: inline-block; position: absolute; top: 0;
+        }
+        .dot-flashing::before {
+            left: -15px; width: 10px; height: 10px; border-radius: 5px;
+            background-color: #2563EB; color: #2563EB;
+            animation: dot-flashing 1s infinite alternate; animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 15px; width: 10px; height: 10px; border-radius: 5px;
+            background-color: #2563EB; color: #2563EB;
+            animation: dot-flashing 1s infinite alternate; animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #2563EB; }
+            50%, 100% { background-color: rgba(37, 99, 235, 0.2); }
+        }
+        
+        .ai-content b { color: #2563EB; font-weight: 700; }
+        .ai-content ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .ai-content li { margin-bottom: 0.25rem; }
+        .essay-content {
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            max-height: 0; opacity: 0; overflow: hidden; padding-top: 0; padding-bottom: 0;
+        }
+        .essay-content.open {
+            max-height: 4000px; opacity: 1; padding-top: 1.5rem; padding-bottom: 1.5rem;
+        }
+        .essay-icon { transition: transform 0.3s ease; }
+        .essay-btn[aria-expanded="true"] .essay-icon { transform: rotate(180deg); }
+    </style>
+</head>
+<body class="antialiased">
+            <!-- ==================== 1. STICKY HEADER (閱思龍門標準頂部導覽列與螢光筆網頁書籤) ==================== -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand & Title (品牌識別與標題) -->
+            <div class="flex items-center space-x-3">
+                <a href="#hero" class="flex items-center space-x-2.5 group no-underline" style="text-decoration:none;">
+                    <img src="../assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-10 h-10 object-contain rounded-full shadow-sm group-hover:rotate-12 transition-transform duration-300">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="font-serif font-bold text-lg sm:text-xl text-slate-900 tracking-wide group-hover:text-amber-800 transition-colors">臺灣議言堂</span>
+                            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">八下閱思龍門・公民思辨</span>
+                        </div>
+                        <p class="text-[11px] text-slate-700 font-medium hidden md:block">
+                            <span class="bg-yellow-200/90 text-amber-950 px-1.5 py-0.5 rounded shadow-xs">夾敘夾議萃取觀點・事實與觀點相激相盪論說文</span>
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Navigation Links (螢光筆網頁書籤) -->
+            <nav class="flex items-center space-x-1 sm:space-x-1.5 font-medium text-xs sm:text-sm">
+                <a href="#expansion-tool" class="px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all flex items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>🌱 觀點轉化</span>
+                </a>
+                <a href="#structure-blueprint" class="px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all flex items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>🏗️ 論說起承轉合</span>
+                </a>
+                <a href="#ai-coach-section" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-amber-950 bg-yellow-300 hover:bg-yellow-400 font-bold shadow-xs transition-all flex items-center gap-1 border border-yellow-400/80 ring-2 ring-yellow-200 no-underline" style="text-decoration:none;">
+                    <span>🤖 AI 寫作教練</span>
+                </a>
+                <a href="#sample-essays" class="hidden sm:flex px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>📚 滿分範文</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <header class="bg-highlight/50 text-ink py-12 px-4 shadow-sm text-center border-b border-highlight" id="hero">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-4xl mb-4 text-primary">📰 臺灣議言堂 🎙️</div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">從一則新聞談起 <br><span class="text-2xl md:text-3xl text-secondary mt-2 inline-block">論說文寫作指南</span></h1>
+            <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto font-medium leading-relaxed">
+                寫論說文最怕流於空泛說教。請以「從一則新聞（或事件）談起」為題，運用**「夾敘夾議」**的手法，讓事實與觀點相激相盪。<br>
+                跟著下方的互動步驟，學習如何從真實事件中萃取觀點，提出具體論證，完成一篇充滿說服力的滿分佳作。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-12 space-y-16 md:space-y-20">
+
+        <!-- 第一步：擴寫練習 -->
+        <section id="expansion-tool" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🌱</span> 第一步：從「客觀事實」到「主觀論點」的轉化術
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    論說文若只有「敘」就成了記敘文；只有「議」又顯得枯燥。觀察下方句子，學習如何將一句客觀的新聞報導，透過**「豐富細節」**、**「引出觀點」**與**「連結論述」**，轉化為一段強而有力的引言。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <div class="bg-paper p-6 rounded-xl border border-gray-200 min-h-[200px] flex flex-col justify-center relative">
+                        <div class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide" id="sentence-label">基礎事實</div>
+                        <p class="text-xl md:text-2xl leading-relaxed text-ink step-transition font-serif" id="sentence-text">
+                            新聞報導一位學生在捷運上讓座給老人，老人覺得很開心。
+                        </p>
+                        <div class="mt-4 text-right">
+                            <span class="inline-block bg-ink text-paper px-3 py-1 rounded-full text-sm font-bold shadow" id="word-count-badge">26 字</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button id="btn-step-1" class="px-5 py-3 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition w-full md:w-auto hidden">↺ 重新開始</button>
+                        <button id="btn-next-step" class="px-5 py-3 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition w-full md:w-auto shadow-md">➕ 加上「細節敘述」</button>
+                    </div>
+
+                    <div class="bg-highlight/40 border-l-4 border-primary p-4 rounded-r-lg mt-4">
+                        <p class="text-sm text-ink font-medium" id="teacher-hint">💡 <strong>寫作心法：</strong>「先敘事」時，不要只交代人事時地物。稍微描繪一下人物的動作或神態，能讓讀者更有畫面感，產生共鳴。</p>
+                    </div>
+                </div>
+
+                <div class="bg-paper/50 rounded-xl p-4 border border-gray-100">
+                    <h3 class="text-center font-bold text-tertiary mb-2 text-sm uppercase tracking-wider">字數與說服力成長</h3>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二步：文章骨架 -->
+        <section id="structure-blueprint" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🏗️</span> 第二步：「起承轉合」論說文骨架搭建
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    以新聞事件為開端的文章，必須做到「敘議結合」。本區塊運用**「起承轉合」**四段式結構，幫你分配好篇幅，引導你從事件中萃取大道理。點擊左側標籤，探索各段落的寫作任務。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-5 flex flex-col gap-2" id="tab-container">
+                    <!-- Tabs generated by JS -->
+                </div>
+
+                <div class="lg:col-span-7 bg-paper rounded-xl border border-gray-200 p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="flex-1 space-y-6">
+                        <div class="border-b-2 border-gray-200 pb-4">
+                            <h3 class="text-2xl font-bold text-ink font-serif" id="tab-title">第一段：【起】引述新聞，確立焦點</h3>
+                            <p class="text-tertiary mt-1 font-medium text-lg" id="tab-words">建議字數：約 110-150 字 (約 5-7 行)</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">🎯</span> 寫作任務</h4>
+                            <p class="text-gray-700 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-task">簡潔有力地敘述你所選擇的新聞或事件。重點不在於詳述整個過程，而是要把鏡頭「聚焦」在最能引發你感觸的那個關鍵點上。</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">❓</span> 引導提問</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-prompts">
+                                <li>這則新聞的主角是誰？發生了什麼事？</li>
+                                <li>事件中哪個畫面或哪句話最讓你印象深刻？</li>
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-primary mb-1 text-sm">寫作策略</h4>
+                                <p class="text-sm text-gray-700" id="tab-materials">運用「先敘後議」，確保事實敘述真實且切題。結尾可稍微點出這件事帶給你的初步感受。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-primary mb-1 text-sm">開頭句型提示</h4>
+                                <p class="text-sm text-gray-700 italic" id="tab-hint">「日前在晚間新聞中，播報了一則關於...的報導。畫面中...的情景，深深觸動了我的心。」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/3 flex flex-col justify-center items-center">
+                        <h4 class="text-center font-bold text-tertiary mb-4 text-sm uppercase tracking-wider">段落字數佔比</h4>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三步：AI 教練與檢核 -->
+        <section id="ai-coach-section" class="bg-ink text-paper rounded-2xl shadow-xl p-6 md:p-10 border-t-8 border-primary">
+            <div class="mb-8 border-b border-white/20 pb-6">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🤖</span> 第三步：觀點檢核與潤飾 (AI 寫作教練)
+                </h2>
+                <p class="text-paper/90 text-lg">
+                    你的論述有說服力嗎？「敘」與「議」是否有良好結合？將你寫好的草稿貼在下方，專屬的 <b>AI 寫作教練</b> 會針對你的論點進行檢核，提供優化建議與示範！
+                </p>
+            </div>
+
+            <!-- AI 教練互動區 -->
+            <div class="bg-paper text-ink rounded-xl p-6 mb-8 shadow-inner">
+                
+                <!-- 防呆破冰：草稿快捷鍵 -->
+                <div class="mb-4 flex flex-wrap items-center gap-2">
+                    <span class="text-sm text-primary font-bold bg-highlight/50 px-2 py-1 rounded">💡 沒靈感嗎？點擊試試：</span>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">新聞播報說有人把垃圾丟在山上，我覺得這樣很不好，破壞環境，大家應該要有公德心，愛護地球。</button>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">我看新聞說，現在很多人都在滑手機，走路也不看路，這樣很危險，可能會被車撞到，我們應該少用手機多看書。</button>
+                </div>
+
+                    <!-- 靈感工具列：靈感骰子 + 快捷提示詞 -->
+                    <div class="flex flex-wrap items-center gap-2 p-2.5 bg-paper rounded-xl border border-gray-200 shadow-2xs">
+                        <button id="btn-inspiration-dice" class="text-xs bg-secondary hover:bg-secondary/90 text-white font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-xs transform hover:scale-105 active:scale-95">
+                            <span class="text-sm">🎲</span>
+                            <span>靈感骰子 (思辨起手式)</span>
+                        </button>
+                        <span class="text-gray-300 hidden sm:inline">|</span>
+                        <span class="text-xs text-gray-500 font-medium hidden sm:inline">快捷注入句型：</span>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="這則引發社會廣泛熱議的新聞事件，核心焦點在於……">
+                            📰 ＋新聞聚焦
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="從另一個角度剖析，當事雙方其實都有各自難言的隱衷與考量……">
+                            ⚖️ ＋多元視角
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="當我們習慣於用片面的標籤定義他人時，是否也失去了對真相的探究？">
+                            🔍 ＋核心反思
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="面對這個議題，身為青年學子的我們，能夠從身邊做起的改變是……">
+                            🌱 ＋青年觀點
+                        </button>
+                    </div>
+
+
+                <div class="mb-6">
+                    <label for="student-input" class="block text-ink font-bold mb-2">✏️ 貼上你的草稿 (請輸入 200 字以內)：</label>
+                    <textarea id="student-input" rows="4" maxlength="200" class="w-full bg-white border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="請貼上你敘述的新聞事件，或是你想從這個事件中提出的論點與看法..."></textarea>
+                    
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="char-warning" class="text-xs text-danger font-bold opacity-0 transition-opacity">⚠️ 字數快到上限囉！建議給教練一個完整的段落即可。</span>
+                        <div class="text-right text-xs text-gray-400"><span id="char-count">0</span> / 200 字</div>
+                    </div>
+                </div>
+
+                <!-- 賦予選擇權：自訂指導重點 -->
+                <div class="mb-6 bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                    <label class="block text-ink font-bold mb-3">🎯 教練，我這次想加強...</label>
+                    <div class="flex flex-col gap-3" id="focus-areas">
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="focus" value="強化「敘」與「議」的連結 (幫助我將新聞事件的敘述與我的個人觀點扣合得更緊密，指出事件背後隱藏的道理，避免各說各話)" class="peer sr-only" checked>
+                            <div class="px-4 py-3 rounded-lg border-2 border-gray-200 peer-checked:bg-primary/10 peer-checked:text-primary peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm flex items-start gap-2">
+                                <span class="text-xl">🔗</span>
+                                <div>
+                                    <div class="text-base">強化「敘」與「議」的連結</div>
+                                    <div class="font-normal text-gray-500 mt-1 text-xs">幫助我將新聞與觀點緊密扣合，指出事件背後的道理。</div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="focus" value="深化論點與補充例證 (我覺得目前的觀點太普通了，請引導我作更深刻的反思，並建議我可以加入哪些歷史故事或名言作為輔助例證)" class="peer sr-only">
+                            <div class="px-4 py-3 rounded-lg border-2 border-gray-200 peer-checked:bg-secondary/10 peer-checked:text-secondary peer-checked:border-secondary hover:bg-gray-50 text-sm font-bold transition shadow-sm flex items-start gap-2">
+                                <span class="text-xl">💡</span>
+                                <div>
+                                    <div class="text-base">深化論點與補充例證</div>
+                                    <div class="font-normal text-gray-500 mt-1 text-xs">引導我作深刻反思，並建議合適的歷史故事或名言佐證。</div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="focus" value="提升客觀性與說服力 (請幫我修飾用詞，把主觀的情緒發洩轉化為具備客觀邏輯的論述，讓文章更像一篇成熟的論說文)" class="peer sr-only">
+                            <div class="px-4 py-3 rounded-lg border-2 border-gray-200 peer-checked:bg-tertiary/10 peer-checked:text-tertiary peer-checked:border-tertiary hover:bg-gray-50 text-sm font-bold transition shadow-sm flex items-start gap-2">
+                                <span class="text-xl">⚖️</span>
+                                <div>
+                                    <div class="text-base">提升客觀邏輯與說服力</div>
+                                    <div class="font-normal text-gray-500 mt-1 text-xs">修飾情緒化用詞，轉化為成熟、理性的論說文語氣。</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <button id="btn-toggle-config" class="text-xs text-gray-500 hover:text-primary transition flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-gray-200 hover:bg-gray-100 bg-white w-fit shadow-xs">
+                        <span>⚙️ 代理通道設定</span>
+                        <span id="channel-badge" class="bg-blue-100 text-primary px-2 py-0.5 rounded text-[11px] font-bold">⚡ Cloudflare 串流 (極速)</span>
+                    </button>
+                    <button id="btn-ask-ai" class="bg-primary hover:opacity-90 text-white font-bold py-3 px-8 rounded-lg shadow transition flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                        <span id="btn-ask-text" class="text-lg">🚀 請教練指導</span>
+                    </button>
+                </div>
+
+                <!-- 代理通道設定面板 (可展開/收合) -->
+                <div id="config-panel" class="hidden mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200 text-sm shadow-inner transition-all">
+                    <div class="flex items-center justify-between mb-3 border-b border-gray-200 pb-2">
+                        <h4 class="font-bold text-ink flex items-center gap-2">
+                            <span>⚙️</span> AI 代理通道切換與端點設定
+                        </h4>
+                        <span class="text-xs text-gray-400">設定將自動保存在瀏覽器</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div>
+                            <label class="block font-bold text-xs text-gray-700 mb-1">通道選擇：</label>
+                            <select id="channel-mode" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary">
+                                <option value="worker">⚡ Cloudflare Worker 邊緣串流 (推薦・極速打字機)</option>
+                                <option value="gas">🛡️ Google Apps Script (原版安全中繼)</option>
+                                <option value="custom">🔑 自備 Gemini API Key（直連 Google）</option>
+                            </select>
+                        </div>
+                        <div id="worker-url-group">
+                            <label class="block font-bold text-xs text-gray-700 mb-1">Cloudflare Worker 網址：</label>
+                            <input id="worker-url-input" type="url" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary" placeholder="請貼上你的 Worker 網址，例如 https://gemini-stream-coach.xxx.workers.dev">
+                        </div>
+                                                <!-- 自備 Key 輸入區塊 -->
+                        <div id="custom-key-group" class="hidden md:col-span-2 p-3 bg-blue-50/70 rounded-lg border border-blue-200 space-y-2">
+                            <div class="flex flex-wrap justify-between items-center gap-1 text-xs">
+                                <span class="font-bold text-blue-900">自備 Google Gemini API Key（安全存放於本機 LocalStorage）</span>
+                                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline text-[11px] hover:text-blue-800 font-medium">前往 Google AI Studio 免費領取</a>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <input type="password" id="custom-api-key" placeholder="貼上 AI Studio 取得的 API Key (AIzaSy...)" class="w-full text-xs font-mono border border-gray-300 rounded-lg px-3 py-2 pr-8 bg-white focus:ring-2 focus:ring-primary">
+                                    <button type="button" id="toggle-key-visibility" class="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-xs" title="顯示/隱藏金鑰">👁️</button>
+                                </div>
+                                <button type="button" id="btn-save-custom-key" class="text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium px-3.5 py-1.5 rounded-lg transition shrink-0 cursor-pointer shadow-xs">
+                                    保存金鑰
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-2 pt-0.5">
+                                <label class="text-[11px] text-gray-600 font-medium shrink-0">自訂模型代號 (選填)：</label>
+                                <input id="custom-model-input" type="text" class="bg-white border border-gray-300 rounded px-2 py-0.5 text-xs font-mono w-40 focus:ring-1 focus:ring-primary" placeholder="預設 gemini-2.5-flash">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-gray-500 gap-2">
+                        <div id="connection-status" class="flex items-center gap-1.5 text-tertiary font-medium">
+                            <span class="w-2 h-2 rounded-full bg-tertiary inline-block"></span>
+                            <span id="status-text">通道就緒：優先採用 Cloudflare 邊緣串流</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="btn-reset-config" class="text-gray-500 hover:text-gray-700 px-3 py-1 rounded border border-gray-300 hover:bg-gray-100 transition">
+                                恢復預設值
+                            </button>
+                            <button id="btn-save-config" class="bg-primary text-white font-bold px-4 py-1.5 rounded hover:opacity-90 transition shadow-xs">
+                                儲存並測試
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading 狀態 -->
+                <div id="ai-loading" class="hidden mt-6 p-6 bg-paper rounded-lg flex flex-col items-center justify-center gap-4 border border-gray-200 shadow-sm">
+                    <div class="dot-flashing"></div>
+                    <p class="text-primary font-medium mt-2">教練正在細細審閱你的草稿，為您提供專屬建議中...</p>
+                </div>
+
+                <!-- AI 回饋輸出區 -->
+                <div id="ai-output-container" class="hidden mt-8 space-y-6">
+                    <div class="flex items-center justify-between border-l-4 border-primary pl-3">
+                        <h3 class="font-bold text-xl text-ink flex items-center gap-2">
+                            <span>💡</span> 教練的回饋與升級示範
+                            <span id="stream-badge" class="hidden text-xs bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full font-bold animate-pulse">⚡ 打字串流中...</span>
+                        </h3>
+                    </div>
+
+                    <!-- 即時串流打字顯示框 (串流時顯示) -->
+                    <div id="ai-stream-box" class="bg-paper border border-gray-300 rounded-xl p-5 text-ink leading-relaxed shadow-xs min-h-[120px]">
+                        <div id="ai-output" class="ai-content leading-relaxed">
+                            <!-- AI Response goes here -->
+                        </div>
+                    </div>
+
+                    <!-- 生成完畢後展示：教練評語卡片 -->
+                    <div id="coach-review-card" class="hidden bg-blue-50/70 border border-blue-200 rounded-xl p-5 shadow-xs">
+                        <h4 class="font-bold text-primary mb-2 flex items-center gap-2">
+                            <span>👩‍🏫</span> 教練的寫作講評：
+                        </h4>
+                        <div id="coach-review-content" class="text-sm text-ink leading-relaxed space-y-2">
+                            <!-- 教練肯定與建議 -->
+                        </div>
+                    </div>
+
+                    <!-- 生成完畢後展示：「Before / After」雙欄卡片對照 -->
+                    <div id="before-after-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Before: 學生原文 -->
+                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+                                    <span class="font-bold text-sm text-gray-700 flex items-center gap-1.5">
+                                        <span>📝</span>【你的原始草稿】
+                                    </span>
+                                    <span id="badge-before-count" class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded font-medium">0 字</span>
+                                </div>
+                                <div id="card-before-text" class="text-gray-800 font-serif leading-relaxed text-base italic">
+                                    <!-- 學生原文 -->
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-400">
+                                原文基礎：有構思雛形，等待展開細節與感情
+                            </div>
+                        </div>
+
+                        <!-- After: 6級分升級版 -->
+                        <div class="bg-amber-50/70 border-2 border-amber-300 rounded-xl p-5 shadow-md flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -top-6 -right-6 w-20 h-20 bg-amber-400/20 rounded-full blur-xl pointer-events-none"></div>
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200/80">
+                                    <span class="font-bold text-sm text-amber-900 flex items-center gap-1.5">
+                                        <span>✨</span>【6 級分潤飾升級版】
+                                    </span>
+                                    <span class="text-xs bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-bold">滿級分示範</span>
+                                </div>
+                                <!-- 純淨 6 級分美句區 (採納與複製專用) -->
+                                <div id="card-after-pure-text" class="text-ink font-serif leading-relaxed text-base p-4 bg-white/95 rounded-xl border border-amber-200/90 shadow-2xs mb-3 select-all">
+                                    <!-- 純淨美句 -->
+                                </div>
+                                <!-- 寫作技法深度拆解 (僅供學生觀摩，不入作文) -->
+                                <div id="card-after-breakdown" class="text-xs space-y-1.5 pt-2 border-t border-amber-200/80">
+                                    <div class="font-bold text-amber-900 mb-1.5 flex items-center gap-1">
+                                        <span>🔍</span> 寫作技法深度拆解 (供觀摩，不入作文)：
+                                    </div>
+                                    <div id="card-after-breakdown-list" class="space-y-1.5 text-gray-700 leading-normal">
+                                        <!-- 彩色修辭標籤與說明 -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-amber-200/80 flex flex-wrap items-center justify-between gap-2">
+                                <span class="text-xs text-amber-800 font-medium">💡 採納與複製將「僅帶入純淨美句」</span>
+                                <span id="badge-after-count" class="text-xs bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded font-bold">0 字</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 操作按鈕列 -->
+                    <div class="flex flex-wrap justify-end gap-3 pt-2">
+                        <button id="btn-adopt-ai" class="text-sm bg-gradient-to-r from-primary to-blue-700 hover:opacity-95 text-white px-5 py-2.5 rounded-lg font-bold transition flex items-center gap-2 shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
+                            <span class="text-base">🚀</span>
+                            <span>一鍵採納至累積區</span>
+                        </button>
+                        <button id="btn-copy-ai" class="text-sm bg-white hover:bg-gray-100 text-ink px-4 py-2.5 rounded-lg font-bold transition flex items-center gap-2 border border-gray-300 shadow-xs">
+                            <span>📋 複製潤飾</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-error" class="hidden mt-6 bg-red-50 border-l-4 border-danger p-4 text-danger rounded-r-lg">
+                    <p id="ai-error-text">抱歉，教練目前遇到連線問題，請確認您的連線或稍後再試一次！</p>
+                </div>
+<!-- 我的文章累積區 -->
+                <div class="mt-10 bg-white border-2 border-primary/30 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-ink flex items-center gap-2">
+                            <span class="text-2xl">✍️</span> 我的論說文草稿區
+                        </h3>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4 font-medium">
+                        參考教練的建議，將修改好的段落貼到這裡。遵循「起承轉合」架構，逐步完成你的大作吧！
+                    </p>
+                    <textarea id="accumulated-draft" rows="8" class="w-full border border-gray-200 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition bg-paper" placeholder="在此處組合並編修你的完整文章..."></textarea>
+                    
+                    <div class="flex justify-end items-center mt-2">
+                        <div class="text-right text-sm text-ink font-bold">目前字數：<span id="accumulated-char-count" class="text-primary">0</span> 字</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 教師人工巡桌指南 -->
+            <div class="mt-10 pt-6 border-t border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-paper flex items-center gap-2"><span class="text-2xl">👩‍🏫</span> 議言堂：常見盲點破解</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🚫</span>
+                            <h4 class="text-lg font-bold text-paper">盲點一：喧賓奪主</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            <b>症狀：</b>花了大半篇幅講新聞故事，最後只剩一句話「所以我們要做好人」。<br><br>
+                            <span class="text-highlight font-bold">破解：論說文的重點在「理」。引述新聞必須簡明扼要，像「王船祭」的例子，只需點出其「送瘟」的儀式感即可，隨後應立刻切入心理層面的論述。</span>
+                        </div>
+                        <div class="text-center text-paper/50 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🧩</span>
+                            <h4 class="text-lg font-bold text-paper">盲點二：各說各話</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            <b>症狀：</b>第一段寫環保新聞，第二段突然開始背誦愛迪生的名言，前後文缺乏邏輯關聯。<br><br>
+                            <span class="text-highlight font-bold">破解：做到「敘議相連」。如果你提出「蝴蝶效應」的論點，你的例子就必須像「韓信與漂母」那樣，證明一個微小的動作（一飯之恩）如何引發重大的歷史結果。</span>
+                        </div>
+                        <div class="text-center text-paper/50 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">☁️</span>
+                            <h4 class="text-lg font-bold text-paper">盲點三：空泛說教</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            <b>症狀：</b>通篇都是「我們應該...」、「大家必須...」等口號，缺乏具體例證支持。<br><br>
+                            <span class="text-highlight font-bold">破解：善用「夾敘夾議」。不要只講抽象道理，要穿插具體事實（如：日常生活經驗、歷史典故），讓「事」的陳述使「理」自然顯現，讀者才會信服。</span>
+                        </div>
+                        <div class="text-center text-paper/50 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四步：優秀範文賞析 -->
+        <section id="sample-essays" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📚</span> 滿分範文賞析
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    觀摩如何從平凡的新聞事件中，萃取出深刻的道理，並巧妙運用「先敘後議」與「夾敘夾議」手法。
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- 範文 1：蝴蝶效應 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper hover:bg-gray-100 flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-butterfly', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🦋</span> 聚焦【微小與偉大】：從讓座新聞談蝴蝶效應</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full border border-primary/20 font-bold">先敘後議</span>
+                            <span class="essay-icon text-gray-500">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-butterfly" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>日前，一則網路新聞吸引了我的目光。影片中，一列擁擠的捷運車廂內，多數乘客正低頭滑著手機。這時，一位身穿制服的高中生悄悄站起身，將座位讓給了剛上車、步履蹣跚的老爺爺。老爺爺驚訝之餘，露出了慈祥的笑容連聲道謝，而周遭原本冷漠的乘客，也紛紛抬起頭，投以讚許的目光。這個看似微不足道的日常舉動，卻在喧囂的都市叢林中，注入了一股溫暖的清流。</p>
+                            <p>這則短暫的新聞畫面，引發了我深刻的反思。在追求效率與功利的現代社會中，我們常誤以為只有做出驚天動地的偉業，才足以改變世界，因此對身邊微小的善意視而不見。然而，正如氣象學中著名的「蝴蝶效應」所言：一隻亞馬遜河流域熱帶雨林中的蝴蝶，偶爾扇動幾下翅膀，可能在兩週後引起美國德克薩斯州的一場龍捲風。這意味著，初始條件下微小的變化，能帶動整個系統長期的巨大連鎖反應。</p>
+                            <p>歷史上，這樣的例子屢見不鮮。中國歷史上那位在河邊洗衣的無名老婦——漂母，可能從未想過自己分給落魄少年韓信的一頓飯，會產生多大的影響。但正是這一飯之恩，激勵了韓信奮發向上，最終成為幫助劉邦建立漢朝的開國功臣。漂母的一個微小善舉，猶如蝴蝶輕拍翅膀，最終改寫了中國歷史的走向。在芸芸眾生中，漂母是一位卑微的小人物，但她所引發的效應，卻比許多王侯將相更為深遠。</p>
+                            <p>回到那則捷運讓座的新聞，那位高中生的舉動，不正是現代社會中的蝴蝶拍翼嗎？他的善意不僅幫助了老爺爺，更重要的是，他喚醒了車廂內其他乘客心中的柔軟，這股善的漣漪，或許會促使這些乘客在未來的某一天，也對陌生人伸出援手。只要我們不妄自菲薄，願意在日常生活中釋放微小的善意，這股力量就能相激相盪，最終匯聚成改變社會的巨大暖流。勿以善小而不為，因為每個人，都有可能是那隻引發善意颶風的蝴蝶。</p>
+                        </div>
+                        <div class="bg-gray-50 p-5 rounded-xl mt-6 border border-gray-200">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><span>🎯</span>【寫作手法解析】</h4>
+                            <ul class="space-y-2 text-sm text-gray-700 list-none pl-0">
+                                <li><b>• 起 (引出事件)：</b>第一段<span class="text-primary font-semibold">先敘述新聞</span>，描繪高中生讓座的細節，確立文章的起點。</li>
+                                <li><b>• 承 (初步反思)：</b>第二段<span class="text-primary font-semibold">由敘轉議</span>，點出現代人的迷思，並引入核心論點「蝴蝶效應」理論。</li>
+                                <li><b>• 轉 (舉例佐證)：</b>第三段運用「韓信與漂母」的歷史典故，以具體事實證明微小善舉能引發巨大改變，增強說服力。</li>
+                                <li><b>• 合 (總結呼應)：</b>第四段將歷史拉回現代新聞，呼籲大眾勿以善小而不為，完美扣合首段與論點。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 2：王船祭 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper hover:bg-gray-100 flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-wangchuan', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🔥</span> 聚焦【心靈除役】：從校園衝突談心中的王船</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-secondary/10 text-secondary px-3 py-1 rounded-full border border-secondary/20 font-bold">夾敘夾議</span>
+                            <span class="essay-icon text-gray-500">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-wangchuan" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>上週的班會課上，兩位平時交情不錯的同學因為分組報告的意見不合，爆發了激烈的口角。當時氣氛緊繃，雙方互不相讓，惡毒的言語如利刃般互相傷害。雖然事後在老師的調解下兩人道了歉，但接下來的幾天裡，我觀察到他們之間的互動充滿了尷尬與刻意迴避。這股未解的鬱悶情緒，像一團無形的烏雲籠罩著他們，也影響了班上的氛圍。這讓我聯想到了台灣民間傳統的「王船祭」。</p>
+                            <p>在台灣西南沿海，每隔幾年就會舉行盛大的王船祭典。先民們相信，透過建造精美的王船，並將象徵瘟疫、邪魔與不幸的事物送上船，最後在海邊將王船點火焚燒，便能將這些災厄送走，祈求全村的平安。這個看似迷信的古老儀式，若從心理學的角度來看，其實蘊含著深刻的智慧。它是先民們為了具象化心中的恐懼與痛苦，所創造出的一種「心靈除役」過程。當人們看著熊熊烈焰吞噬王船，內心的焦慮也隨之燃燒殆盡，最終獲得平靜。</p>
+                            <p>現實生活中，我們何嘗不需要一場內心的王船祭？當兩位同學發生衝突時，他們心中產生了憤怒、委屈或罪惡感等負面情緒。這些情緒就好比心靈的「瘟疫」，如果只是表面上道歉，卻沒有在內心深處真正原諒對方與自己，這些瘟疫就會持續在心中蔓延，消耗我們的能量。我們的心中，其實都停泊著一艘載滿負面情緒的王船，它需要一個宣洩的出口，需要被點燃、出海。</p>
+                            <p>與其讓負面情緒如未散的陰霾般累積，不如主動為自己舉行一場心靈祭典。面對衝突後的芥蒂，我們需要勇敢地面對心中的糾結，也許是一次坦誠的長談，也許是一封寫下真實感受的信，將這些不愉快打包放上心中的王船。然後，學會放下，讓寬容的烈火將這些重擔燃燒殆盡。唯有適時地清空心靈的包袱，我們才能如同祭典過後的村莊，迎接嶄新而充滿希望的明天。</p>
+                        </div>
+                        <div class="bg-gray-50 p-5 rounded-xl mt-6 border border-gray-200">
+                            <h4 class="font-bold text-secondary mb-3 flex items-center gap-2"><span>🎯</span>【寫作手法解析】</h4>
+                            <ul class="space-y-2 text-sm text-gray-700 list-none pl-0">
+                                <li><b>• 敘事導入：</b>第一段從「校園同學衝突」的事件起筆，描繪事件留下的負面情緒餘波。</li>
+                                <li><b>• 轉換觀點：</b>第二段引入「王船祭」的傳統習俗，並<span class="text-secondary font-semibold">進行議理分析</span>，指出其背後「心靈除役」的心理學意義。</li>
+                                <li><b>• 夾敘夾議：</b>第三段將同學衝突產生的負面情緒，精妙地比喻為心靈的「瘟疫」，指出每個人心中都有一艘需要被燃燒的王船。</li>
+                                <li><b>• 提出解方：</b>第四段總結，呼籲我們應勇敢面對糾結，學會放下，讓心靈重獲平靜。邏輯層層遞進，說服力強。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 3：AI 新聞 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper hover:bg-gray-100 flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-ai', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🤖</span> 聚焦【科技與人文】：從 AI 繪圖獲獎新聞談起</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm text-blue-700 bg-blue-100 px-3 py-1 rounded-full border border-blue-200 font-bold">夾敘夾議</span>
+                            <span class="essay-icon text-gray-500">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-ai" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>日前，一則科技新聞在藝術界引發了軒然大波。在美國的一場美術比賽中，一幅名為《太空歌劇院》的作品奪得了數位藝術類別的首獎。然而，令人震驚的是，這幅畫作並非出自人類畫家之手，而是參賽者利用 AI 繪圖工具生成的。新聞畫面中，有些畫家憤怒地抗議這是「藝術的死亡」，但也有人讚嘆 AI 驚人的創造力。這起事件，宛如一顆投入平靜湖面的石子，在我的心中激起了層層漣漪。</p>
+                            <p>這則新聞觸發了我對「人類價值」的深刻反思。隨著人工智慧的飛速發展，從自動駕駛、機器人寫稿到如今的 AI 藝術創作，科技似乎正一步步取代人類曾經引以為傲的技能。許多人開始陷入「我們將被淘汰」的恐懼之中。然而，冷靜思考後，我認為 AI 終究是工具，它能快速處理龐大數據、模仿大師的筆觸，卻無法複製人類從生命經驗中淬鍊出的「情感」與「靈魂」。一幅畫作之所以感人，不僅在於光影的精準，更在於畫家作畫時所傾注的喜怒哀樂。</p>
+                            <p>回顧歷史，類似的科技衝擊並非第一次發生。十九世紀工業革命時期，機器的出現曾讓大量紡織工人失業，他們甚至發起「盧德運動」去砸毀機器。但事實證明，機器的發明並沒有毀滅人類，反而將人類從繁重的勞力中解放出來，促成了後續文化與科學的躍進；又如同當年照相機發明時，許多畫家以為寫實繪畫將走向終結，沒想到這反而逼迫藝術家跳脫寫實的框架，催生了印象派、立體派等更具想像力的藝術流派。AI 的出現也是如此，它取代了技術性的「製造」，卻將逼迫我們更加專注於「創造」。</p>
+                            <p>回到那則 AI 獲獎的新聞，我們不需要將科技視為洪水猛獸。人工智慧是一面鏡子，照出了人類在技術上的局限，同時也折射出人類情感與思想的無可取代。我們應該學會駕馭 AI，將其作為延伸想像力的畫筆，而非任由它取代我們的腦袋。在未來的世界裡，不被淘汰的秘訣，不是去跟機器比拚計算速度，而是去深化我們生而為人的溫度與同理心。只要我們的心跳依舊帶著感情，人類的光芒就不會被冰冷的演算法所掩蓋。</p>
+                        </div>
+                        <div class="bg-gray-50 p-5 rounded-xl mt-6 border border-gray-200">
+                            <h4 class="font-bold text-blue-700 mb-3 flex items-center gap-2"><span>🎯</span>【寫作手法解析】</h4>
+                            <ul class="space-y-2 text-sm text-gray-700 list-none pl-0">
+                                <li><b>• 起 (引出事件)：</b>第一段敘述 AI 畫作獲獎的爭議新聞，點出雙方觀點的衝突，成功吸引讀者目光。</li>
+                                <li><b>• 承 (分析事理)：</b>第二段剖析 AI 的優勢與局限，提出核心論點：「AI 無法複製人類的情感與靈魂」。</li>
+                                <li><b>• 轉 (舉例佐證)：</b>第三段運用工業革命與照相機發明的歷史例證，以古鑑今，證明科技進步反而是逼迫人類昇華的催化劑。</li>
+                                <li><b>• 合 (總結呼籲)：</b>第四段呼應首段，提出具體的面對態度——「駕馭它，並保有生而為人的溫度」，為文章畫下充滿希望的句點。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= 頁尾識別 (Footer) ================= -->
+    <footer class="bg-slate-100 text-slate-600 py-8 mt-16 border-t border-slate-200 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-2.5">
+                <img src="../assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-8 h-8 rounded-full shadow-sm">
+                <span class="font-serif font-bold text-slate-800 text-sm sm:text-base">八下閱思龍門・臺灣議言堂</span>
+            </div>
+
+            <!-- Copyright -->
+            <div class="text-xs text-slate-500 font-medium text-center sm:text-right leading-relaxed">
+                <div>© 2026 學思軒</div>
+                <div class="text-slate-400 text-[11px] mt-0.5">&gt;&lt;&gt; &gt;&lt;&gt; &gt;&lt;&gt; ˙˙˙本網頁由黃于珊老師利用Google antigravity 2.0生成製作，僅供教學使用。˙˙˙&lt;&gt;&lt; &lt;&gt;&lt; &lt;&gt;&lt;</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Step 1: Fact to Argument Builder (事件到論點的擴寫)
+            const sentenceData = [
+                { label: "基礎事實", text: "新聞報導一位學生在捷運上讓座給老人，老人覺得很開心。", words: 26, btnText: "➕ 加上「細節敘述」", hint: "💡 <strong>寫作心法：</strong>「先敘事」時，不要只交代人事時地物。稍微描繪一下人物的動作或神態，能讓讀者更有畫面感，產生共鳴。" },
+                { label: "細節敘述", text: "新聞報導，一名穿著制服的國中生在擁擠的捷運上，主動將座位讓給一位步履蹣跚的老爺爺，老爺爺露出慈祥的微笑連聲道謝。", words: 56, btnText: "➕ 加上「初步反思」", hint: "💡 <strong>寫作心法：</strong>敘述完畢後，必須「由敘轉議」。試着用「這個畫面讓我體悟到...」或「這不禁讓我思考...」來引出你的看法。" },
+                { label: "初步反思", text: "新聞報導中，國中生在擁擠捷運上讓座給步履蹣跚的老爺爺。這個短暫的畫面，卻在冷漠的都市叢林中注入了一股暖流。這讓我體悟到，善良並不需要做出驚天動地的偉業。", words: 77, btnText: "➕ 加上「核心論述」", hint: "💡 <strong>寫作心法：</strong>最後，將你的反思與一個具有普遍性的「道理」或「理論」（例如課本教的蝴蝶效應）結合，就能形成強有力的論點！" },
+                { label: "完整引言 (敘議結合)", text: "新聞中，國中生在捷運上讓座給老人的舉動，在冷漠的都市中注入了暖流。這讓我體悟到，善良不需驚天動地的偉業，正如「蝴蝶效應」般，一個微小的善意之舉，也能在社會角落引發善的巨大漣漪。", words: 91, btnText: "🎉 完成練習", hint: "✨ <strong>太棒了！</strong>從一句單調的事實，我們成功萃取出「微小善意能引發巨大影響」的核心論點。這就是論說文開頭最棒的示範！" }
+            ];
+
+            let currentStep = 0;
+            const elLabel = document.getElementById('sentence-label');
+            const elText = document.getElementById('sentence-text');
+            const elBadge = document.getElementById('word-count-badge');
+            const btnNext = document.getElementById('btn-next-step');
+            const btnReset = document.getElementById('btn-step-1');
+            const hintBox = document.getElementById('teacher-hint');
+
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(ctxGrowth, {
+                type: 'bar',
+                data: {
+                    labels: ['基礎事實', '加細節', '加反思', '加論述'],
+                    datasets: [{
+                        label: '字數',
+                        data: [26, 0, 0, 0],
+                        backgroundColor: ['#E2E8F0', '#93C5FD', '#FBBF24', '#2563EB'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: '#F1F5F9' }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' 字'; } } } }
+                }
+            });
+
+            btnNext.addEventListener('click', () => { if (currentStep < 3) { currentStep++; updateSentenceUI(); } });
+            btnReset.addEventListener('click', () => { currentStep = 0; updateSentenceUI(); });
+
+            function updateSentenceUI() {
+                const data = sentenceData[currentStep];
+                elText.style.opacity = 0;
+                setTimeout(() => {
+                    elLabel.textContent = data.label; elText.innerHTML = data.text;
+                    elBadge.textContent = data.words + ' 字'; 
+                    hintBox.innerHTML = data.hint;
+                    elText.style.opacity = 1;
+                }, 200);
+
+                if (currentStep === 3) {
+                    btnNext.style.display = 'none'; btnReset.style.display = 'block';
+                } else {
+                    btnNext.style.display = 'block'; btnNext.textContent = data.btnText; btnReset.style.display = 'none';
+                }
+
+                const newData = [26, 0, 0, 0];
+                for (let i = 0; i <= currentStep; i++) newData[i] = sentenceData[i].words;
+                growthChart.data.datasets[0].data = newData;
+                growthChart.update();
+            }
+
+            // Step 2: Paragraph Blueprint Logic (起承轉合) 改為具體字數建議
+            const paragraphData = [
+                { id: 'p1', title: "第一段：【起】引述新聞，確立焦點", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#2563EB', task: "簡潔有力地敘述你所選擇的新聞或事件。重點不在詳述過程，而是把鏡頭「聚焦」在最能引發感觸的關鍵點。", prompts: ["這則新聞的主角是誰？發生了什麼事？", "事件中哪個畫面或行為最讓你印象深刻？"], materials: "運用「先敘後議」，確保事實敘述真實。結尾可稍微點出初步感受，做為橋樑。", hint: "「日前新聞播報了一則關於...的報導。畫面中...的情景，深深觸動了我的心。」", icon: "🎬" },
+                { id: 'p2', title: "第二段：【承】分析事理，深化反思", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#D97706', task: "從新聞事件表面往下挖。這個事件反映了現代社會的什麼現象？或是觸發了你什麼樣的心理感悟？", prompts: ["這個事件為什麼會發生？背後有什麼值得探討的動機或社會背景？", "這件事打破了你的什麼迷思？"], materials: "使用「夾敘夾議」。在論述觀點時，適時回扣首段的新聞細節，確保論述不脫節。", hint: "「這短暫的畫面引發了我的反思。在追求效率的現代社會，我們常以為...，然而這件事卻告訴我們...」", icon: "🔍" },
+                { id: 'p3', title: "第三段：【轉】舉例佐證，強化論點", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#059669', task: "為了證明你的觀點不是各說各話，請引入其他具體例證（如：歷史典故、名言佳句、其他類似事件）來支持你的看法。", prompts: ["有哪些歷史人物（如韓信）或理論（如蝴蝶效應、王船祭）可以證明你的論點？", "這些例子與你首段的新聞有什麼共同的本質？"], materials: "善用「例證法」。舉例時也要「先敘後議」，簡述例子後，務必說明這個例子如何證明你的核心觀點。", hint: "「歷史上，這樣的例子屢見不鮮。正如氣象學中的蝴蝶效應... / 中國歷史上的漂母...，他們都證明了...」", icon: "🏛️" },
+                { id: 'p4', title: "第四段：【合】總結呼應，提出呼籲", wordsStr: "約 150-200 字 (約 7-9 行)", weight: 175, color: '#7C3AED', task: "將第三段的廣闊視野拉回現實生活，總結你的核心觀點，並對讀者（或自己）提出具體的呼籲或期許。", prompts: ["總結來說，這則新聞帶給我們最重要的啟示是什麼？", "我們在日常生活中可以怎麼做？"], materials: "首尾呼應。重申立場，語氣要堅定、客觀且具備正面力量。", hint: "「回到那則新聞，那位主角的舉動正是...。只要我們願意...，這股力量就能匯聚成改變社會的暖流。」", icon: "✨" }
+            ];
+
+            const tabContainer = document.getElementById('tab-container');
+            let activeTabIndex = 0;
+
+            paragraphData.forEach((data, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn w-full text-left px-5 py-4 rounded-lg bg-white border border-gray-100 font-bold text-ink flex items-center justify-between shadow-sm`;
+                if(index === 0) btn.classList.add('active');
+                
+                // 修改標籤呈現方式，直接顯示字數建議字串
+                btn.innerHTML = `<span class="flex items-center gap-3"><span class="text-xl">${data.icon}</span> <span>${data.title.split('：')[0]}</span></span> <span class="text-xs font-normal opacity-70">${data.wordsStr}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.style.borderLeftColor = 'transparent'; });
+                    btn.classList.add('active'); btn.style.borderLeftColor = data.color;
+                    activeTabIndex = index;
+                    updateTabContent(index); updateDoughnutChart(index);
+                });
+                tabContainer.appendChild(btn);
+            });
+
+            function updateTabContent(index) {
+                const data = paragraphData[index];
+                document.getElementById('tab-title').textContent = data.title;
+                document.getElementById('tab-words').textContent = `建議字數：${data.wordsStr}`;
+                document.getElementById('tab-task').textContent = data.task;
+                
+                const elPrompts = document.getElementById('tab-prompts');
+                elPrompts.innerHTML = '';
+                data.prompts.forEach(p => {
+                    const li = document.createElement('li'); li.textContent = p; elPrompts.appendChild(li);
+                });
+
+                document.getElementById('tab-materials').textContent = data.materials;
+                document.getElementById('tab-hint').textContent = data.hint;
+            }
+
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            const weights = paragraphData.map(d => d.weight);
+            const baseColors = paragraphData.map(d => d.color);
+            const mutedColors = baseColors.map(c => c + '40'); 
+
+            const doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: paragraphData.map(d => d.title.split('：')[0]),
+                    datasets: [{
+                        data: weights, backgroundColor: [baseColors[0], mutedColors[1], mutedColors[2], mutedColors[3]],
+                        borderWidth: 2, borderColor: '#F8FAFC'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '70%',
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return '約 ' + context.raw + ' 字'; } } } },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+
+            function updateDoughnutChart(activeIndex) {
+                const newColors = paragraphData.map((d, i) => i === activeIndex ? baseColors[i] : mutedColors[i]);
+                doughnutChart.data.datasets[0].backgroundColor = newColors; doughnutChart.update();
+            }
+
+            tabContainer.querySelector('.tab-btn').style.borderLeftColor = paragraphData[0].color;
+            document.querySelectorAll('.hidden-content').forEach(el => el.style.display = 'none');
+            
+            // --- Step 3: AI Coach Logic ---
+            const btnAskAI = document.getElementById('btn-ask-ai');
+            const studentInput = document.getElementById('student-input');
+            const charCountDisplay = document.getElementById('char-count');
+            const charWarning = document.getElementById('char-warning');
+            const aiLoading = document.getElementById('ai-loading');
+            const aiOutputContainer = document.getElementById('ai-output-container');
+            const aiOutput = document.getElementById('ai-output');
+            const aiError = document.getElementById('ai-error');
+            const quickDraftBtns = document.querySelectorAll('.quick-draft-btn');
+            const btnCopyAi = document.getElementById('btn-copy-ai');
+            
+            const accumulatedDraft = document.getElementById('accumulated-draft');
+            const accumulatedCharCount = document.getElementById('accumulated-char-count');
+
+                        const inspirationQuotes = [
+                "一則短短三十秒的短影音新聞，在社群平台上掀起了百萬點擊與數以萬計的激烈爭鋒，令人深思。",
+                "在碎片化資訊氾濫的時代，我們往往急著在鍵盤上敲下憤怒，卻忘了停下腳步探尋事件的全貌。",
+                "表面上看這是一起單純的消費糾紛，若抽絲剝繭，背後折射出的卻是現代社會制度與人性的雙重拉扯。",
+                "作為中學生的我們，不應只是被動的旁觀者，而應具備批判思考的敏銳度，以理性撥開輿論迷霧。"
+            ];
+
+            const btnInspirationDice = document.getElementById('btn-inspiration-dice');
+            const promptChips = document.querySelectorAll('.prompt-chip-btn');
+            const btnAskText = document.getElementById('btn-ask-text');
+
+            // 雙欄卡片相關元件
+            const beforeAfterContainer = document.getElementById('before-after-container');
+            const cardBeforeText = document.getElementById('card-before-text');
+            const badgeBeforeCount = document.getElementById('badge-before-count');
+            const cardAfterPureText = document.getElementById('card-after-pure-text');
+            const cardAfterBreakdown = document.getElementById('card-after-breakdown');
+            const cardAfterBreakdownList = document.getElementById('card-after-breakdown-list');
+            const badgeAfterCount = document.getElementById('badge-after-count');
+            const coachReviewCard = document.getElementById('coach-review-card');
+            const coachReviewContent = document.getElementById('coach-review-content');
+            const aiStreamBox = document.getElementById('ai-stream-box');
+            const streamBadge = document.getElementById('stream-badge');
+            const btnAdoptAi = document.getElementById('btn-adopt-ai');
+            const aiErrorText = document.getElementById('ai-error-text');
+
+            // 隨機靈感骰子
+            if (btnInspirationDice) {
+                btnInspirationDice.addEventListener('click', () => {
+                    const randomQuote = inspirationQuotes[Math.floor(Math.random() * inspirationQuotes.length)];
+                    insertAtCursor(studentInput, randomQuote);
+                    btnInspirationDice.classList.add('rotate-12', 'scale-105');
+                    setTimeout(() => btnInspirationDice.classList.remove('rotate-12', 'scale-105'), 200);
+                });
+            }
+
+            // 在光標處插入文字輔助函式
+            function insertAtCursor(myField, myValue) {
+                if (document.selection) {
+                    myField.focus();
+                    const sel = document.selection.createRange();
+                    sel.text = myValue;
+                } else if (myField.selectionStart || myField.selectionStart == '0') {
+                    const startPos = myField.selectionStart;
+                    const endPos = myField.selectionEnd;
+                    myField.value = myField.value.substring(0, startPos)
+                        + myValue
+                        + myField.value.substring(endPos, myField.value.length);
+                    myField.selectionStart = startPos + myValue.length;
+                    myField.selectionEnd = startPos + myValue.length;
+                } else {
+                    myField.value += myValue;
+                }
+                updateCharCount();
+                myField.focus();
+            }
+
+            // 快捷提示詞按鈕監聽
+            promptChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const promptText = this.getAttribute('data-prompt');
+                    insertAtCursor(studentInput, promptText);
+                    this.classList.add('scale-105', 'bg-blue-100');
+                    setTimeout(() => this.classList.remove('scale-105', 'bg-blue-100'), 200);
+                });
+            });
+
+            // 通道設定相關元件
+            const btnToggleConfig = document.getElementById('btn-toggle-config');
+            const configPanel = document.getElementById('config-panel');
+            const channelMode = document.getElementById('channel-mode');
+            const workerUrlInput = document.getElementById('worker-url-input');
+            const workerUrlGroup = document.getElementById('worker-url-group');
+            const customKeyGroup = document.getElementById('custom-key-group');
+            const customApiKeyInput = document.getElementById('custom-api-key');
+            const customModelInput = document.getElementById('custom-model-input');
+            const channelBadge = document.getElementById('channel-badge');
+            const statusText = document.getElementById('status-text');
+            const btnSaveConfig = document.getElementById('btn-save-config');
+            const btnResetConfig = document.getElementById('btn-reset-config');
+            const toggleKeyVisibility = document.getElementById('toggle-key-visibility');
+            const btnSaveCustomKey = document.getElementById('btn-save-custom-key');
+
+            // 預設端點設定 (預設已包含您的 Worker 專屬網址)
+            const DEFAULT_WORKER_URL = "https://gemini-stream-coach.oaoadna.workers.dev";
+            const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbwTX1R33gA3Sz_gPOJ-FXRRK5buWGHZvybTsNUKAD57y48sSJVdjAiaRMzbuxqRJoUtLA/exec";
+            
+            let currentMode = localStorage.getItem('ai_coach_channel') || 'worker';
+            let currentWorkerUrl = localStorage.getItem('ai_coach_worker_url') || DEFAULT_WORKER_URL;
+            let currentCustomKey = localStorage.getItem('ai_coach_custom_key') || localStorage.getItem('gemini_zuowen_key') || '';
+            let currentCustomModel = localStorage.getItem('ai_coach_custom_model') || 'gemini-2.5-flash';
+
+            function updateConfigUI() {
+                channelMode.value = currentMode;
+                workerUrlInput.value = currentWorkerUrl;
+                customApiKeyInput.value = currentCustomKey;
+                customModelInput.value = currentCustomModel;
+
+                if (currentMode === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
+                    if (currentWorkerUrl) {
+                        channelBadge.innerHTML = '⚡ Cloudflare 串流 (極速)';
+                        channelBadge.className = 'bg-blue-100 text-primary px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '通道就緒：使用 Cloudflare 邊緣串流多金鑰池 (SSE)';
+                    } else {
+                        channelBadge.innerHTML = '⚡ Cloudflare 串流 (未設網址)';
+                        channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '提示：尚未填寫 Worker 網址，送出時將自動備援轉為 GAS';
+                    }
+                } else if (currentMode === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                    if (currentCustomKey) {
+                        channelBadge.innerHTML = '自備 Gemini Key';
+                        channelBadge.className = 'bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = `通道就緒：使用個人 API Key 直連原廠 (${currentCustomModel || 'gemini-2.5-flash'})`;
+                    } else {
+                        channelBadge.innerHTML = '🔑 自備 Key (未填寫)';
+                        channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '提示：請輸入您的 Gemini API Key 後點擊「保存金鑰」';
+                    }
+                } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
+                    channelBadge.innerHTML = '🛡️ GAS 安全通道';
+                    channelBadge.className = 'bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[11px] font-bold';
+                    statusText.textContent = '通道就緒：使用 Google Apps Script 安全備援通道';
+                }
+            }
+            updateConfigUI();
+
+            channelMode.addEventListener('change', () => {
+                if (channelMode.value === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
+                } else if (channelMode.value === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
+                }
+            });
+
+            btnToggleConfig.addEventListener('click', () => {
+                configPanel.classList.toggle('hidden');
+            });
+
+            if (toggleKeyVisibility && customApiKeyInput) {
+                toggleKeyVisibility.addEventListener('click', () => {
+                    const isPass = customApiKeyInput.type === 'password';
+                    customApiKeyInput.type = isPass ? 'text' : 'password';
+                    toggleKeyVisibility.textContent = isPass ? '🔒' : '👁️';
+                });
+            }
+
+            if (btnSaveCustomKey && customApiKeyInput) {
+                btnSaveCustomKey.addEventListener('click', () => {
+                    const keyVal = customApiKeyInput.value.trim();
+                    currentCustomKey = keyVal;
+                    localStorage.setItem('ai_coach_custom_key', keyVal);
+                    localStorage.setItem('gemini_zuowen_key', keyVal);
+                    updateConfigUI();
+                    if (keyVal) {
+                        statusText.textContent = '🔑 自備 Gemini Key 已安全儲存於本機！';
+                        alert('已成功保存 Gemini API Key！可直接進行點評。');
+                    } else {
+                        statusText.textContent = '⚠️ 已清除自備金鑰';
+                    }
+                });
+            }
+
+            btnSaveConfig.addEventListener('click', () => {
+                currentMode = channelMode.value;
+                currentWorkerUrl = workerUrlInput.value.trim();
+                currentCustomKey = customApiKeyInput.value.trim();
+                currentCustomModel = customModelInput.value.trim() || 'gemini-2.5-flash';
+                localStorage.setItem('ai_coach_channel', currentMode);
+                localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
+                updateConfigUI();
+                configPanel.classList.add('hidden');
+                alert('✅ 代理通道設定已成功儲存！');
+            });
+
+            btnResetConfig.addEventListener('click', () => {
+                currentMode = 'worker';
+                currentWorkerUrl = DEFAULT_WORKER_URL;
+                currentCustomKey = '';
+                currentCustomModel = 'gemini-2.5-flash';
+                localStorage.setItem('ai_coach_channel', currentMode);
+                localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
+                updateConfigUI();
+                alert('已還原為專屬 Cloudflare 預設設定！');
+            });
+
+            quickDraftBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    studentInput.value = this.innerText;
+                    updateCharCount();
+                    this.classList.add('bg-highlight');
+                    setTimeout(() => this.classList.remove('bg-highlight'), 200);
+                });
+            });
+
+            function updateCharCount() {
+                const len = studentInput.value.length;
+                charCountDisplay.textContent = len;
+                if (len >= 200) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數已達上限 (200字)！請分批讓教練指導。';
+                    charCountDisplay.classList.add('text-danger', 'font-bold');
+                } else if (len > 150) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。';
+                    charCountDisplay.classList.add('text-yellow-600', 'font-bold');
+                    charCountDisplay.classList.remove('text-danger');
+                } else {
+                    charWarning.classList.add('opacity-0');
+                    charCountDisplay.classList.remove('text-danger', 'text-yellow-600', 'font-bold');
+                }
+            }
+            studentInput.addEventListener('input', updateCharCount);
+
+            accumulatedDraft.addEventListener('input', () => {
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+            });
+
+            // 智慧分離「純淨 6 級分故事美句」與「寫作技法拆解說明」
+            function separateProseAndBreakdown(demoRaw) {
+                // 1. 若內容中明確含有 <ul> 或 <ol> 標籤列表
+                const listMatch = demoRaw.match(/<(?:ul|ol)[\s\S]*?<\/(?:ul|ol)>/i);
+                if (listMatch) {
+                    const breakdownHtml = listMatch[0];
+                    const proseHtml = demoRaw.replace(listMatch[0], '').trim();
+                    return { prose: proseHtml, breakdown: breakdownHtml };
+                }
+
+                // 2. 若包含特定拆解關鍵字
+                const breakdownKeywords = ['【擴寫技法拆解】', '【寫作技法拆解】', '【技巧拆解】', '【寫作手法拆解】', '【擴寫手法】', '擴寫技法拆解', '寫作技法拆解'];
+                for (const kw of breakdownKeywords) {
+                    const idx = demoRaw.indexOf(kw);
+                    if (idx !== -1) {
+                        return {
+                            prose: demoRaw.substring(0, idx).trim(),
+                            breakdown: demoRaw.substring(idx + kw.length).trim()
+                        };
+                    }
+                }
+
+                // 3. 按段落分割 (<p>, </li>, <br> 或 \n)，識別出含有技法解析特徵的行
+                const rawBlocks = demoRaw.split(/(?:<\/p>|<\/li>|<br\s*\/?>|\n+)/).map(b => b.trim()).filter(Boolean);
+                const proseBlocks = [];
+                const breakdownBlocks = [];
+                let isBreakdownSection = false;
+
+                for (const block of rawBlocks) {
+                    const cleanText = block.replace(/<[^>]+>/g, '').trim();
+                    if (!cleanText) continue;
+
+                    // 判斷是否為技法解析特徵行
+                    const isExplanation = /^[•\-\*]/.test(cleanText)
+                        || /^(?:\d+[\.、\)]|✨|🔍|💡|👉)/.test(cleanText)
+                        || /(?:：|:)\s*(?:將|詳述|運用|修辭|動作|具體|暗示|言外之意|摹寫|呈現|加強|說明|解析)/.test(cleanText)
+                        || /(?:運用|使用|採用)了?(?:譬喻|轉化|映襯|誇飾|象徵|細節|摹寫|動態|靜態)/.test(cleanText);
+
+                    if (isExplanation) {
+                        isBreakdownSection = true;
+                    }
+
+                    if (isBreakdownSection) {
+                        breakdownBlocks.push(block);
+                    } else {
+                        proseBlocks.push(block);
+                    }
+                }
+
+                if (breakdownBlocks.length > 0) {
+                    return {
+                        prose: proseBlocks.join('<br>'),
+                        breakdown: breakdownBlocks.join('<br>')
+                    };
+                }
+
+                return { prose: demoRaw, breakdown: '' };
+            }
+
+            // 📋 複製純淨 6 級分美句 (僅複製作文句子，不含說明)
+            btnCopyAi.addEventListener('click', () => {
+                let textToCopy = cardAfterPureText.innerText.trim();
+                if (!textToCopy) {
+                    textToCopy = cardBeforeText.innerText.trim();
+                }
+                textToCopy = textToCopy.replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '').trim();
+
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+
+                const originalHTML = btnCopyAi.innerHTML;
+                btnCopyAi.innerHTML = '✅ 已複製純淨美句！';
+                btnCopyAi.classList.add('bg-primary', 'text-white');
+                setTimeout(() => { 
+                    btnCopyAi.innerHTML = originalHTML;
+                    btnCopyAi.classList.remove('bg-primary', 'text-white');
+                }, 2000);
+            });
+
+            // 🚀 一鍵採納至累積區 (100% 僅採納純淨美句，完全不含任何解析說明)
+            btnAdoptAi.addEventListener('click', () => {
+                let textToAdopt = cardAfterPureText.innerText.trim();
+                
+                if (!textToAdopt) {
+                    alert('目前尚無潤飾美句可採納喔！');
+                    return;
+                }
+
+                // 再次確保去除任何多餘標籤
+                textToAdopt = textToAdopt.replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '').trim();
+
+                if (accumulatedDraft.value.trim().length > 0) {
+                    accumulatedDraft.value += '\n\n' + textToAdopt;
+                } else {
+                    accumulatedDraft.value = textToAdopt;
+                }
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+
+                // 平滑滾動至累積區並做醒目閃爍反饋
+                accumulatedDraft.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                accumulatedDraft.classList.add('ring-4', 'ring-amber-400', 'bg-amber-50/70');
+                setTimeout(() => {
+                    accumulatedDraft.classList.remove('ring-4', 'ring-amber-400', 'bg-amber-50/70');
+                }, 1500);
+
+                const origHTML = btnAdoptAi.innerHTML;
+                btnAdoptAi.innerHTML = '🎉 已成功採納純淨美句！';
+                btnAdoptAi.classList.replace('from-primary', 'from-emerald-600');
+                btnAdoptAi.classList.replace('to-blue-700', 'to-emerald-700');
+                setTimeout(() => {
+                    btnAdoptAi.innerHTML = origHTML;
+                    btnAdoptAi.classList.replace('from-emerald-600', 'from-primary');
+                    btnAdoptAi.classList.replace('to-emerald-700', 'to-blue-700');
+                }, 2500);
+            });
+
+            // 文字美化與排版清理
+            function formatAiText(raw) {
+                let formatted = raw.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                return formatted;
+            }
+
+            // 渲染「Before / After」雙欄對照卡片與修辭標籤
+            function renderBeforeAfterCards(originalDraft, fullAiText) {
+                aiStreamBox.classList.add('hidden');
+                coachReviewCard.classList.remove('hidden');
+                beforeAfterContainer.classList.remove('hidden');
+
+                cardBeforeText.textContent = originalDraft;
+                badgeBeforeCount.textContent = originalDraft.length + ' 字';
+
+                // 拆解【教練評語】與【潤飾示範】
+                let reviewText = '';
+                let afterDemoText = fullAiText;
+
+                const demoKeywords = ['【潤飾示範與拆解】', '【潤飾示範】', '【改寫示範】', '潤飾示範'];
+                let demoIndex = -1;
+                let foundKeyword = '';
+
+                for (const kw of demoKeywords) {
+                    const idx = fullAiText.indexOf(kw);
+                    if (idx !== -1) {
+                        demoIndex = idx;
+                        foundKeyword = kw;
+                        break;
+                    }
+                }
+
+                if (demoIndex !== -1) {
+                    reviewText = fullAiText.substring(0, demoIndex).trim();
+                    afterDemoText = fullAiText.substring(demoIndex + foundKeyword.length).trim();
+                } else {
+                    reviewText = fullAiText;
+                }
+
+                coachReviewContent.innerHTML = formatAiText(reviewText);
+
+                // 分離出「純淨美句」與「說明拆解」
+                const { prose, breakdown } = separateProseAndBreakdown(afterDemoText);
+
+                // 純淨美句去除任何多餘標籤與括號說明
+                let cleanProse = prose
+                    .replace(/<[^>]+>/g, '')
+                    .replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '')
+                    .replace(/【6級分範文美句】/g, '')
+                    .trim();
+
+                // 填入純淨美句
+                cardAfterPureText.textContent = cleanProse;
+                badgeAfterCount.textContent = cleanProse.length + ' 字';
+
+                // 處理技法拆解區塊 (轉換為彩色膠囊標籤)
+                if (breakdown && breakdown.trim().length > 0) {
+                    let styledBreakdown = breakdown.replace(/[\(（]([^）\)]+?)[\)）]/g, (match, tagContent) => {
+                        let colorClass = 'bg-blue-100 text-blue-800 border-blue-200';
+                        if (tagContent.includes('譬喻') || tagContent.includes('比喻') || tagContent.includes('擬人') || tagContent.includes('轉化') || tagContent.includes('修辭')) {
+                            colorClass = 'bg-purple-100 text-purple-800 border-purple-300';
+                        } else if (tagContent.includes('動態') || tagContent.includes('動作') || tagContent.includes('細部') || tagContent.includes('具體')) {
+                            colorClass = 'bg-amber-100 text-amber-800 border-amber-300';
+                        } else if (tagContent.includes('言外之意') || tagContent.includes('情感') || tagContent.includes('心境') || tagContent.includes('昇華') || tagContent.includes('反思')) {
+                            colorClass = 'bg-rose-100 text-rose-800 border-rose-300';
+                        } else if (tagContent.includes('五感') || tagContent.includes('視覺') || tagContent.includes('聽覺') || tagContent.includes('嗅覺') || tagContent.includes('摹寫')) {
+                            colorClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                        }
+                        return `<span class="inline-flex items-center px-2 py-0.5 m-0.5 rounded-full text-xs font-bold border ` + colorClass + ` shadow-2xs">✨ ` + tagContent + `</span>`;
+                    });
+
+                    cardAfterBreakdownList.innerHTML = formatAiText(styledBreakdown);
+                    cardAfterBreakdown.classList.remove('hidden');
+                } else {
+                    cardAfterBreakdown.classList.add('hidden');
+                }
+            }
+
+            // Cloudflare Workers SSE 串流讀取函式
+            async function streamFromWorker(workerUrl, payload, originalDraft) {
+                const response = await fetch(workerUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...payload, stream: true })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    let errMsg = errText;
+                    try {
+                        const parsed = JSON.parse(errText);
+                        errMsg = parsed.error?.message || errText;
+                    } catch(e) {}
+                    throw new Error(`Worker 連線異常 (` + response.status + `)：` + errMsg);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                let accumulatedText = '';
+
+                // 重設並啟動即時串流打字介面
+                streamBadge.classList.remove('hidden');
+                aiLoading.classList.add('hidden');
+                aiOutputContainer.classList.remove('hidden');
+                aiStreamBox.classList.remove('hidden');
+                coachReviewCard.classList.add('hidden');
+                beforeAfterContainer.classList.add('hidden');
+
+                aiOutput.innerHTML = '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('data:')) {
+                            const jsonStr = trimmed.slice(5).trim();
+                            if (jsonStr) {
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const chunkText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                                    if (chunkText) {
+                                        accumulatedText += chunkText;
+                                        aiOutput.innerHTML = formatAiText(accumulatedText) + '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+                                    }
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+
+                // 串流結束：移除打字標籤並切換為 Before/After 雙欄卡片
+                streamBadge.classList.add('hidden');
+                renderBeforeAfterCards(originalDraft, accumulatedText);
+                return accumulatedText;
+            }
+
+
+            // 自訂 Gemini API Key 原廠直連 SSE 串流讀取函式
+            async function streamFromDirectGemini(apiKey, targetModel, payload, originalDraft) {
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:streamGenerateContent?alt=sse&key=${apiKey}`;
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    let errMsg = errText;
+                    try {
+                        const parsed = JSON.parse(errText);
+                        errMsg = parsed.error?.message || errText;
+                    } catch(e) {}
+                    throw new Error(`Google 原廠直連異常 (${response.status})：${errMsg}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                let accumulatedText = '';
+
+                // 重設並啟動即時串流打字介面
+                streamBadge.classList.remove('hidden');
+                aiLoading.classList.add('hidden');
+                aiOutputContainer.classList.remove('hidden');
+                aiStreamBox.classList.remove('hidden');
+                coachReviewCard.classList.add('hidden');
+                beforeAfterContainer.classList.add('hidden');
+
+                aiOutput.innerHTML = '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('data:')) {
+                            const jsonStr = trimmed.slice(5).trim();
+                            if (jsonStr) {
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const chunkText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                                    if (chunkText) {
+                                        accumulatedText += chunkText;
+                                        aiOutput.innerHTML = formatAiText(accumulatedText) + '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+                                    }
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+
+                streamBadge.classList.add('hidden');
+                renderBeforeAfterCards(originalDraft, accumulatedText);
+                return accumulatedText;
+            }
+
+            // GAS 備援請求函式
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+            async function fetchWithRetry(url, payload, retries = 3) {
+                const delays = [1000, 2000, 4000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ` + response.status);
+                        
+                        const textResponse = await response.text();
+                        try {
+                            return JSON.parse(textResponse);
+                        } catch (parseError) {
+                            throw new Error('回傳格式錯誤，請確認 API 連線或 GAS 權限設定。');
+                        }
+                    } catch (error) {
+                        if (i === retries - 1) throw error;
+                        await delay(delays[i]);
+                    }
+                }
+            }
+
+            btnAskAI.addEventListener('click', async () => {
+                const text = studentInput.value.trim();
+                if (!text) {
+                    alert('請先輸入草稿喔！');
+                    return;
+                }
+
+                const selectedFocus = document.querySelector('input[name="focus"]:checked').value;
+
+                btnAskAI.disabled = true;
+                btnAskAI.classList.add('opacity-50', 'cursor-not-allowed');
+                btnAskText.textContent = '⚡ 教練動筆中...';
+                aiOutputContainer.classList.add('hidden');
+                aiError.classList.add('hidden');
+                aiLoading.classList.remove('hidden');
+
+                const systemPrompt = `你是一位專業且溫柔的國中寫作教練，正在指導八年級學生寫「臺灣議言堂：從一則新聞談起」的會考論說文。
+寫作重點：運用「夾敘夾議」或「先敘後議」手法，從新聞事件中萃取觀點，避免流於空泛說教，要求有具體的例證（如歷史故事或名言）。
+請根據學生輸入的草稿給予回饋。
+
+【特別任務】學生希望這次能特別加強：**${selectedFocus}**。請在給予建議時，特別針對這點進行指導。
+
+回饋必須使用繁體中文，語氣親切具鼓勵性，格式請嚴格遵守以下三個段落（請直接使用簡單的 HTML 標籤如 <p>, <b>, <ul>, <li> 進行排版，不要使用 Markdown 星號）：
+
+<p><b>【教練的肯定】</b><br>簡短稱讚學生的選材或初步想法，給予鼓勵。</p>
+<p><b>【具體建議】</b><br>針對學生選擇的加強重點給出具體的修改方向。例如：如何將敘事提煉出道理？建議引用哪些歷史典故？如何讓語氣更客觀？</p>
+<p><b>【潤飾示範與拆解】</b><br>給出一段改寫後的美句示範（符合國中生 6級分程度，融合敘述與議論），並在句子後面用括號標註你使用了什麼寫作技巧（如：夾敘夾議、由實入虛、例證法等）。</p>`;
+
+                const payload = {
+                    model: "gemini-2.5-flash",
+                    contents: [{ role: "user", parts: [{ text: text }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                try {
+                    // 1. 自訂 Gemini API Key 個人直連串流模式
+                    if (currentMode === 'custom') {
+                        if (!currentCustomKey) {
+                            configPanel.classList.remove('hidden');
+                            throw new Error('您已選擇「自訂 API Key」模式，但尚未填寫金鑰。請在上方輸入您的 Gemini API Key 後點擊「儲存設定」。');
+                        }
+                        const targetModel = currentCustomModel || 'gemini-2.5-flash';
+                        const directPayload = {
+                            contents: [{ role: "user", parts: [{ text: text }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        };
+                        await streamFromDirectGemini(currentCustomKey, targetModel, directPayload, text);
+                    } 
+                    // 2. Cloudflare Worker 邊緣多金鑰池串流模式
+                    else if (currentMode === 'worker' && currentWorkerUrl) {
+                        await streamFromWorker(currentWorkerUrl, payload, text);
+                    } 
+                    // 3. GAS 安全備援模式
+                    else {
+                        // 使用 GAS 安全備援模式
+                        const result = await fetchWithRetry(DEFAULT_GAS_URL, payload);
+                        const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                        
+                        if (generatedText) {
+                            aiLoading.classList.add('hidden');
+                            aiOutputContainer.classList.remove('hidden');
+                            renderBeforeAfterCards(text, generatedText);
+                        } else {
+                            const apiErrorMsg = result.error?.message || '未回傳有效文字';
+                            throw new Error(`API 錯誤：` + apiErrorMsg);
+                        }
+                    }
+                } catch (error) {
+                    console.error('AI Coach Error:', error);
+                    aiLoading.classList.add('hidden');
+                    streamBadge.classList.add('hidden');
+                    aiError.classList.remove('hidden');
+                    aiErrorText.innerHTML = `抱歉，教練目前遇到連線問題：<br><strong class="text-sm">` + error.message + `</strong><br>👉 您可點擊上方「⚙️ 代理通道設定」檢查設定、切換至 GAS 備援或輸入自訂 API Key。`;
+                } finally {
+                    btnAskAI.disabled = false;
+                    btnAskAI.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnAskText.textContent = '🚀 請教練指導';
+                }
+            });
+
+
+        });
+
+        // Teacher Checklist Toggle
+        function toggleChecklist(element) {
+            const content = element.querySelector('.hidden-content');
+            const hint = element.querySelector('.show-more-hint');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                element.classList.replace('bg-teacher', 'bg-teacher-light');
+                hint.style.display = 'none';
+            } else {
+                content.style.display = 'none';
+                element.classList.replace('bg-teacher-light', 'bg-teacher');
+                hint.style.display = 'block';
+            }
+        }
+
+        // 範文賞析 Toggle
+        function toggleEssay(essayId, btnElement) {
+            const content = document.getElementById(essayId);
+            const isExpanded = btnElement.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.classList.remove('open');
+                btnElement.setAttribute('aria-expanded', 'false');
+            } else {
+                content.classList.add('open');
+                btnElement.setAttribute('aria-expanded', 'true');
+            }
+        }
+    </script>
+</body>
+</html>

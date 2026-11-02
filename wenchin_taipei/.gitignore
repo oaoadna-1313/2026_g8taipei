@@ -1,0 +1,8 @@
+*.doc
+*.docx
+*.txt
+*.zip
+extracted_assets/
+*.tmp
+.DS_Store
+Thumbs.db

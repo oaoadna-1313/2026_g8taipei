@@ -1,0 +1,1579 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍲 寶島戀真情_我的家鄉味 寫作指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FFFDF8',      /* 帶點米黃的紙張底色，呈現懷舊與食物的溫暖 */
+                        ink: '#3E2723',        /* 沉穩深咖啡色，取代原本的深藍灰 */
+                        primary: '#D35400',    /* 滷肉橘/紅磚色 (代表傳統美食、熱情) */
+                        secondary: '#27AE60',  /* 凍頂茶綠 (代表自然、茶葉、生機) */
+                        tertiary: '#C0392B',   /* 傳統印泥紅 (代表文化傳承) */
+                        highlight: '#FDEBD0',  /* 暖橘底色 */
+                        danger: '#E74C3C',     /* 警示紅 */
+                        teacher: '#5D4037',    /* 教師區預設底色 (深棕) */
+                        'teacher-light': '#8D6E63' /* 教師區展開底色 */
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap');
+        
+        body {
+            background-color: #F4F1EA;
+            color: #3E2723;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23d35400" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+        .step-transition {
+            transition: all 0.5s ease-in-out;
+        }
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #FDF2E9;
+        }
+        .tab-btn.active {
+            background-color: #3E2723 !important;
+            color: #FFFDF8 !important;
+            border-left: 4px solid #D35400;
+        }
+        .checklist-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .checklist-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Loading Animation */
+        .dot-flashing {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #D35400;
+            color: #D35400;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #D35400;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #D35400;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #D35400; }
+            50%, 100% { background-color: rgba(211, 84, 0, 0.2); }
+        }
+        
+        .ai-content b { color: #D35400; font-weight: 700; }
+        .ai-content ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .ai-content li { margin-bottom: 0.25rem; }
+        .ai-content br { margin-bottom: 0.5rem; }
+
+        .essay-content {
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .essay-content.open {
+            max-height: 4000px;
+            opacity: 1;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        .essay-icon {
+            transition: transform 0.3s ease;
+        }
+        .essay-btn[aria-expanded="true"] .essay-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased">
+            <!-- ==================== 1. STICKY HEADER (閱思龍門標準頂部導覽列與螢光筆網頁書籤) ==================== -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand & Title (品牌識別與標題) -->
+            <div class="flex items-center space-x-3">
+                <a href="#hero" class="flex items-center space-x-2.5 group no-underline" style="text-decoration:none;">
+                    <img src="../assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-10 h-10 object-contain rounded-full shadow-sm group-hover:rotate-12 transition-transform duration-300">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="font-serif font-bold text-lg sm:text-xl text-slate-900 tracking-wide group-hover:text-amber-800 transition-colors">寶島戀真情</span>
+                            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">八下閱思龍門・飲食散文</span>
+                        </div>
+                        <p class="text-[11px] text-slate-700 font-medium hidden md:block">
+                            <span class="bg-yellow-200/90 text-amber-950 px-1.5 py-0.5 rounded shadow-xs">詠物三層面構思・美食五感到物我相連真情</span>
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Navigation Links (螢光筆網頁書籤) -->
+            <nav class="flex items-center space-x-1 sm:space-x-1.5 font-medium text-xs sm:text-sm">
+                <a href="#expansion-tool" class="px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all flex items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>🌱 詠物擴寫</span>
+                </a>
+                <a href="#structure-blueprint" class="px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all flex items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>🏗️ 詠物抒懷</span>
+                </a>
+                <a href="#ai-coach-section" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-amber-950 bg-yellow-300 hover:bg-yellow-400 font-bold shadow-xs transition-all flex items-center gap-1 border border-yellow-400/80 ring-2 ring-yellow-200 no-underline" style="text-decoration:none;">
+                    <span>🤖 AI 寫作教練</span>
+                </a>
+                <a href="#sample-essays" class="hidden sm:flex px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>📚 範文賞析</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <header class="bg-white/80 text-ink py-12 px-4 shadow-sm text-center border-b border-primary/20 backdrop-blur-sm relative overflow-hidden" id="hero">
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-secondary to-tertiary"></div>
+        <div class="max-w-4xl mx-auto relative z-10">
+            <div class="text-4xl mb-4">🥢 寶島戀真情 🍵</div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight"><span class="text-primary">我的家鄉味</span> 寫作指南</h1>
+            <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto font-medium leading-relaxed">
+                生活中有許多「物」可以成為寫作對象。請選擇一樣<b class="text-primary">臺灣在地美食</b>，透過<b class="text-tertiary">「詠物三層面」</b>的構思手法，從五感描繪到物我相連，最終抒發你對家鄉的深厚情感，完成一篇約 900 字的動人文章。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-12 space-y-16 md:space-y-20">
+
+        <!-- 第一步：詠物三層面擴寫 -->
+        <section id="expansion-tool" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🌱</span> 第一步：從「好吃」到「感動」的詠物三層面
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    寫美食最怕寫成「食譜」或只會說「很好吃」。透過互動式的練習，觀察我們如何將一句平淡的「我喜歡吃滷肉飯」，依照<b>「描繪及聯想」</b>、<b>「串連物與我」</b>與<b>「抒發情感」</b>三個層次，擴充成一段飽含溫度的文字。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <div class="bg-paper p-6 rounded-xl border border-gray-200 min-h-[200px] flex flex-col justify-center">
+                        <div class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide" id="sentence-label">基礎敘述</div>
+                        <p class="text-xl md:text-2xl leading-relaxed text-ink step-transition font-serif" id="sentence-text">
+                            我最喜歡吃巷口的滷肉飯，覺得非常美味好吃。
+                        </p>
+                        <div class="mt-4 text-right">
+                            <span class="inline-block bg-ink text-paper px-3 py-1 rounded-full text-sm font-bold shadow" id="word-count-badge">21 字</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button id="btn-step-1" class="px-5 py-3 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition w-full md:w-auto hidden">↺ 重新開始</button>
+                        <button id="btn-next-step" class="px-5 py-3 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition w-full md:w-auto shadow-md flex items-center justify-center gap-2">
+                            <span>➕ 進入層面一：描繪與聯想</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-highlight/40 border-l-4 border-primary p-4 rounded-r-lg mt-4">
+                        <p class="text-sm text-ink font-medium" id="teacher-hint">💡 <strong>寫作心法：</strong>「不要只寫『好吃』！請運用視覺、嗅覺等五感，把這道食物的『外形、香氣、特性』具體地描寫出來，讓讀者看了就流口水。」</p>
+                    </div>
+                </div>
+
+                <div class="bg-paper/50 rounded-xl p-4 border border-gray-200">
+                    <h3 class="text-center font-bold text-ink mb-2 text-sm uppercase tracking-wider">寫作層次與字數成長</h3>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二步：文章骨架 -->
+        <section id="structure-blueprint" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🏗️</span> 第二步：「詠物抒懷」五段式骨架搭建
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    以「物」為題材，文章必須有層次地從外在寫到內在。本區塊為你分配好 900 字的黃金比例。點擊左側標籤，探索各段落如何將「家鄉味」與「個人情感」緊密結合。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 flex flex-col gap-2" id="tab-container">
+                    <!-- Tabs will be generated here -->
+                </div>
+
+                <div class="lg:col-span-8 bg-paper rounded-xl border border-gray-200 p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="flex-1 space-y-6">
+                        <div class="border-b-2 border-gray-200 pb-4">
+                            <h3 class="text-2xl font-bold text-ink font-serif" id="tab-title">第一段：【起】破題聚焦</h3>
+                            <p class="text-primary mt-1 font-medium" id="tab-words">建議字數：約 110-150 字 (約 5-7 行)</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">🎯</span> 寫作任務</h4>
+                            <p class="text-gray-700 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-task">開門見山，直接點出你要描寫的「家鄉味」是什麼。可以從廣泛的臺灣美食帶入，最後聚焦在對你最具意義的那一道食物上。</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">❓</span> 引導提問</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-prompts">
+                                <li>在眾多臺灣美食中，最能代表你家鄉或童年回憶的是哪一道？</li>
+                                <li>這道食物通常出現在什麼樣的場合或時間？</li>
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-ink mb-1 text-sm">寫作策略</h4>
+                                <p class="text-sm text-gray-700" id="tab-materials">運用「漏斗式破題」，從多元的臺灣味（大範圍）聚焦到你獨鍾的那一道菜（小焦點）。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-ink mb-1 text-sm">開頭句型提示</h4>
+                                <p class="text-sm text-gray-700 italic" id="tab-hint">「臺灣素有美食王國的美譽，有人獨鍾鮮甜的牛肉麵，有人偏愛消暑的芒果冰。然而，每當我在異鄉感到疲憊時，腦海中浮現的，總是那一碗熱騰騰的...」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/3 flex flex-col justify-center items-center">
+                        <h4 class="text-center font-bold text-ink mb-4 text-sm uppercase tracking-wider">段落字數佔比</h4>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三步：AI 教練與檢核 -->
+        <section id="ai-coach-section" class="bg-ink text-paper rounded-2xl shadow-xl p-6 md:p-10 border-t-8 border-primary">
+            <div class="mb-8 border-b border-primary/30 pb-6">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2 text-white">
+                    <span class="text-3xl">🤖</span> 第三步：檢核與潤飾 (專屬寫作教練)
+                </h2>
+                <p class="text-paper/90 text-lg">
+                    你的「家鄉味」描寫夠具體嗎？情感有成功抒發嗎？將你寫好的草稿貼在下方，AI 寫作教練會根據<b>「詠物三層面」</b>給你優化建議，讓你的文字香氣四溢！
+                </p>
+            </div>
+
+            <!-- AI 教練互動區 -->
+            <div class="bg-white text-ink rounded-xl p-6 mb-8 shadow-inner">
+                
+                <!-- 防呆破冰：草稿快捷鍵 -->
+                <div class="mb-4 flex flex-wrap items-center gap-2">
+                    <span class="text-sm text-primary font-bold bg-highlight/50 px-2 py-1 rounded">💡 沒靈感嗎？點擊試試：</span>
+                    <button class="quick-draft-btn text-sm bg-gray-50 hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">每天放學我都會去買一杯珍珠奶茶，甜甜的奶茶加上QQ的珍珠，讓我喝了覺得很幸福，忘記了考試的壓力。</button>
+                    <button class="quick-draft-btn text-sm bg-gray-50 hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">阿嬤包的粽子最好吃了，裡面有大塊的肥肉和香菇。每次端午節聞到竹葉的香味，我就會想起小時候在鄉下阿嬤家的快樂時光。</button>
+                </div>
+
+                    <!-- 靈感工具列：靈感骰子 + 快捷提示詞 -->
+                    <div class="flex flex-wrap items-center gap-2 p-2.5 bg-paper rounded-xl border border-gray-200 shadow-2xs">
+                        <button id="btn-inspiration-dice" class="text-xs bg-secondary hover:bg-secondary/90 text-white font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-xs transform hover:scale-105 active:scale-95">
+                            <span class="text-sm">🎲</span>
+                            <span>靈感骰子 (滋味起手式)</span>
+                        </button>
+                        <span class="text-gray-300 hidden sm:inline">|</span>
+                        <span class="text-xs text-gray-500 font-medium hidden sm:inline">快捷注入句型：</span>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="白濛濛的熱氣撲面而來，伴隨著熟悉的醬香，瞬間喚醒了……">
+                            🍲 ＋香氣熱氣
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="外皮金黃焦脆，輕咬一口，鮮甜濃郁的湯汁在舌尖四溢，……">
+                            👅 ＋口感層次
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="母親熟練地翻動著鍋鏟，汗水浸濕了鬢角，眼神裡滿是關愛……">
+                            👵 ＋掌廚身影
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="原來故鄉的味道從來不只是食物，而是歲月與親情沉澱出的思念……">
+                            ❤️ ＋思鄉哲思
+                        </button>
+                    </div>
+
+
+                <div class="mb-6">
+                    <label for="student-input" class="block text-ink font-bold mb-2 text-lg">✏️ 貼上你的草稿 (請輸入 200 字以內)：</label>
+                    <textarea id="student-input" rows="4" maxlength="200" class="w-full bg-paper border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="請貼上你的一段敘述。例如你對某道食物的外觀、香氣描寫，或是這道食物讓你想起了誰..."></textarea>
+                    
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="char-warning" class="text-xs text-danger font-bold opacity-0 transition-opacity">⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。</span>
+                        <div class="text-right text-xs text-gray-400"><span id="char-count">0</span> / 200 字</div>
+                    </div>
+                </div>
+
+                <!-- 自訂指導重點 -->
+                <div class="mb-6 bg-paper p-4 rounded-lg border border-gray-200 shadow-sm">
+                    <label class="block text-ink font-bold mb-3">🎯 教練，我這次想加強...</label>
+                    <div class="flex flex-wrap gap-3" id="focus-areas">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="強化五感摹寫 (幫助我把食物的外觀、顏色、香氣、口感描寫得更生動，讓人垂涎三尺)" class="peer sr-only" checked>
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-300 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-100 text-sm font-bold transition shadow-sm">層面一：強化五感摹寫</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="深化物我關係 (幫助我把這道食物與我的生活經驗、童年回憶或特定人物做更深刻的連結)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-300 peer-checked:bg-secondary peer-checked:text-white peer-checked:border-secondary hover:bg-gray-100 text-sm font-bold transition shadow-sm">層面二：深化物我關係</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="昇華家鄉情感 (幫助我從這道食物中，提煉出對土地、家鄉或親情的深刻感悟與抒發)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-300 peer-checked:bg-tertiary peer-checked:text-white peer-checked:border-tertiary hover:bg-gray-100 text-sm font-bold transition shadow-sm">層面三：昇華家鄉情感</div>
+                        </label>
+                    </div>
+                </div>
+
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <button id="btn-toggle-config" class="text-xs text-gray-500 hover:text-primary transition flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-gray-200 hover:bg-gray-100 bg-white w-fit shadow-xs">
+                        <span>⚙️ 代理通道設定</span>
+                        <span id="channel-badge" class="bg-blue-100 text-primary px-2 py-0.5 rounded text-[11px] font-bold">⚡ Cloudflare 串流 (極速)</span>
+                    </button>
+                    <button id="btn-ask-ai" class="bg-primary hover:opacity-90 text-white font-bold py-3 px-8 rounded-lg shadow transition flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                        <span id="btn-ask-text" class="text-lg">🚀 請教練指導</span>
+                    </button>
+                </div>
+
+                <!-- 代理通道設定面板 (可展開/收合) -->
+                <div id="config-panel" class="hidden mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200 text-sm shadow-inner transition-all">
+                    <div class="flex items-center justify-between mb-3 border-b border-gray-200 pb-2">
+                        <h4 class="font-bold text-ink flex items-center gap-2">
+                            <span>⚙️</span> AI 代理通道切換與端點設定
+                        </h4>
+                        <span class="text-xs text-gray-400">設定將自動保存在瀏覽器</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div>
+                            <label class="block font-bold text-xs text-gray-700 mb-1">通道選擇：</label>
+                            <select id="channel-mode" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary">
+                                <option value="worker">⚡ Cloudflare Worker 邊緣串流 (推薦・極速打字機)</option>
+                                <option value="gas">🛡️ Google Apps Script (原版安全中繼)</option>
+                                <option value="custom">🔑 自備 Gemini API Key（直連 Google）</option>
+                            </select>
+                        </div>
+                        <div id="worker-url-group">
+                            <label class="block font-bold text-xs text-gray-700 mb-1">Cloudflare Worker 網址：</label>
+                            <input id="worker-url-input" type="url" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary" placeholder="請貼上你的 Worker 網址，例如 https://gemini-stream-coach.xxx.workers.dev">
+                        </div>
+                                                <!-- 自備 Key 輸入區塊 -->
+                        <div id="custom-key-group" class="hidden md:col-span-2 p-3 bg-blue-50/70 rounded-lg border border-blue-200 space-y-2">
+                            <div class="flex flex-wrap justify-between items-center gap-1 text-xs">
+                                <span class="font-bold text-blue-900">自備 Google Gemini API Key（安全存放於本機 LocalStorage）</span>
+                                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline text-[11px] hover:text-blue-800 font-medium">前往 Google AI Studio 免費領取</a>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <input type="password" id="custom-api-key" placeholder="貼上 AI Studio 取得的 API Key (AIzaSy...)" class="w-full text-xs font-mono border border-gray-300 rounded-lg px-3 py-2 pr-8 bg-white focus:ring-2 focus:ring-primary">
+                                    <button type="button" id="toggle-key-visibility" class="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-xs" title="顯示/隱藏金鑰">👁️</button>
+                                </div>
+                                <button type="button" id="btn-save-custom-key" class="text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium px-3.5 py-1.5 rounded-lg transition shrink-0 cursor-pointer shadow-xs">
+                                    保存金鑰
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-2 pt-0.5">
+                                <label class="text-[11px] text-gray-600 font-medium shrink-0">自訂模型代號 (選填)：</label>
+                                <input id="custom-model-input" type="text" class="bg-white border border-gray-300 rounded px-2 py-0.5 text-xs font-mono w-40 focus:ring-1 focus:ring-primary" placeholder="預設 gemini-2.5-flash">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-gray-500 gap-2">
+                        <div id="connection-status" class="flex items-center gap-1.5 text-tertiary font-medium">
+                            <span class="w-2 h-2 rounded-full bg-tertiary inline-block"></span>
+                            <span id="status-text">通道就緒：優先採用 Cloudflare 邊緣串流</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="btn-reset-config" class="text-gray-500 hover:text-gray-700 px-3 py-1 rounded border border-gray-300 hover:bg-gray-100 transition">
+                                恢復預設值
+                            </button>
+                            <button id="btn-save-config" class="bg-primary text-white font-bold px-4 py-1.5 rounded hover:opacity-90 transition shadow-xs">
+                                儲存並測試
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading 狀態 -->
+                <div id="ai-loading" class="hidden mt-6 p-6 bg-paper rounded-lg flex flex-col items-center justify-center gap-4 border border-gray-200 shadow-sm">
+                    <div class="dot-flashing"></div>
+                    <p class="text-primary font-medium mt-2">教練正在細細審閱你的草稿，為您提供專屬建議中...</p>
+                </div>
+
+                <!-- AI 回饋輸出區 -->
+                <div id="ai-output-container" class="hidden mt-8 space-y-6">
+                    <div class="flex items-center justify-between border-l-4 border-primary pl-3">
+                        <h3 class="font-bold text-xl text-ink flex items-center gap-2">
+                            <span>💡</span> 教練的回饋與升級示範
+                            <span id="stream-badge" class="hidden text-xs bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full font-bold animate-pulse">⚡ 打字串流中...</span>
+                        </h3>
+                    </div>
+
+                    <!-- 即時串流打字顯示框 (串流時顯示) -->
+                    <div id="ai-stream-box" class="bg-paper border border-gray-300 rounded-xl p-5 text-ink leading-relaxed shadow-xs min-h-[120px]">
+                        <div id="ai-output" class="ai-content leading-relaxed">
+                            <!-- AI Response goes here -->
+                        </div>
+                    </div>
+
+                    <!-- 生成完畢後展示：教練評語卡片 -->
+                    <div id="coach-review-card" class="hidden bg-blue-50/70 border border-blue-200 rounded-xl p-5 shadow-xs">
+                        <h4 class="font-bold text-primary mb-2 flex items-center gap-2">
+                            <span>👩‍🏫</span> 教練的寫作講評：
+                        </h4>
+                        <div id="coach-review-content" class="text-sm text-ink leading-relaxed space-y-2">
+                            <!-- 教練肯定與建議 -->
+                        </div>
+                    </div>
+
+                    <!-- 生成完畢後展示：「Before / After」雙欄卡片對照 -->
+                    <div id="before-after-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Before: 學生原文 -->
+                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+                                    <span class="font-bold text-sm text-gray-700 flex items-center gap-1.5">
+                                        <span>📝</span>【你的原始草稿】
+                                    </span>
+                                    <span id="badge-before-count" class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded font-medium">0 字</span>
+                                </div>
+                                <div id="card-before-text" class="text-gray-800 font-serif leading-relaxed text-base italic">
+                                    <!-- 學生原文 -->
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-400">
+                                原文基礎：有構思雛形，等待展開細節與感情
+                            </div>
+                        </div>
+
+                        <!-- After: 6級分升級版 -->
+                        <div class="bg-amber-50/70 border-2 border-amber-300 rounded-xl p-5 shadow-md flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -top-6 -right-6 w-20 h-20 bg-amber-400/20 rounded-full blur-xl pointer-events-none"></div>
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200/80">
+                                    <span class="font-bold text-sm text-amber-900 flex items-center gap-1.5">
+                                        <span>✨</span>【6 級分潤飾升級版】
+                                    </span>
+                                    <span class="text-xs bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-bold">滿級分示範</span>
+                                </div>
+                                <!-- 純淨 6 級分美句區 (採納與複製專用) -->
+                                <div id="card-after-pure-text" class="text-ink font-serif leading-relaxed text-base p-4 bg-white/95 rounded-xl border border-amber-200/90 shadow-2xs mb-3 select-all">
+                                    <!-- 純淨美句 -->
+                                </div>
+                                <!-- 寫作技法深度拆解 (僅供學生觀摩，不入作文) -->
+                                <div id="card-after-breakdown" class="text-xs space-y-1.5 pt-2 border-t border-amber-200/80">
+                                    <div class="font-bold text-amber-900 mb-1.5 flex items-center gap-1">
+                                        <span>🔍</span> 寫作技法深度拆解 (供觀摩，不入作文)：
+                                    </div>
+                                    <div id="card-after-breakdown-list" class="space-y-1.5 text-gray-700 leading-normal">
+                                        <!-- 彩色修辭標籤與說明 -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-amber-200/80 flex flex-wrap items-center justify-between gap-2">
+                                <span class="text-xs text-amber-800 font-medium">💡 採納與複製將「僅帶入純淨美句」</span>
+                                <span id="badge-after-count" class="text-xs bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded font-bold">0 字</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 操作按鈕列 -->
+                    <div class="flex flex-wrap justify-end gap-3 pt-2">
+                        <button id="btn-adopt-ai" class="text-sm bg-gradient-to-r from-primary to-blue-700 hover:opacity-95 text-white px-5 py-2.5 rounded-lg font-bold transition flex items-center gap-2 shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
+                            <span class="text-base">🚀</span>
+                            <span>一鍵採納至累積區</span>
+                        </button>
+                        <button id="btn-copy-ai" class="text-sm bg-white hover:bg-gray-100 text-ink px-4 py-2.5 rounded-lg font-bold transition flex items-center gap-2 border border-gray-300 shadow-xs">
+                            <span>📋 複製潤飾</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-error" class="hidden mt-6 bg-red-50 border-l-4 border-danger p-4 text-danger rounded-r-lg">
+                    <p id="ai-error-text">抱歉，教練目前遇到連線問題，請確認您的連線或稍後再試一次！</p>
+                </div>
+<!-- 我的文章累積區 -->
+                <div class="mt-10 bg-white border-2 border-primary/50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-ink flex items-center gap-2">
+                            <span class="text-2xl">📝</span> 我的文章累積區
+                        </h3>
+                    </div>
+                    <p class="text-sm text-primary mb-4 font-medium">
+                        看過教練的建議後，把你自己修改好的「優美句子」貼到這裡吧！你可以依照「詠物抒懷五段式」結構，慢慢拼成一篇完整的 900 字文章。
+                    </p>
+                    <textarea id="accumulated-draft" rows="8" class="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition bg-paper" placeholder="將潤飾好的段落貼上來，或是直接在這裡修改你的最終文章..."></textarea>
+                    
+                    <div class="flex justify-end items-center mt-2">
+                        <div class="text-right text-sm text-ink font-bold">目前累積字數：<span id="accumulated-char-count" class="text-primary">0</span> / 900 字</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 教師人工巡桌指南 -->
+            <div class="mt-10 pt-6 border-t border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-white flex items-center gap-2"><span class="text-2xl">👩‍🏫</span> 教師巡桌指導備忘錄</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🚫</span>
+                            <h4 class="text-lg font-bold text-white">1. 避免淪為「食譜介紹」</h4>
+                        </div>
+                        <div class="text-white/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：「做肉圓要先準備地瓜粉，然後把肉包進去拿去蒸，最後淋上醬汁。」<br><br>
+                            <span class="text-highlight font-bold">引導：提醒學生，我們不是在寫烹飪教學。重點應該放在「吃」的感受、食物上桌時的「色香味」，以及這道食物帶給人的「情感連結」。</span>
+                        </div>
+                        <div class="text-center text-white/50 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">👅</span>
+                            <h4 class="text-lg font-bold text-white">2. 善用「五感交錯」摹寫</h4>
+                        </div>
+                        <div class="text-white/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：「這碗麵很香，吃起來很好吃，顏色也很好看。」<br><br>
+                            <span class="text-highlight font-bold">引導：要求學生寫出具體的感官細節。聽覺（熱油的滋滋聲）、嗅覺（九層塔的辛香）、視覺（金黃酥脆的外皮）、味覺（鹹甜交織的醬汁）、觸覺（Ｑ彈有嚼勁）。</span>
+                        </div>
+                        <div class="text-center text-white/50 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">❤️</span>
+                            <h4 class="text-lg font-bold text-white">3. 找出獨特的「情感連結」</h4>
+                        </div>
+                        <div class="text-white/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：結尾只有「臺灣的美食真好吃，我下次還要再吃。」<br><br>
+                            <span class="text-highlight font-bold">引導：這就是詠物「最深層」的地方。這道食物讓你想起了誰？（阿嬤的背影？）代表了什麼精神？（臺灣人的刻苦耐勞？）引導學生把「物」與「情」緊緊扣連。</span>
+                        </div>
+                        <div class="text-center text-white/50 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四步：優秀範文賞析 -->
+        <section id="sample-essays" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📚</span> 優秀範文賞析
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    觀摩不同的「家鄉味」如何運用「詠物三層面」結構，寫出不落俗套的深度好文。點擊下方標題，即可展開閱讀完整範文與段落架構解析。
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- 範文 1：凍頂烏龍茶 (來自PDF) -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper hover:bg-gray-50 flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-tea', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🍵</span> 【凍頂烏龍茶】：茶香攜帶我的童年 (改寫自向陽)</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-secondary/20 text-secondary px-3 py-1 rounded-full border border-secondary/30 font-bold">820 字</span>
+                            <span class="essay-icon text-ink">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-tea" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>幸福是一種感覺，這感覺可能一瞬即逝，也可能漫漫渺渺，纏繞一生。有的人透過視覺捕捉美景，有的人透過聽覺享受天籟，而我，對於嗅覺的記憶卻特別敏銳。花的香氣、書的油墨、樹木草葉的清新，我都可以清楚感覺。然而，在和那麼多人間的氣味相遇的旅程中，我最難忘的，還是童年時代故鄉家中，那不時流動的凍頂茶香。那是我生命中最深刻的家鄉味。</p>
+                            <p>我的老家在南投縣鹿谷鄉，父親來自凍頂林家，世代為茶農。小時候，父親在山下開設了「凍頂茶行」，我的記憶便是和著茶香一起長大。那清透澄黃的茶湯，在白瓷杯中微微蕩漾，湊近鼻尖，一股揉合著焙火與高山冷冽氣息的醇厚香氣便撲鼻而來。輕啜一口，微苦的滋味在舌尖化開，隨後轉為一股甘甜滑入喉嚨，餘韻繞樑。那不僅是口中喝的茶湯，更是二十四小時縈繞屋樑、從未散去的氣味。彷彿從眼耳鼻口到全身上下，都浸濡在這股金黃色的茶香之中。</p>
+                            <p>就連晚上睡覺，我也和著茶的香氣入寐。睡房在閣樓上，一桶桶貯存茶葉的茶桶，沿著牆邊蹲坐，外頭貼著紅紙，依序寫著春、夏、秋、冬。儘管茶桶密不透風，這四季的茶香卻早已攀爬在閣樓的牆壁與樑縫中。夜裡的山風吹著，茶香跟著漂浮；月光灑落小窗，茶香也尾隨月光，逗留我的鼻尖。這股香氣，見證了伯父叔父在烈日下採茶的辛勞，也承載了母親在焙茶爐前揮汗如雨的背影。那每一片蜷曲的茶葉，都蘊含著先人對這片土地的敬畏與勤懇。</p>
+                            <p>如今歲月流轉，將近半生，我已離開了那個產茶的山村，來到喧囂的都市生活。在繁忙的步調中，人們習慣了速成的罐裝飲料或是甜膩的手搖杯，卻很少有人願意靜下心來，等待一壺熱水將乾癟的茶葉慢慢舒展開來。然而，每當我在生活中感到疲憊或迷惘時，我總會為自己沏上一壺來自家鄉的凍頂烏龍。看著水氣氤氳升騰，聞著那熟悉的焙火香，我那原本浮躁的心，便奇蹟似地沉靜了下來。</p>
+                            <p>我至今仍然鮮明地記著，這包裹著我童年印記的茶的香氣。那茶的香味，保存著一個產茶山村的美麗和甘醇。幸福，就在我泡茶、喝茶，品聞鼻下唇邊那金黃色的茶香時，總會攜帶著我的童年、我的故鄉，來到我的眼前。這股屬於臺灣的溫潤茶香，是我心中永遠不滅的光點。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-secondary/20">
+                            <h4 class="font-bold text-secondary mb-3 flex items-center gap-2"><span>🎯</span>【詠物抒懷架構解析】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 【起】破題聚焦：</span> <span class="text-gray-700">從各種感官的記憶切入，最後聚焦在嗅覺上的「凍頂茶香」，點出主題。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 【承】五感描繪：</span> <span class="text-gray-700">細膩描寫茶湯的視覺（澄黃）、嗅覺（焙火與高山氣息）、味覺（微苦轉甘甜），呈現層面一。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 【轉】物我相連：</span> <span class="text-gray-700">將茶香與閣樓睡房、春夏秋冬茶桶的「童年回憶」連結，帶出父母長輩製茶的辛勞，進入層面二。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 【轉】深刻反思：</span> <span class="text-gray-700">對比都市的速成飲料與泡茶的「慢」，寫出茶香能撫平生活疲憊的力量，進入層面三。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 【合】情感昇華：</span> <span class="text-gray-700">總結茶香等同於童年與故鄉的幸福，將外在的「物」完全內化為永恆的情感歸屬。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 2：滷肉飯 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper hover:bg-gray-50 flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-pork', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🍚</span> 【傳統滷肉飯】：撫慰靈魂的琥珀色光芒</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-primary/20 text-primary px-3 py-1 rounded-full border border-primary/30 font-bold">890 字</span>
+                            <span class="essay-icon text-ink">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-pork" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>臺灣素有美食王國的美譽，街頭巷尾林立著各式珍饈。有人獨鍾高雅精緻的西式料理，有人偏愛香辣刺激的異國美食。然而，若要問我心中最能代表臺灣、最能牽動鄉愁的家鄉味是什麼？我的答案永遠是那碗在夜市或巷弄間，隨處可見、平靜卻充滿力量的「滷肉飯」。</p>
+                            <p>一碗上乘的滷肉飯，本身就是一場絕佳的五感饗宴。剛端上桌，白煙裊裊中，濃郁的醬油香伴隨著紅蔥頭爆炒過的油脂氣息，霸道地鑽入鼻腔，瞬間喚醒了所有的食慾。視線所及，是切得細碎、肥瘦相間的帶皮豬肉，在長時間的慢火熬煮下，已染上了一層油亮迷人的琥珀色澤。當你拿起湯匙，將那閃爍著微光的滷汁與晶瑩飽滿的白米飯輕輕拌勻，米粒吸飽了湯汁，呈現誘人的焦糖色。送入口中，肥肉入口即化，瘦肉軟嫩不柴，鹹甜交織的醬汁在舌尖跳躍，米飯的Ｑ彈與滷汁的溫潤完美融合，那是一種樸實卻直擊靈魂的美味。</p>
+                            <p>這碗平凡的滷肉飯，其實串連著我最溫馨的童年回憶。小時候，父母在夜市擺攤，每當深夜收攤後，飢腸轆轆的我們總會走到巷口那家24小時營業的小吃攤。老闆娘總會笑著端上兩大碗滷肉飯，還特地在我的碗裡多淋上一瓢滷汁、放上一顆滷得黑亮入味的鴨蛋。在那個微涼的深夜，昏黃的燈泡下，我們一家人圍坐在白鐵桌旁，聽著鍋鏟碰撞的聲音，吃著熱騰騰的滷肉飯。那一刻，食物的溫度驅散了父母工作的辛勞，也餵飽了我童年的安心感。那家小攤，成了我們一家人最溫暖的避風港。</p>
+                            <p>隨著年齡增長，我離開家鄉來到臺北求學。在這座繁華卻冷漠的都會裡，我吃過許多昂貴的餐廳，卻總覺得少了一味。我漸漸明白，滷肉飯之所以無可取代，是因為它熬煮了臺灣人刻苦耐勞的精神。那一鍋看似簡單的滷汁，其實需要老滷的傳承、火候的拿捏，以及不厭其煩的翻攪，就像臺灣人在艱難環境中，總是能用耐心與韌性，熬出屬於自己的甘甜。那一小碗銅板價的美食，撫慰了無數計程車司機、下班族與學子疲憊的心。</p>
+                            <p>每當我在異鄉感到孤單或挫折時，我總會走進一家滷肉飯館。當那熟悉的香氣再次將我包圍，我看見的不只是一碗飯，而是家鄉巷口那盞溫暖的燈，以及父母辛勤卻滿足的笑容。滷肉飯，這道深植臺灣底蘊的家鄉味，不僅飽足了我的胃，更賦予了我繼續前行的力量。它是我心中，最樸實卻最閃耀的琥珀色光芒。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-primary/20">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><span>🎯</span>【詠物抒懷架構解析】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 【起】破題聚焦：</span> <span class="text-gray-700">用對比法（西式/異國 vs. 傳統），將焦點匯聚在最平民的「滷肉飯」上。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 【承】五感描繪：</span> <span class="text-gray-700">極致的色香味描寫（紅蔥頭香、琥珀色澤、入口即化、鹹甜交織），展現層面一的功力。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 【轉】物我相連：</span> <span class="text-gray-700">連結父母夜市收攤後吃宵夜的童年回憶，賦予滷肉飯「家庭溫暖」的意義（層面二）。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 【轉】深刻反思：</span> <span class="text-gray-700">將熬煮滷汁的過程，昇華為臺灣人「刻苦耐勞、韌性」的精神象徵，寫出深度的文化意涵（層面三）。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 【合】情感昇華：</span> <span class="text-gray-700">首尾呼應，總結這道家鄉味是撫慰挫折、帶來前行力量的光芒。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 3：牛肉麵 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper hover:bg-gray-50 flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-beef', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🍜</span> 【紅燒牛肉麵】：熬煮時光的醇厚鄉愁</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-tertiary/20 text-tertiary px-3 py-1 rounded-full border border-tertiary/30 font-bold">880 字</span>
+                            <span class="essay-icon text-ink">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-beef" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>臺灣的街頭巷尾，總少不了麵攤的身影。有人喜愛清淡質樸的陽春麵，有人偏好濃郁香醇的麻醬麵。然而，若要論及最能代表臺灣美食文化、最能撫慰人心的一碗麵，我心中唯有那熱氣騰騰、香氣四溢的「紅燒牛肉麵」。它是這塊土地上，最醇厚的家鄉味。</p>
+                            <p>一碗上好的紅燒牛肉麵，上桌時便是一場華麗的感官盛宴。伴隨著裊裊上升的白煙，濃郁的牛骨高湯揉合了八角、花椒與豆瓣醬的辛香，強勢地席捲了嗅覺，令人垂涎欲滴。定睛一看，紅艷濃郁的湯頭中，臥著幾塊厚實且半筋半肉的牛腱塊，上面點綴著一抹翠綠的蔥花與酸菜。迫不及待地夾起吸飽湯汁的手工寬麵大口呼嚕吞下，麵條的Ｑ彈與微辣的湯汁在口中交織。再咬下一口牛肉，燉煮得軟嫩卻不失嚼勁的肉塊在舌尖化開，鮮甜的肉汁瞬間爆發，那是足以讓人忘卻一切煩憂的絕美滋味。</p>
+                            <p>對我而言，這碗牛肉麵不僅是味蕾的享受，更承載著父愛的溫度。國三那年，為了準備會考，我總是在補習班待到深夜。每當在冬夜的寒風中瑟瑟發抖地走出大樓，總能看見父親騎著機車在等我。他總會默默地遞上安全帽，然後載著我來到巷口那家還亮著昏黃招牌的老張牛肉麵。父子倆面對面坐著，沒有太多言語，只有兩碗熱騰騰的麵。看著父親把他的牛肉塊夾到我的碗裡，那一刻，醇厚的湯頭暖了我的胃，而那份無聲的關愛，則深深暖了我的心。</p>
+                            <p>隨著年紀漸長，我才了解牛肉麵背後的故事。它原是早年外省老兵為了稍解鄉愁，將家鄉味與臺灣在地食材結合而生的料理。一鍋看似豪邁的紅燒湯頭，其實需要經過數小時的細火慢燉，才能將各式香料與牛骨的精華完美融合。這不正如臺灣這塊土地嗎？包容了來自四面八方的人們，經過時間的熬煮，最終揉合成一種獨特且充滿底蘊的臺灣精神。而人生亦是如此，所有美好的成果，都需要經過耐心與時間的燉煮，才能散發出醇厚的香氣。</p>
+                            <p>如今，我偶爾也會在異鄉的餐館裡點上一碗牛肉麵，但總覺得少了幾分熟悉的味道。原來，真正令我魂牽夢縈的，不只是那紅燒的香氣，更是父親在冬夜裡的陪伴，以及那份屬於家鄉的溫暖記憶。這碗紅燒牛肉麵，是我心中永遠沸騰的光點，給了我源源不絕的勇氣，去面對未來的每一場風雨。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-tertiary/20">
+                            <h4 class="font-bold text-tertiary mb-3 flex items-center gap-2"><span>🎯</span>【詠物抒懷架構解析】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 【起】破題聚焦：</span> <span class="text-gray-700">以臺灣常見的麵食開場，最終聚焦於最具代表性的「紅燒牛肉麵」。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 【承】五感描繪：</span> <span class="text-gray-700">生動刻畫紅燒湯頭的視覺（紅艷、翠綠）、嗅覺（八角、牛骨香）與味覺口感（Ｑ彈、軟嫩），展現層面一。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 【轉】物我相連：</span> <span class="text-gray-700">帶入國三冬夜補習後，父親帶我吃麵的專屬回憶，將食物與「父愛」連結，進入層面二。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 【轉】深刻反思：</span> <span class="text-gray-700">由牛肉麵的歷史淵源聯想到臺灣土地的「包容力」，並領悟人生如同熬湯需要「耐心燉煮」的哲理，進入層面三。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 【合】情感昇華：</span> <span class="text-gray-700">總結牛肉麵不只是食物，更是帶來溫暖與勇氣的家鄉記憶。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= 頁尾識別 (Footer) ================= -->
+    <footer class="bg-slate-100 text-slate-600 py-8 mt-16 border-t border-slate-200 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-2.5">
+                <img src="../assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-8 h-8 rounded-full shadow-sm">
+                <span class="font-serif font-bold text-slate-800 text-sm sm:text-base">八下閱思龍門・寶島戀真情</span>
+            </div>
+
+            <!-- Copyright -->
+            <div class="text-xs text-slate-500 font-medium text-center sm:text-right leading-relaxed">
+                <div>© 2026 學思軒</div>
+                <div class="text-slate-400 text-[11px] mt-0.5">&gt;&lt;&gt; &gt;&lt;&gt; &gt;&lt;&gt; ˙˙˙本網頁由黃于珊老師利用Google antigravity 2.0生成製作，僅供教學使用。˙˙˙&lt;&gt;&lt; &lt;&gt;&lt; &lt;&gt;&lt;</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Step 1: Sentence Builder Logic (詠物三層面)
+            const sentenceData = [
+                { label: "基礎敘述", text: "我最喜歡吃巷口的滷肉飯，覺得非常美味好吃。", words: 21, btnText: "➕ 進入層面一：描繪與聯想", hint: "💡 <strong>寫作心法：</strong>「不要只寫『好吃』！請運用視覺、嗅覺等五感，把這道食物的外形與香氣具體描寫出來。」" },
+                { label: "層面一：描繪及聯想", text: "剛端上桌的滷肉飯，油亮的肉燥散發著醬油與紅蔥頭交織的鹹香，與熱騰騰的白飯完美融合，令人食指大動。", words: 49, btnText: "➕ 進入層面二：串連物與我", hint: "💡 <strong>寫作心法：</strong>「寫得很好！現在請加入『你的生活經驗』。這碗飯讓你想起哪個人？哪個特定的時刻？」" },
+                { label: "層面二：串連物與我", text: "剛端上桌的滷肉飯，散發著醬油與紅蔥頭的鹹香。這是我從小放學後最期待的點心，老闆娘總會親切地為我多淋一匙滷汁，溫暖了我疲憊的身心。", words: 66, btnText: "➕ 進入層面三：抒發情感", hint: "💡 <strong>寫作心法：</strong>「最後一步！除了回憶，這道食物對你有什麼『抽象的意義』或『精神象徵』？請抒發你對它的情感。」" },
+                { label: "層面三：抒發情感 (完成)", text: "散發著紅蔥頭鹹香的滷肉飯，是我放學後最期待的溫暖。這碗平凡的美食，不僅滿足了胃，更承載著童年無憂的回憶與濃濃的家鄉人情味，是我心中無可取代的臺灣味。", words: 77, btnText: "🎉 完成擴寫", hint: "💡 <strong>恭喜完成！</strong>你已經成功運用了「詠物三層面」，把一句流水帳變成了一段有溫度、有深度的文字。" }
+            ];
+
+            let currentStep = 0;
+            const elLabel = document.getElementById('sentence-label');
+            const elText = document.getElementById('sentence-text');
+            const elBadge = document.getElementById('word-count-badge');
+            const btnNext = document.getElementById('btn-next-step');
+            const btnReset = document.getElementById('btn-step-1');
+            const teacherHint = document.getElementById('teacher-hint');
+
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(ctxGrowth, {
+                type: 'bar',
+                data: {
+                    labels: ['基礎敘述', '五感描繪', '連結回憶', '情感抒發'],
+                    datasets: [{
+                        label: '字數',
+                        data: [21, 0, 0, 0],
+                        backgroundColor: ['#FDEBD0', '#D35400', '#27AE60', '#C0392B'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: '#E5E7EB' }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' 字'; } } } }
+                }
+            });
+
+            btnNext.addEventListener('click', () => { if (currentStep < 3) { currentStep++; updateSentenceUI(); } });
+            btnReset.addEventListener('click', () => { currentStep = 0; updateSentenceUI(); });
+
+            function updateSentenceUI() {
+                const data = sentenceData[currentStep];
+                elText.style.opacity = 0;
+                setTimeout(() => {
+                    elLabel.textContent = data.label; elText.innerHTML = data.text;
+                    elBadge.textContent = data.words + ' 字'; elText.style.opacity = 1;
+                    teacherHint.innerHTML = data.hint;
+                }, 200);
+
+                if (currentStep === 3) {
+                    btnNext.style.display = 'none'; btnReset.style.display = 'block';
+                } else {
+                    btnNext.style.display = 'flex'; btnNext.querySelector('span').textContent = data.btnText; btnReset.style.display = 'none';
+                }
+
+                const newData = [21, 0, 0, 0];
+                for (let i = 0; i <= currentStep; i++) newData[i] = sentenceData[i].words;
+                growthChart.data.datasets[0].data = newData;
+                growthChart.update();
+            }
+
+            // Step 2: Paragraph Blueprint Logic (詠物抒懷五段式)
+            const paragraphData = [
+                { id: 'p1', title: "第一段：【起】破題聚焦", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#D35400', task: "開門見山，直接點出你要描寫的「家鄉味」是什麼。可以從廣泛的臺灣美食帶入，最後聚焦在對你最具意義的那一道食物上。", prompts: ["在眾多臺灣美食中，最能代表你家鄉或童年回憶的是哪一道？", "這道食物通常出現在什麼樣的場合或時間？"], materials: "運用「漏斗式破題」，從多元的臺灣味（大範圍）聚焦到你獨鍾的那一道菜（小焦點）。", hint: "「臺灣素有美食王國的美譽，有人獨鍾牛肉麵，有人偏愛芒果冰。然而，每當我在異鄉感到疲憊時，腦海中浮現的，總是那一碗熱騰騰的...」", icon: "🥢" },
+                { id: 'p2', title: "第二段：【承】五感描繪", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#E67E22', task: "對應詠物「層面一」。針對你聚焦的美食，進行細膩的五感描繪，寫出它誘人的色香味與口感。", prompts: ["剛端上桌時，它看起來是什麼顏色？散發什麼香氣？", "咬下去的第一口，口感是酥脆、軟嫩還是Ｑ彈？味道如何？"], materials: "善用「五感交錯摹寫」（視覺、聽覺、嗅覺、味覺、觸覺），讓讀者光看文字就能流口水。", hint: "「剛端上桌，濃郁的醬油香伴隨著紅蔥頭的氣息鑽入鼻腔。晶瑩飽滿的白米飯吸飽了湯汁，呈現誘人的焦糖色。送入口中，肥肉入口即化...」", icon: "👁️" },
+                { id: 'p3', title: "第三段：【轉】物我相連", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#27AE60', task: "對應詠物「層面二」。食物本身是冰冷的，必須與「我」的經驗結合才有溫度。寫出這道食物背後專屬於你的回憶。", prompts: ["這道食物讓你聯想到小時候的哪個場景或哪個人物？", "是阿嬤在廚房忙碌的背影？還是父母帶你去夜市的溫暖？"], materials: "將「物」與「生活經驗」串連。透過具體的人物動作或場景描寫，賦予食物人情味。", hint: "「這碗平凡的滷肉飯，串連著我溫馨的童年回憶。小時候父母夜市收攤後，我們總會去巷口那家小攤。老闆娘總會笑著為我多淋上一瓢滷汁...」", icon: "💞" },
+                { id: 'p4', title: "第四段：【轉】深刻反思", wordsStr: "約 150-200 字 (約 7-9 行)", weight: 175, color: '#C0392B', task: "對應詠物「層面三」。從個人的回憶，昇華到對文化、土地或生命態度的反思。", prompts: ["這道看似平凡的食物，展現了臺灣人什麼樣的精神？（刻苦、包容、傳承）", "在現代速食社會中，這種傳統味道有何珍貴之處？"], materials: "使用「藉物喻理」的技巧。把製作食物的過程或特性，比喻為一種人生哲理或臺灣精神。", hint: "「我漸漸明白，這碗飯熬煮了臺灣人刻苦耐勞的精神。那一鍋老滷需要耐心與翻攪，就像臺灣人在艱難環境中，總能熬出自己的甘甜...」", icon: "🧠" },
+                { id: 'p5', title: "第五段：【合】情感昇華", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#8E44AD', task: "回扣文章開頭，總結這道「家鄉味」在你心中的地位，完成最後的情感抒發。", prompts: ["未來無論走到哪裡，這道食物對你的意義是什麼？", "它如何給予你面對生活的力量？"], materials: "昇華主題，點出家鄉味不僅是滿足味蕾，更是心靈的避風港與前行的動力。", hint: "「每當在異鄉感到孤單，這熟悉的香氣總能給我力量。這道深植底蘊的家鄉味，是我心中最樸實卻最閃耀的光芒，陪伴我繼續前行...」", icon: "✨" }
+            ];
+
+            const tabContainer = document.getElementById('tab-container');
+            let activeTabIndex = 0;
+
+            paragraphData.forEach((data, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn w-full text-left px-5 py-4 rounded-lg bg-white border border-gray-200 font-bold text-ink flex items-center justify-between shadow-sm`;
+                if(index === 0) btn.classList.add('active');
+                
+                btn.innerHTML = `<span class="flex items-center gap-3"><span class="text-xl">${data.icon}</span> <span>${data.title.split('：')[0]}</span></span> <span class="text-xs font-normal opacity-70">${data.wordsStr}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.style.borderLeftColor = 'transparent'; });
+                    btn.classList.add('active'); btn.style.borderLeftColor = data.color;
+                    activeTabIndex = index;
+                    updateTabContent(index); updateDoughnutChart(index);
+                });
+                tabContainer.appendChild(btn);
+            });
+
+            function updateTabContent(index) {
+                const data = paragraphData[index];
+                document.getElementById('tab-title').textContent = data.title;
+                document.getElementById('tab-title').style.color = data.color;
+                document.getElementById('tab-words').textContent = `建議字數：${data.wordsStr}`;
+                document.getElementById('tab-task').textContent = data.task;
+                
+                const elPrompts = document.getElementById('tab-prompts');
+                elPrompts.innerHTML = '';
+                data.prompts.forEach(p => {
+                    const li = document.createElement('li'); li.textContent = p; elPrompts.appendChild(li);
+                });
+
+                document.getElementById('tab-materials').textContent = data.materials;
+                document.getElementById('tab-hint').textContent = data.hint;
+            }
+
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            const weights = paragraphData.map(d => d.weight);
+            const baseColors = paragraphData.map(d => d.color);
+            const mutedColors = baseColors.map(c => c + '40'); 
+
+            const doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: paragraphData.map(d => d.title.split('：')[0]),
+                    datasets: [{
+                        data: weights, backgroundColor: [baseColors[0], mutedColors[1], mutedColors[2], mutedColors[3], mutedColors[4]],
+                        borderWidth: 2, borderColor: '#FFFDF8'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '70%',
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return '約 ' + context.raw + ' 字'; } } } },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+
+            function updateDoughnutChart(activeIndex) {
+                const newColors = paragraphData.map((d, i) => i === activeIndex ? baseColors[i] : mutedColors[i]);
+                doughnutChart.data.datasets[0].backgroundColor = newColors; doughnutChart.update();
+            }
+
+            tabContainer.querySelector('.tab-btn').style.borderLeftColor = paragraphData[0].color;
+            document.querySelectorAll('.hidden-content').forEach(el => el.style.display = 'none');
+            
+            // --- Step 3: AI Coach Logic ---
+            const btnAskAI = document.getElementById('btn-ask-ai');
+            const studentInput = document.getElementById('student-input');
+            const charCountDisplay = document.getElementById('char-count');
+            const charWarning = document.getElementById('char-warning');
+            const aiLoading = document.getElementById('ai-loading');
+            const aiOutputContainer = document.getElementById('ai-output-container');
+            const aiOutput = document.getElementById('ai-output');
+            const aiError = document.getElementById('ai-error');
+            const quickDraftBtns = document.querySelectorAll('.quick-draft-btn');
+            const btnCopyAi = document.getElementById('btn-copy-ai');
+            
+            const accumulatedDraft = document.getElementById('accumulated-draft');
+            const accumulatedCharCount = document.getElementById('accumulated-char-count');
+
+                        const inspirationQuotes = [
+                "那口大鐵鍋裡翻滾著濃稠的滷汁，八角與醬油的醇厚香氣隨著熱氣蒸騰，飄散在整條青石板老街上。",
+                "咬下外皮酥脆的肉圓，內餡筍絲的鮮甜與軟嫩豬肉在口中迸發，那是外婆掌心裡最熟悉的溫度。",
+                "每當逢年過節，廚房總傳來規律的切菜聲與爆香的油滋聲，空氣中盡是家的安心與溫暖。",
+                "即便離家千里，只要嚐到那一碗灑了芹菜末的魚丸湯，舌尖上的鄉愁便瞬間找到了歸屬。"
+            ];
+
+            const btnInspirationDice = document.getElementById('btn-inspiration-dice');
+            const promptChips = document.querySelectorAll('.prompt-chip-btn');
+            const btnAskText = document.getElementById('btn-ask-text');
+
+            // 雙欄卡片相關元件
+            const beforeAfterContainer = document.getElementById('before-after-container');
+            const cardBeforeText = document.getElementById('card-before-text');
+            const badgeBeforeCount = document.getElementById('badge-before-count');
+            const cardAfterPureText = document.getElementById('card-after-pure-text');
+            const cardAfterBreakdown = document.getElementById('card-after-breakdown');
+            const cardAfterBreakdownList = document.getElementById('card-after-breakdown-list');
+            const badgeAfterCount = document.getElementById('badge-after-count');
+            const coachReviewCard = document.getElementById('coach-review-card');
+            const coachReviewContent = document.getElementById('coach-review-content');
+            const aiStreamBox = document.getElementById('ai-stream-box');
+            const streamBadge = document.getElementById('stream-badge');
+            const btnAdoptAi = document.getElementById('btn-adopt-ai');
+            const aiErrorText = document.getElementById('ai-error-text');
+
+            // 隨機靈感骰子
+            if (btnInspirationDice) {
+                btnInspirationDice.addEventListener('click', () => {
+                    const randomQuote = inspirationQuotes[Math.floor(Math.random() * inspirationQuotes.length)];
+                    insertAtCursor(studentInput, randomQuote);
+                    btnInspirationDice.classList.add('rotate-12', 'scale-105');
+                    setTimeout(() => btnInspirationDice.classList.remove('rotate-12', 'scale-105'), 200);
+                });
+            }
+
+            // 在光標處插入文字輔助函式
+            function insertAtCursor(myField, myValue) {
+                if (document.selection) {
+                    myField.focus();
+                    const sel = document.selection.createRange();
+                    sel.text = myValue;
+                } else if (myField.selectionStart || myField.selectionStart == '0') {
+                    const startPos = myField.selectionStart;
+                    const endPos = myField.selectionEnd;
+                    myField.value = myField.value.substring(0, startPos)
+                        + myValue
+                        + myField.value.substring(endPos, myField.value.length);
+                    myField.selectionStart = startPos + myValue.length;
+                    myField.selectionEnd = startPos + myValue.length;
+                } else {
+                    myField.value += myValue;
+                }
+                updateCharCount();
+                myField.focus();
+            }
+
+            // 快捷提示詞按鈕監聽
+            promptChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const promptText = this.getAttribute('data-prompt');
+                    insertAtCursor(studentInput, promptText);
+                    this.classList.add('scale-105', 'bg-blue-100');
+                    setTimeout(() => this.classList.remove('scale-105', 'bg-blue-100'), 200);
+                });
+            });
+
+            // 通道設定相關元件
+            const btnToggleConfig = document.getElementById('btn-toggle-config');
+            const configPanel = document.getElementById('config-panel');
+            const channelMode = document.getElementById('channel-mode');
+            const workerUrlInput = document.getElementById('worker-url-input');
+            const workerUrlGroup = document.getElementById('worker-url-group');
+            const customKeyGroup = document.getElementById('custom-key-group');
+            const customApiKeyInput = document.getElementById('custom-api-key');
+            const customModelInput = document.getElementById('custom-model-input');
+            const channelBadge = document.getElementById('channel-badge');
+            const statusText = document.getElementById('status-text');
+            const btnSaveConfig = document.getElementById('btn-save-config');
+            const btnResetConfig = document.getElementById('btn-reset-config');
+            const toggleKeyVisibility = document.getElementById('toggle-key-visibility');
+            const btnSaveCustomKey = document.getElementById('btn-save-custom-key');
+
+            // 預設端點設定 (預設已包含您的 Worker 專屬網址)
+            const DEFAULT_WORKER_URL = "https://gemini-stream-coach.oaoadna.workers.dev";
+            const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbwTX1R33gA3Sz_gPOJ-FXRRK5buWGHZvybTsNUKAD57y48sSJVdjAiaRMzbuxqRJoUtLA/exec";
+            
+            let currentMode = localStorage.getItem('ai_coach_channel') || 'worker';
+            let currentWorkerUrl = localStorage.getItem('ai_coach_worker_url') || DEFAULT_WORKER_URL;
+            let currentCustomKey = localStorage.getItem('ai_coach_custom_key') || localStorage.getItem('gemini_zuowen_key') || '';
+            let currentCustomModel = localStorage.getItem('ai_coach_custom_model') || 'gemini-2.5-flash';
+
+            function updateConfigUI() {
+                channelMode.value = currentMode;
+                workerUrlInput.value = currentWorkerUrl;
+                customApiKeyInput.value = currentCustomKey;
+                customModelInput.value = currentCustomModel;
+
+                if (currentMode === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
+                    if (currentWorkerUrl) {
+                        channelBadge.innerHTML = '⚡ Cloudflare 串流 (極速)';
+                        channelBadge.className = 'bg-blue-100 text-primary px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '通道就緒：使用 Cloudflare 邊緣串流多金鑰池 (SSE)';
+                    } else {
+                        channelBadge.innerHTML = '⚡ Cloudflare 串流 (未設網址)';
+                        channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '提示：尚未填寫 Worker 網址，送出時將自動備援轉為 GAS';
+                    }
+                } else if (currentMode === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                    if (currentCustomKey) {
+                        channelBadge.innerHTML = '自備 Gemini Key';
+                        channelBadge.className = 'bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = `通道就緒：使用個人 API Key 直連原廠 (${currentCustomModel || 'gemini-2.5-flash'})`;
+                    } else {
+                        channelBadge.innerHTML = '🔑 自備 Key (未填寫)';
+                        channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '提示：請輸入您的 Gemini API Key 後點擊「保存金鑰」';
+                    }
+                } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
+                    channelBadge.innerHTML = '🛡️ GAS 安全通道';
+                    channelBadge.className = 'bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[11px] font-bold';
+                    statusText.textContent = '通道就緒：使用 Google Apps Script 安全備援通道';
+                }
+            }
+            updateConfigUI();
+
+            channelMode.addEventListener('change', () => {
+                if (channelMode.value === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
+                } else if (channelMode.value === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
+                }
+            });
+
+            btnToggleConfig.addEventListener('click', () => {
+                configPanel.classList.toggle('hidden');
+            });
+
+            if (toggleKeyVisibility && customApiKeyInput) {
+                toggleKeyVisibility.addEventListener('click', () => {
+                    const isPass = customApiKeyInput.type === 'password';
+                    customApiKeyInput.type = isPass ? 'text' : 'password';
+                    toggleKeyVisibility.textContent = isPass ? '🔒' : '👁️';
+                });
+            }
+
+            if (btnSaveCustomKey && customApiKeyInput) {
+                btnSaveCustomKey.addEventListener('click', () => {
+                    const keyVal = customApiKeyInput.value.trim();
+                    currentCustomKey = keyVal;
+                    localStorage.setItem('ai_coach_custom_key', keyVal);
+                    localStorage.setItem('gemini_zuowen_key', keyVal);
+                    updateConfigUI();
+                    if (keyVal) {
+                        statusText.textContent = '🔑 自備 Gemini Key 已安全儲存於本機！';
+                        alert('已成功保存 Gemini API Key！可直接進行點評。');
+                    } else {
+                        statusText.textContent = '⚠️ 已清除自備金鑰';
+                    }
+                });
+            }
+
+            btnSaveConfig.addEventListener('click', () => {
+                currentMode = channelMode.value;
+                currentWorkerUrl = workerUrlInput.value.trim();
+                currentCustomKey = customApiKeyInput.value.trim();
+                currentCustomModel = customModelInput.value.trim() || 'gemini-2.5-flash';
+                localStorage.setItem('ai_coach_channel', currentMode);
+                localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
+                updateConfigUI();
+                configPanel.classList.add('hidden');
+                alert('✅ 代理通道設定已成功儲存！');
+            });
+
+            btnResetConfig.addEventListener('click', () => {
+                currentMode = 'worker';
+                currentWorkerUrl = DEFAULT_WORKER_URL;
+                currentCustomKey = '';
+                currentCustomModel = 'gemini-2.5-flash';
+                localStorage.setItem('ai_coach_channel', currentMode);
+                localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
+                updateConfigUI();
+                alert('已還原為專屬 Cloudflare 預設設定！');
+            });
+
+            quickDraftBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    studentInput.value = this.innerText;
+                    updateCharCount();
+                    this.classList.add('bg-highlight');
+                    setTimeout(() => this.classList.remove('bg-highlight'), 200);
+                });
+            });
+
+            function updateCharCount() {
+                const len = studentInput.value.length;
+                charCountDisplay.textContent = len;
+                if (len >= 200) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數已達上限 (200字)！請分批讓教練指導。';
+                    charCountDisplay.classList.add('text-danger', 'font-bold');
+                } else if (len > 150) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。';
+                    charCountDisplay.classList.add('text-yellow-600', 'font-bold');
+                    charCountDisplay.classList.remove('text-danger');
+                } else {
+                    charWarning.classList.add('opacity-0');
+                    charCountDisplay.classList.remove('text-danger', 'text-yellow-600', 'font-bold');
+                }
+            }
+            studentInput.addEventListener('input', updateCharCount);
+
+            accumulatedDraft.addEventListener('input', () => {
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+            });
+
+            // 智慧分離「純淨 6 級分故事美句」與「寫作技法拆解說明」
+            function separateProseAndBreakdown(demoRaw) {
+                // 1. 若內容中明確含有 <ul> 或 <ol> 標籤列表
+                const listMatch = demoRaw.match(/<(?:ul|ol)[\s\S]*?<\/(?:ul|ol)>/i);
+                if (listMatch) {
+                    const breakdownHtml = listMatch[0];
+                    const proseHtml = demoRaw.replace(listMatch[0], '').trim();
+                    return { prose: proseHtml, breakdown: breakdownHtml };
+                }
+
+                // 2. 若包含特定拆解關鍵字
+                const breakdownKeywords = ['【擴寫技法拆解】', '【寫作技法拆解】', '【技巧拆解】', '【寫作手法拆解】', '【擴寫手法】', '擴寫技法拆解', '寫作技法拆解'];
+                for (const kw of breakdownKeywords) {
+                    const idx = demoRaw.indexOf(kw);
+                    if (idx !== -1) {
+                        return {
+                            prose: demoRaw.substring(0, idx).trim(),
+                            breakdown: demoRaw.substring(idx + kw.length).trim()
+                        };
+                    }
+                }
+
+                // 3. 按段落分割 (<p>, </li>, <br> 或 \n)，識別出含有技法解析特徵的行
+                const rawBlocks = demoRaw.split(/(?:<\/p>|<\/li>|<br\s*\/?>|\n+)/).map(b => b.trim()).filter(Boolean);
+                const proseBlocks = [];
+                const breakdownBlocks = [];
+                let isBreakdownSection = false;
+
+                for (const block of rawBlocks) {
+                    const cleanText = block.replace(/<[^>]+>/g, '').trim();
+                    if (!cleanText) continue;
+
+                    // 判斷是否為技法解析特徵行
+                    const isExplanation = /^[•\-\*]/.test(cleanText)
+                        || /^(?:\d+[\.、\)]|✨|🔍|💡|👉)/.test(cleanText)
+                        || /(?:：|:)\s*(?:將|詳述|運用|修辭|動作|具體|暗示|言外之意|摹寫|呈現|加強|說明|解析)/.test(cleanText)
+                        || /(?:運用|使用|採用)了?(?:譬喻|轉化|映襯|誇飾|象徵|細節|摹寫|動態|靜態)/.test(cleanText);
+
+                    if (isExplanation) {
+                        isBreakdownSection = true;
+                    }
+
+                    if (isBreakdownSection) {
+                        breakdownBlocks.push(block);
+                    } else {
+                        proseBlocks.push(block);
+                    }
+                }
+
+                if (breakdownBlocks.length > 0) {
+                    return {
+                        prose: proseBlocks.join('<br>'),
+                        breakdown: breakdownBlocks.join('<br>')
+                    };
+                }
+
+                return { prose: demoRaw, breakdown: '' };
+            }
+
+            // 📋 複製純淨 6 級分美句 (僅複製作文句子，不含說明)
+            btnCopyAi.addEventListener('click', () => {
+                let textToCopy = cardAfterPureText.innerText.trim();
+                if (!textToCopy) {
+                    textToCopy = cardBeforeText.innerText.trim();
+                }
+                textToCopy = textToCopy.replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '').trim();
+
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+
+                const originalHTML = btnCopyAi.innerHTML;
+                btnCopyAi.innerHTML = '✅ 已複製純淨美句！';
+                btnCopyAi.classList.add('bg-primary', 'text-white');
+                setTimeout(() => { 
+                    btnCopyAi.innerHTML = originalHTML;
+                    btnCopyAi.classList.remove('bg-primary', 'text-white');
+                }, 2000);
+            });
+
+            // 🚀 一鍵採納至累積區 (100% 僅採納純淨美句，完全不含任何解析說明)
+            btnAdoptAi.addEventListener('click', () => {
+                let textToAdopt = cardAfterPureText.innerText.trim();
+                
+                if (!textToAdopt) {
+                    alert('目前尚無潤飾美句可採納喔！');
+                    return;
+                }
+
+                // 再次確保去除任何多餘標籤
+                textToAdopt = textToAdopt.replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '').trim();
+
+                if (accumulatedDraft.value.trim().length > 0) {
+                    accumulatedDraft.value += '\n\n' + textToAdopt;
+                } else {
+                    accumulatedDraft.value = textToAdopt;
+                }
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+
+                // 平滑滾動至累積區並做醒目閃爍反饋
+                accumulatedDraft.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                accumulatedDraft.classList.add('ring-4', 'ring-amber-400', 'bg-amber-50/70');
+                setTimeout(() => {
+                    accumulatedDraft.classList.remove('ring-4', 'ring-amber-400', 'bg-amber-50/70');
+                }, 1500);
+
+                const origHTML = btnAdoptAi.innerHTML;
+                btnAdoptAi.innerHTML = '🎉 已成功採納純淨美句！';
+                btnAdoptAi.classList.replace('from-primary', 'from-emerald-600');
+                btnAdoptAi.classList.replace('to-blue-700', 'to-emerald-700');
+                setTimeout(() => {
+                    btnAdoptAi.innerHTML = origHTML;
+                    btnAdoptAi.classList.replace('from-emerald-600', 'from-primary');
+                    btnAdoptAi.classList.replace('to-emerald-700', 'to-blue-700');
+                }, 2500);
+            });
+
+            // 文字美化與排版清理
+            function formatAiText(raw) {
+                let formatted = raw.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                return formatted;
+            }
+
+            // 渲染「Before / After」雙欄對照卡片與修辭標籤
+            function renderBeforeAfterCards(originalDraft, fullAiText) {
+                aiStreamBox.classList.add('hidden');
+                coachReviewCard.classList.remove('hidden');
+                beforeAfterContainer.classList.remove('hidden');
+
+                cardBeforeText.textContent = originalDraft;
+                badgeBeforeCount.textContent = originalDraft.length + ' 字';
+
+                // 拆解【教練評語】與【潤飾示範】
+                let reviewText = '';
+                let afterDemoText = fullAiText;
+
+                const demoKeywords = ['【潤飾示範與拆解】', '【潤飾示範】', '【改寫示範】', '潤飾示範'];
+                let demoIndex = -1;
+                let foundKeyword = '';
+
+                for (const kw of demoKeywords) {
+                    const idx = fullAiText.indexOf(kw);
+                    if (idx !== -1) {
+                        demoIndex = idx;
+                        foundKeyword = kw;
+                        break;
+                    }
+                }
+
+                if (demoIndex !== -1) {
+                    reviewText = fullAiText.substring(0, demoIndex).trim();
+                    afterDemoText = fullAiText.substring(demoIndex + foundKeyword.length).trim();
+                } else {
+                    reviewText = fullAiText;
+                }
+
+                coachReviewContent.innerHTML = formatAiText(reviewText);
+
+                // 分離出「純淨美句」與「說明拆解」
+                const { prose, breakdown } = separateProseAndBreakdown(afterDemoText);
+
+                // 純淨美句去除任何多餘標籤與括號說明
+                let cleanProse = prose
+                    .replace(/<[^>]+>/g, '')
+                    .replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '')
+                    .replace(/【6級分範文美句】/g, '')
+                    .trim();
+
+                // 填入純淨美句
+                cardAfterPureText.textContent = cleanProse;
+                badgeAfterCount.textContent = cleanProse.length + ' 字';
+
+                // 處理技法拆解區塊 (轉換為彩色膠囊標籤)
+                if (breakdown && breakdown.trim().length > 0) {
+                    let styledBreakdown = breakdown.replace(/[\(（]([^）\)]+?)[\)）]/g, (match, tagContent) => {
+                        let colorClass = 'bg-blue-100 text-blue-800 border-blue-200';
+                        if (tagContent.includes('譬喻') || tagContent.includes('比喻') || tagContent.includes('擬人') || tagContent.includes('轉化') || tagContent.includes('修辭')) {
+                            colorClass = 'bg-purple-100 text-purple-800 border-purple-300';
+                        } else if (tagContent.includes('動態') || tagContent.includes('動作') || tagContent.includes('細部') || tagContent.includes('具體')) {
+                            colorClass = 'bg-amber-100 text-amber-800 border-amber-300';
+                        } else if (tagContent.includes('言外之意') || tagContent.includes('情感') || tagContent.includes('心境') || tagContent.includes('昇華') || tagContent.includes('反思')) {
+                            colorClass = 'bg-rose-100 text-rose-800 border-rose-300';
+                        } else if (tagContent.includes('五感') || tagContent.includes('視覺') || tagContent.includes('聽覺') || tagContent.includes('嗅覺') || tagContent.includes('摹寫')) {
+                            colorClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                        }
+                        return `<span class="inline-flex items-center px-2 py-0.5 m-0.5 rounded-full text-xs font-bold border ` + colorClass + ` shadow-2xs">✨ ` + tagContent + `</span>`;
+                    });
+
+                    cardAfterBreakdownList.innerHTML = formatAiText(styledBreakdown);
+                    cardAfterBreakdown.classList.remove('hidden');
+                } else {
+                    cardAfterBreakdown.classList.add('hidden');
+                }
+            }
+
+            // Cloudflare Workers SSE 串流讀取函式
+            async function streamFromWorker(workerUrl, payload, originalDraft) {
+                const response = await fetch(workerUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...payload, stream: true })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    let errMsg = errText;
+                    try {
+                        const parsed = JSON.parse(errText);
+                        errMsg = parsed.error?.message || errText;
+                    } catch(e) {}
+                    throw new Error(`Worker 連線異常 (` + response.status + `)：` + errMsg);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                let accumulatedText = '';
+
+                // 重設並啟動即時串流打字介面
+                streamBadge.classList.remove('hidden');
+                aiLoading.classList.add('hidden');
+                aiOutputContainer.classList.remove('hidden');
+                aiStreamBox.classList.remove('hidden');
+                coachReviewCard.classList.add('hidden');
+                beforeAfterContainer.classList.add('hidden');
+
+                aiOutput.innerHTML = '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('data:')) {
+                            const jsonStr = trimmed.slice(5).trim();
+                            if (jsonStr) {
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const chunkText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                                    if (chunkText) {
+                                        accumulatedText += chunkText;
+                                        aiOutput.innerHTML = formatAiText(accumulatedText) + '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+                                    }
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+
+                // 串流結束：移除打字標籤並切換為 Before/After 雙欄卡片
+                streamBadge.classList.add('hidden');
+                renderBeforeAfterCards(originalDraft, accumulatedText);
+                return accumulatedText;
+            }
+
+
+            // 自訂 Gemini API Key 原廠直連 SSE 串流讀取函式
+            async function streamFromDirectGemini(apiKey, targetModel, payload, originalDraft) {
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:streamGenerateContent?alt=sse&key=${apiKey}`;
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    let errMsg = errText;
+                    try {
+                        const parsed = JSON.parse(errText);
+                        errMsg = parsed.error?.message || errText;
+                    } catch(e) {}
+                    throw new Error(`Google 原廠直連異常 (${response.status})：${errMsg}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                let accumulatedText = '';
+
+                // 重設並啟動即時串流打字介面
+                streamBadge.classList.remove('hidden');
+                aiLoading.classList.add('hidden');
+                aiOutputContainer.classList.remove('hidden');
+                aiStreamBox.classList.remove('hidden');
+                coachReviewCard.classList.add('hidden');
+                beforeAfterContainer.classList.add('hidden');
+
+                aiOutput.innerHTML = '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('data:')) {
+                            const jsonStr = trimmed.slice(5).trim();
+                            if (jsonStr) {
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const chunkText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                                    if (chunkText) {
+                                        accumulatedText += chunkText;
+                                        aiOutput.innerHTML = formatAiText(accumulatedText) + '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+                                    }
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+
+                streamBadge.classList.add('hidden');
+                renderBeforeAfterCards(originalDraft, accumulatedText);
+                return accumulatedText;
+            }
+
+            // GAS 備援請求函式
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+            async function fetchWithRetry(url, payload, retries = 3) {
+                const delays = [1000, 2000, 4000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ` + response.status);
+                        
+                        const textResponse = await response.text();
+                        try {
+                            return JSON.parse(textResponse);
+                        } catch (parseError) {
+                            throw new Error('回傳格式錯誤，請確認 API 連線或 GAS 權限設定。');
+                        }
+                    } catch (error) {
+                        if (i === retries - 1) throw error;
+                        await delay(delays[i]);
+                    }
+                }
+            }
+
+            btnAskAI.addEventListener('click', async () => {
+                const text = studentInput.value.trim();
+                if (!text) {
+                    alert('請先輸入草稿喔！');
+                    return;
+                }
+
+                const selectedFocus = document.querySelector('input[name="focus"]:checked').value;
+
+                btnAskAI.disabled = true;
+                btnAskAI.classList.add('opacity-50', 'cursor-not-allowed');
+                btnAskText.textContent = '⚡ 教練動筆中...';
+                aiOutputContainer.classList.add('hidden');
+                aiError.classList.add('hidden');
+                aiLoading.classList.remove('hidden');
+
+                const systemPrompt = `你是一位專業且溫柔的國中寫作教練，正在指導學生寫「寶島戀真情：我的家鄉味」的會考作文。
+寫作重點：運用「詠物三層面（描繪及聯想、串連物與我、抒發情感）」手法，避免寫成食譜流水帳，深入描寫臺灣的美食並藉物抒情。
+請根據學生輸入的草稿給予回饋。
+
+【特別任務】學生希望這次能特別加強：**${selectedFocus}**。請在給予建議時，特別針對這點進行指導。
+
+回饋必須使用繁體中文，格式請嚴格遵守以下三個段落（請直接使用簡單的 HTML 標籤如 <p>, <b>, <ul>, <li> 進行排版，不要使用 Markdown 星號）：
+
+<p><b>【教練的肯定】</b><br>簡短稱讚學生的選材或反思視角，給予鼓勵。</p>
+<p><b>【具體建議】</b><br>針對學生選擇的加強重點給出具體的修改方向。用語要像是親切的對話。</p>
+<p><b>【潤飾示範與拆解】</b><br>給出一段改寫後的美句示範（符合國中生 6級分程度），並在句子後面用括號標註你使用了什麼寫作技巧（如：五感摹寫、物我相連、情感昇華等）。</p>`;
+
+                const payload = {
+                    model: "gemini-2.5-flash",
+                    contents: [{ role: "user", parts: [{ text: text }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                try {
+                    // 1. 自訂 Gemini API Key 個人直連串流模式
+                    if (currentMode === 'custom') {
+                        if (!currentCustomKey) {
+                            configPanel.classList.remove('hidden');
+                            throw new Error('您已選擇「自訂 API Key」模式，但尚未填寫金鑰。請在上方輸入您的 Gemini API Key 後點擊「儲存設定」。');
+                        }
+                        const targetModel = currentCustomModel || 'gemini-2.5-flash';
+                        const directPayload = {
+                            contents: [{ role: "user", parts: [{ text: text }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        };
+                        await streamFromDirectGemini(currentCustomKey, targetModel, directPayload, text);
+                    } 
+                    // 2. Cloudflare Worker 邊緣多金鑰池串流模式
+                    else if (currentMode === 'worker' && currentWorkerUrl) {
+                        await streamFromWorker(currentWorkerUrl, payload, text);
+                    } 
+                    // 3. GAS 安全備援模式
+                    else {
+                        // 使用 GAS 安全備援模式
+                        const result = await fetchWithRetry(DEFAULT_GAS_URL, payload);
+                        const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                        
+                        if (generatedText) {
+                            aiLoading.classList.add('hidden');
+                            aiOutputContainer.classList.remove('hidden');
+                            renderBeforeAfterCards(text, generatedText);
+                        } else {
+                            const apiErrorMsg = result.error?.message || '未回傳有效文字';
+                            throw new Error(`API 錯誤：` + apiErrorMsg);
+                        }
+                    }
+                } catch (error) {
+                    console.error('AI Coach Error:', error);
+                    aiLoading.classList.add('hidden');
+                    streamBadge.classList.add('hidden');
+                    aiError.classList.remove('hidden');
+                    aiErrorText.innerHTML = `抱歉，教練目前遇到連線問題：<br><strong class="text-sm">` + error.message + `</strong><br>👉 您可點擊上方「⚙️ 代理通道設定」檢查設定、切換至 GAS 備援或輸入自訂 API Key。`;
+                } finally {
+                    btnAskAI.disabled = false;
+                    btnAskAI.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnAskText.textContent = '🚀 請教練指導';
+                }
+            });
+
+
+        });
+
+        // Teacher Checklist Toggle
+        function toggleChecklist(element) {
+            const content = element.querySelector('.hidden-content');
+            const hint = element.querySelector('.show-more-hint');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                element.classList.replace('bg-teacher', 'bg-teacher-light');
+                hint.style.display = 'none';
+            } else {
+                content.style.display = 'none';
+                element.classList.replace('bg-teacher-light', 'bg-teacher');
+                hint.style.display = 'block';
+            }
+        }
+
+        // 範文賞析 Toggle
+        function toggleEssay(essayId, btnElement) {
+            const content = document.getElementById(essayId);
+            const isExpanded = btnElement.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.classList.remove('open');
+                btnElement.setAttribute('aria-expanded', 'false');
+            } else {
+                content.classList.add('open');
+                btnElement.setAttribute('aria-expanded', 'true');
+            }
+        }
+    </script>
+</body>
+</html>

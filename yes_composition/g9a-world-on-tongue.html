@@ -1,0 +1,1579 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✍️ 舌尖上的世界 寫作指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FFFDF9',      /* 溫暖象牙白 (餐桌底色) */
+                        ink: '#4A3B32',        /* 暖深褐 */
+                        primary: '#E25822',    /* 番茄紅 (強烈味蕾衝擊) */
+                        secondary: '#F39C12',  /* 暖陽橘 (溫潤傳統美食) */
+                        tertiary: '#27AE60',   /* 羅勒綠 (文化包容與生機) */
+                        highlight: '#FDEBD0',  /* 麵團淺膚色 */
+                        danger: '#C0392B',     /* 警示紅 */
+                        teacher: '#5D4037',    /* 教師區預設底色 */
+                        'teacher-light': '#795548' /* 教師區展開底色 */
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap');
+        
+        body {
+            background-color: #FFFDF9;
+            color: #4A3B32;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .step-transition {
+            transition: all 0.5s ease-in-out;
+        }
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #FDEBD0;
+        }
+        .tab-btn.active {
+            background-color: #4A3B32 !important;
+            color: #FFFDF9 !important;
+            border-left: 4px solid #E25822;
+        }
+        .checklist-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .checklist-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Loading Animation for AI */
+        .dot-flashing {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #E25822;
+            color: #E25822;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #E25822;
+            color: #E25822;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #E25822;
+            color: #E25822;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #E25822; }
+            50%, 100% { background-color: rgba(226, 88, 34, 0.2); }
+        }
+        
+        /* Styled AI Output */
+        .ai-content b { color: #E25822; font-weight: 700; }
+        .ai-content ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .ai-content li { margin-bottom: 0.25rem; }
+        .ai-content br { margin-bottom: 0.5rem; }
+
+        /* Essay Toggle Transition */
+        .essay-content {
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .essay-content.open {
+            max-height: 4000px;
+            opacity: 1;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        .essay-icon {
+            transition: transform 0.3s ease;
+        }
+        .essay-btn[aria-expanded="true"] .essay-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased">
+            <!-- ==================== 1. STICKY HEADER (閱思龍門標準頂部導覽列與螢光筆網頁書籤) ==================== -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand & Title (品牌識別與標題) -->
+            <div class="flex items-center space-x-3">
+                <a href="#hero" class="flex items-center space-x-2.5 group no-underline" style="text-decoration:none;">
+                    <img src="../assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-10 h-10 object-contain rounded-full shadow-sm group-hover:rotate-12 transition-transform duration-300">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="font-serif font-bold text-lg sm:text-xl text-slate-900 tracking-wide group-hover:text-amber-800 transition-colors">舌尖上的世界</span>
+                            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">九上閱思龍門・多元文化</span>
+                        </div>
+                        <p class="text-[11px] text-slate-700 font-medium hidden md:block">
+                            <span class="bg-yellow-200/90 text-amber-950 px-1.5 py-0.5 rounded shadow-xs">飲食文化衝擊融合・五感滋味轉化為文化包容好文</span>
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Navigation Links (螢光筆網頁書籤) -->
+            <nav class="flex items-center space-x-1 sm:space-x-1.5 font-medium text-xs sm:text-sm">
+                <a href="#expansion-tool" class="px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all flex items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>🌱 感官擴寫</span>
+                </a>
+                <a href="#structure-blueprint" class="px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all flex items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>🏗️ 篇章骨架</span>
+                </a>
+                <a href="#ai-coach-section" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-amber-950 bg-yellow-300 hover:bg-yellow-400 font-bold shadow-xs transition-all flex items-center gap-1 border border-yellow-400/80 ring-2 ring-yellow-200 no-underline" style="text-decoration:none;">
+                    <span>🤖 AI 寫作教練</span>
+                </a>
+                <a href="#sample-essays" class="hidden sm:flex px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>📚 範文賞析</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <header class="bg-highlight/40 text-ink py-12 px-4 shadow-sm text-center border-b border-highlight/60" id="hero">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-4xl mb-4">🍕舌尖上的世界🍜</div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight"><span class="text-primary">舌尖上的世界 寫作指南</span></h1>
+            <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto font-medium leading-relaxed">
+                「在全球化的影響下，即使是簡單的日常食物，也可見到世界文化的衝擊與融合（如：香菜豬血糕比薩、珍珠奶茶拉麵）。思考飲食文化所受到的影響，並發表你的看法與感受。」<br>
+                跟著下方的互動步驟，學習如何將食物的滋味，轉化為具備感官畫面、深刻反思與文化包容力的滿分好文。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-12 space-y-16 md:space-y-20">
+
+        <!-- 第一步：擴寫練習 -->
+        <section id="expansion-tool" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🌱</span> 第一步：從「平淡」到「垂涎」的擴寫術
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    寫飲食文章最怕變成流水帳食記。透過互動式的「句子長大術」，觀察我們如何將一句平淡無奇的「出現了很多特別的食物」，透過加入<b>「具體畫面」</b>、<b>「五感摹寫」</b>與<b>「文化反思」</b>，擴充成一段色香味俱全且引人深思的段落。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <div class="bg-paper p-6 rounded-xl border border-gray-200 min-h-[200px] flex flex-col justify-center">
+                        <div class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide" id="sentence-label">基礎敘述</div>
+                        <p class="text-xl md:text-2xl leading-relaxed text-ink step-transition font-serif" id="sentence-text">
+                            在全球化的影響下，出現了許多特別的食物。
+                        </p>
+                        <div class="mt-4 text-right">
+                            <span class="inline-block bg-ink text-paper px-3 py-1 rounded-full text-sm font-bold shadow" id="word-count-badge">20 字</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button id="btn-step-1" class="px-5 py-3 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition w-full md:w-auto hidden">↺ 重新開始</button>
+                        <button id="btn-next-step" class="px-5 py-3 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition w-full md:w-auto shadow-md">➕ 加上「具體畫面」</button>
+                    </div>
+
+                    <div class="bg-highlight/30 border-l-4 border-primary p-4 rounded-r-lg mt-4">
+                        <p class="text-sm text-ink font-medium">💡 <strong>教師引導語：</strong>「不要只寫出『特別的食物』，試著在腦海中浮現夜市或餐廳的菜單（如韓式泡菜蔥抓餅、珍奶拉麵），讓讀者立刻產生畫面感！」</p>
+                    </div>
+                </div>
+
+                <div class="bg-paper/50 rounded-xl p-4 border border-gray-100">
+                    <h3 class="text-center font-bold text-tertiary mb-2 text-sm uppercase tracking-wider">字數與畫面感成長</h3>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二步：文章骨架 -->
+        <section id="structure-blueprint" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🏗️</span> 第二步：「問津趕行程」的骨架搭建
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    面對「圖表與情境表述」的題目，本區塊採用<b>「問津趕行程」</b>口訣，對準會考作文的高分考點，作為五段落的組織架構，幫你分配好 900 字的黃金比例。點擊左側標籤，探索各段落的寫作任務。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 flex flex-col gap-2" id="tab-container">
+                </div>
+
+                <div class="lg:col-span-8 bg-paper rounded-xl border border-gray-200 p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="flex-1 space-y-6">
+                        <div class="border-b-2 border-gray-200 pb-4">
+                            <h3 class="text-2xl font-bold text-ink font-serif" id="tab-title">第一段：【問】問題意識</h3>
+                            <p class="text-tertiary mt-1 font-medium" id="tab-words">建議字數：約 110-150 字 (約 5-7 行)</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">🎯</span> 寫作任務</h4>
+                            <p class="text-gray-700 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-task">點出全球化帶來的飲食衝擊現象，提出你對「食物跨國融合」或「傳統與創新」的問題意識與討論方向。</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">❓</span> 引導提問</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-prompts">
+                                <li>當你看到「珍珠奶茶拉麵」或「香菜豬血糕比薩」時，第一直覺是什麼？</li>
+                                <li>全球化是如何悄悄改變我們每天的餐桌風景？</li>
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">寫作策略</h4>
+                                <p class="text-sm text-gray-700" id="tab-materials">運用「對比法」，將老一輩對食物的傳統堅持，與現在網路上爆紅的混血創意美食進行對比破題。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">開頭句型提示</h4>
+                                <p class="text-sm text-gray-700 italic" id="tab-hint">「小時候，阿嬤總說食物要吃原味。然而，隨著全球化的浪潮襲來，當『香菜豬血糕比薩』躍上面版，我看見的不再只是噱頭，而是...」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/3 flex flex-col justify-center items-center">
+                        <h4 class="text-center font-bold text-tertiary mb-4 text-sm uppercase tracking-wider">段落字數佔比</h4>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三步：AI 教練與檢核 -->
+        <section id="ai-coach-section" class="bg-ink text-paper rounded-2xl shadow-xl p-6 md:p-10 border-t-8 border-primary">
+            <div class="mb-8 border-b border-primary/30 pb-6">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🤖</span> 第三步：檢核與潤飾 (AI 寫作教練)
+                </h2>
+                <p class="text-paper/90 text-lg">
+                    食物的色香味寫得夠誘人嗎？對文化融合的反思夠深刻嗎？將你寫好的草稿貼在下方，專屬的 <b>AI 寫作教練</b> 會給你優化建議，讓你的文字令人垂涎三尺又發人深省！
+                </p>
+            </div>
+
+            <!-- AI 教練互動區 -->
+            <div class="bg-paper text-ink rounded-xl p-6 mb-8 shadow-inner">
+                
+                <!-- 防呆破冰：草稿快捷鍵 -->
+                <div class="mb-4 flex flex-wrap items-center gap-2">
+                    <span class="text-sm text-primary font-bold bg-highlight/50 px-2 py-1 rounded">💡 沒靈感嗎？點擊試試：</span>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">我覺得把珍珠加進拉麵裡真的很奇怪，感覺破壞了拉麵原本的味道，傳統的美食還是不要亂改比較好。</button>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">夜市裡現在到處都是異國美食，像是韓國烤肉跟泰式奶茶，雖然很好吃，但有時候會怕台灣原本的小吃不見了。</button>
+                </div>
+
+                    <!-- 靈感工具列：靈感骰子 + 快捷提示詞 -->
+                    <div class="flex flex-wrap items-center gap-2 p-2.5 bg-paper rounded-xl border border-gray-200 shadow-2xs">
+                        <button id="btn-inspiration-dice" class="text-xs bg-secondary hover:bg-secondary/90 text-white font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-xs transform hover:scale-105 active:scale-95">
+                            <span class="text-sm">🎲</span>
+                            <span>靈感骰子 (飲食起手式)</span>
+                        </button>
+                        <span class="text-gray-300 hidden sm:inline">|</span>
+                        <span class="text-xs text-gray-500 font-medium hidden sm:inline">快捷注入句型：</span>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="細緻的滋味在舌尖化開，層次分明的香氣瞬間直衝鼻腔……">
+                            🥢 ＋舌尖感官
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="每一道料理背後，都凝聚了一方水土的氣候風貌與歷史記憶……">
+                            🌍 ＋文化視野
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="那一道熟悉的家常料理，承載了兩代人之間無需言語的深厚溫情……">
+                            🍲 ＋情感牽繫
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="舌尖所嚐盡的百味，恰似人生百態，唯有從容以對才能品出真味……">
+                            📖 ＋五味哲理
+                        </button>
+                    </div>
+
+
+                <div class="mb-6">
+                    <label for="student-input" class="block text-ink font-bold mb-2">✏️ 貼上你的草稿 (請輸入 200 字以內)：</label>
+                    <textarea id="student-input" rows="4" maxlength="200" class="w-full bg-white border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="請貼上你的一段敘述或想法，例如你品嘗過什麼特別的混血美食，或是對傳統小吃沒落的看法..."></textarea>
+                    
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="char-warning" class="text-xs text-danger font-bold opacity-0 transition-opacity">⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。</span>
+                        <div class="text-right text-xs text-gray-400"><span id="char-count">0</span> / 200 字</div>
+                    </div>
+                </div>
+
+                <!-- 賦予選擇權：自訂指導重點 -->
+                <div class="mb-6 bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                    <label class="block text-ink font-bold mb-3">🎯 教練，我這次想加強...</label>
+                    <div class="flex flex-wrap gap-3" id="focus-areas">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="強化五感與味蕾摹寫 (使用視覺、嗅覺、味覺的細膩描繪，讓食物的狀態與味道躍然紙上，令人垂涎)" class="peer sr-only" checked>
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🎬 強化五感味蕾摹寫</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="深化文化與傳統的反思 (幫助我從單純的好不好吃，深入探討文化包容、刻板印象，或傳統在地滋味的傳承意義)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🧠 深化飲食文化反思</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="加強論述邏輯 (加入起承轉合的連接詞與對比修辭，讓面對異國美食衝擊時的態度與解方更有說服力)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🔗 增強論述邏輯</div>
+                        </label>
+                    </div>
+                </div>
+
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <button id="btn-toggle-config" class="text-xs text-gray-500 hover:text-primary transition flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-gray-200 hover:bg-gray-100 bg-white w-fit shadow-xs">
+                        <span>⚙️ 代理通道設定</span>
+                        <span id="channel-badge" class="bg-blue-100 text-primary px-2 py-0.5 rounded text-[11px] font-bold">⚡ Cloudflare 串流 (極速)</span>
+                    </button>
+                    <button id="btn-ask-ai" class="bg-primary hover:opacity-90 text-white font-bold py-3 px-8 rounded-lg shadow transition flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                        <span id="btn-ask-text" class="text-lg">🚀 請教練指導</span>
+                    </button>
+                </div>
+
+                <!-- 代理通道設定面板 (可展開/收合) -->
+                <div id="config-panel" class="hidden mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200 text-sm shadow-inner transition-all">
+                    <div class="flex items-center justify-between mb-3 border-b border-gray-200 pb-2">
+                        <h4 class="font-bold text-ink flex items-center gap-2">
+                            <span>⚙️</span> AI 代理通道切換與端點設定
+                        </h4>
+                        <span class="text-xs text-gray-400">設定將自動保存在瀏覽器</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div>
+                            <label class="block font-bold text-xs text-gray-700 mb-1">通道選擇：</label>
+                            <select id="channel-mode" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary">
+                                <option value="worker">⚡ Cloudflare Worker 邊緣串流 (推薦・極速打字機)</option>
+                                <option value="gas">🛡️ Google Apps Script (原版安全中繼)</option>
+                                <option value="custom">🔑 自備 Gemini API Key（直連 Google）</option>
+                            </select>
+                        </div>
+                        <div id="worker-url-group">
+                            <label class="block font-bold text-xs text-gray-700 mb-1">Cloudflare Worker 網址：</label>
+                            <input id="worker-url-input" type="url" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary" placeholder="請貼上你的 Worker 網址，例如 https://gemini-stream-coach.xxx.workers.dev">
+                        </div>
+                                                <!-- 自備 Key 輸入區塊 -->
+                        <div id="custom-key-group" class="hidden md:col-span-2 p-3 bg-blue-50/70 rounded-lg border border-blue-200 space-y-2">
+                            <div class="flex flex-wrap justify-between items-center gap-1 text-xs">
+                                <span class="font-bold text-blue-900">自備 Google Gemini API Key（安全存放於本機 LocalStorage）</span>
+                                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline text-[11px] hover:text-blue-800 font-medium">前往 Google AI Studio 免費領取</a>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <input type="password" id="custom-api-key" placeholder="貼上 AI Studio 取得的 API Key (AIzaSy...)" class="w-full text-xs font-mono border border-gray-300 rounded-lg px-3 py-2 pr-8 bg-white focus:ring-2 focus:ring-primary">
+                                    <button type="button" id="toggle-key-visibility" class="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-xs" title="顯示/隱藏金鑰">👁️</button>
+                                </div>
+                                <button type="button" id="btn-save-custom-key" class="text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium px-3.5 py-1.5 rounded-lg transition shrink-0 cursor-pointer shadow-xs">
+                                    保存金鑰
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-2 pt-0.5">
+                                <label class="text-[11px] text-gray-600 font-medium shrink-0">自訂模型代號 (選填)：</label>
+                                <input id="custom-model-input" type="text" class="bg-white border border-gray-300 rounded px-2 py-0.5 text-xs font-mono w-40 focus:ring-1 focus:ring-primary" placeholder="預設 gemini-2.5-flash">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-gray-500 gap-2">
+                        <div id="connection-status" class="flex items-center gap-1.5 text-tertiary font-medium">
+                            <span class="w-2 h-2 rounded-full bg-tertiary inline-block"></span>
+                            <span id="status-text">通道就緒：優先採用 Cloudflare 邊緣串流</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="btn-reset-config" class="text-gray-500 hover:text-gray-700 px-3 py-1 rounded border border-gray-300 hover:bg-gray-100 transition">
+                                恢復預設值
+                            </button>
+                            <button id="btn-save-config" class="bg-primary text-white font-bold px-4 py-1.5 rounded hover:opacity-90 transition shadow-xs">
+                                儲存並測試
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading 狀態 -->
+                <div id="ai-loading" class="hidden mt-6 p-6 bg-paper rounded-lg flex flex-col items-center justify-center gap-4 border border-gray-200 shadow-sm">
+                    <div class="dot-flashing"></div>
+                    <p class="text-primary font-medium mt-2">教練正在細細審閱你的草稿，為您提供專屬建議中...</p>
+                </div>
+
+                <!-- AI 回饋輸出區 -->
+                <div id="ai-output-container" class="hidden mt-8 space-y-6">
+                    <div class="flex items-center justify-between border-l-4 border-primary pl-3">
+                        <h3 class="font-bold text-xl text-ink flex items-center gap-2">
+                            <span>💡</span> 教練的回饋與升級示範
+                            <span id="stream-badge" class="hidden text-xs bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full font-bold animate-pulse">⚡ 打字串流中...</span>
+                        </h3>
+                    </div>
+
+                    <!-- 即時串流打字顯示框 (串流時顯示) -->
+                    <div id="ai-stream-box" class="bg-paper border border-gray-300 rounded-xl p-5 text-ink leading-relaxed shadow-xs min-h-[120px]">
+                        <div id="ai-output" class="ai-content leading-relaxed">
+                            <!-- AI Response goes here -->
+                        </div>
+                    </div>
+
+                    <!-- 生成完畢後展示：教練評語卡片 -->
+                    <div id="coach-review-card" class="hidden bg-blue-50/70 border border-blue-200 rounded-xl p-5 shadow-xs">
+                        <h4 class="font-bold text-primary mb-2 flex items-center gap-2">
+                            <span>👩‍🏫</span> 教練的寫作講評：
+                        </h4>
+                        <div id="coach-review-content" class="text-sm text-ink leading-relaxed space-y-2">
+                            <!-- 教練肯定與建議 -->
+                        </div>
+                    </div>
+
+                    <!-- 生成完畢後展示：「Before / After」雙欄卡片對照 -->
+                    <div id="before-after-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Before: 學生原文 -->
+                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+                                    <span class="font-bold text-sm text-gray-700 flex items-center gap-1.5">
+                                        <span>📝</span>【你的原始草稿】
+                                    </span>
+                                    <span id="badge-before-count" class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded font-medium">0 字</span>
+                                </div>
+                                <div id="card-before-text" class="text-gray-800 font-serif leading-relaxed text-base italic">
+                                    <!-- 學生原文 -->
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-400">
+                                原文基礎：有構思雛形，等待展開細節與感情
+                            </div>
+                        </div>
+
+                        <!-- After: 6級分升級版 -->
+                        <div class="bg-amber-50/70 border-2 border-amber-300 rounded-xl p-5 shadow-md flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -top-6 -right-6 w-20 h-20 bg-amber-400/20 rounded-full blur-xl pointer-events-none"></div>
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200/80">
+                                    <span class="font-bold text-sm text-amber-900 flex items-center gap-1.5">
+                                        <span>✨</span>【6 級分潤飾升級版】
+                                    </span>
+                                    <span class="text-xs bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-bold">滿級分示範</span>
+                                </div>
+                                <!-- 純淨 6 級分美句區 (採納與複製專用) -->
+                                <div id="card-after-pure-text" class="text-ink font-serif leading-relaxed text-base p-4 bg-white/95 rounded-xl border border-amber-200/90 shadow-2xs mb-3 select-all">
+                                    <!-- 純淨美句 -->
+                                </div>
+                                <!-- 寫作技法深度拆解 (僅供學生觀摩，不入作文) -->
+                                <div id="card-after-breakdown" class="text-xs space-y-1.5 pt-2 border-t border-amber-200/80">
+                                    <div class="font-bold text-amber-900 mb-1.5 flex items-center gap-1">
+                                        <span>🔍</span> 寫作技法深度拆解 (供觀摩，不入作文)：
+                                    </div>
+                                    <div id="card-after-breakdown-list" class="space-y-1.5 text-gray-700 leading-normal">
+                                        <!-- 彩色修辭標籤與說明 -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-amber-200/80 flex flex-wrap items-center justify-between gap-2">
+                                <span class="text-xs text-amber-800 font-medium">💡 採納與複製將「僅帶入純淨美句」</span>
+                                <span id="badge-after-count" class="text-xs bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded font-bold">0 字</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 操作按鈕列 -->
+                    <div class="flex flex-wrap justify-end gap-3 pt-2">
+                        <button id="btn-adopt-ai" class="text-sm bg-gradient-to-r from-primary to-blue-700 hover:opacity-95 text-white px-5 py-2.5 rounded-lg font-bold transition flex items-center gap-2 shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
+                            <span class="text-base">🚀</span>
+                            <span>一鍵採納至累積區</span>
+                        </button>
+                        <button id="btn-copy-ai" class="text-sm bg-white hover:bg-gray-100 text-ink px-4 py-2.5 rounded-lg font-bold transition flex items-center gap-2 border border-gray-300 shadow-xs">
+                            <span>📋 複製潤飾</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-error" class="hidden mt-6 bg-red-50 border-l-4 border-danger p-4 text-danger rounded-r-lg">
+                    <p id="ai-error-text">抱歉，教練目前遇到連線問題，請確認您的連線或稍後再試一次！</p>
+                </div>
+<!-- 我的文章累積區 -->
+                <div class="mt-10 bg-white border-2 border-primary/50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-ink flex items-center gap-2">
+                            <span class="text-2xl">📝</span> 我的文章累積區
+                        </h3>
+                    </div>
+                    <p class="text-sm text-primary mb-4 font-medium">
+                        看過教練的建議後，把你自己修改好的「優美句子」貼到這裡吧！你可以依照「問津趕行程」五段式結構，慢慢拼成一篇完整的 900 字文章。
+                    </p>
+                    <textarea id="accumulated-draft" rows="8" class="w-full border border-gray-200 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition bg-paper" placeholder="將潤飾好的段落貼上來，或是直接在這裡修改你的最終文章..."></textarea>
+                    
+                    <div class="flex justify-end items-center mt-2">
+                        <div class="text-right text-sm text-ink font-bold">目前累積字數：<span id="accumulated-char-count" class="text-primary">0</span> / 900 字</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 教師人工巡桌指南 -->
+            <div class="mt-10 pt-6 border-t border-primary/30">
+                <h3 class="text-xl font-bold mb-4 text-paper flex items-center gap-2"><span class="text-2xl">👩‍🏫</span> 教師巡桌指導備忘錄</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🚫</span>
+                            <h4 class="text-lg font-bold text-paper">1. 避免「淪為單純的美食部落客」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：整篇文章都在形容東西多好吃、排隊排多久，完全沒有提到「全球化」、「文化交融」或「衝擊」。<br>
+                            <span class="text-highlight font-bold">引導：提醒學生，食物只是「引子」。重點在於這份食物背後代表的意義，例如跨國文化的碰撞、創新與傳統的拉扯，必須將層次拉高到文化反思。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🎯</span>
+                            <h4 class="text-lg font-bold text-paper">2. 善用「五感摹寫」營造畫面</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：描述食物只有「很香」、「很好吃」、「很奇怪」等空泛的形容詞。<br>
+                            <span class="text-highlight font-bold">引導：請學生動用五官。視覺（金黃焦脆、晶瑩剔透）、嗅覺（辛辣的香氣、濃郁奶香撲鼻）、味覺與觸覺（軟糯Q彈、在舌尖炸開）。讓文字充滿誘惑力。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🌱</span>
+                            <h4 class="text-lg font-bold text-paper">3. 結尾展現「包容或尋根的態度」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：結尾只寫「希望以後可以吃到更多美食」。<br>
+                            <span class="text-highlight font-bold">引導：面對飲食文化的改變，我們該有什麼態度？可以是「學會放下刻板印象，包容多元文化」，也可以是「在擁抱世界的同時，不忘傳承在地傳統老味道」。展現宏觀格局。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四步：優秀範文賞析 -->
+        <section id="sample-essays" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📚</span> 優秀範文賞析
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    觀摩不同的「飲食文化觀點」如何運用「問津趕行程」的結構營造色香味與文化張力。點擊下方標題，即可展開閱讀完整範文與段落架構解析。
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- 範文 1：創新交融 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-fusion', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🍕</span> 聚焦【創新交融】：舌尖上的世界村</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-primary/20 text-primary px-3 py-1 rounded-full border border-primary/30 font-bold">948 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-fusion" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>小時候，阿嬤總說食物要吃原味，不該胡亂添加。然而，隨著時代的巨輪滾滾向前，全球化的浪潮不僅改變了我們的生活方式，更悄悄地端上了我們的餐桌。當「香菜豬血糕比薩」與「珍珠奶茶拉麵」成為社群媒體上的熱門話題時，我看見的不再只是譁眾取寵的噱頭，而是一場正在舌尖上激烈上演的文化融合與碰撞。</p>
+                            <p>這場味蕾的衝擊，真實地發生在我與朋友們的一次聚餐中。那天，我們點了一份引發網路熱議的「泰式冬蔭功海鮮比薩」。當比薩端上桌時，那是一幅令人震撼的視覺衝擊：金黃焦脆的義式餅皮上，鋪滿了鮮紅的泰式酸辣醬汁，肥美的鮮蝦與透抽點綴其中，還灑落著幾片翠綠的九層塔。熱氣蒸騰中，濃郁的起司奶香與辛辣的香茅氣息奇妙地交織在一起，撲鼻而來。我懷著忐忑的心情咬下一口，起司的溫潤首先安撫了舌尖，緊接著泰式香料的酸辣如煙火般在口腔中炸開，義大利的麵香與泰國的熱情竟在這一刻達成了完美的平衡。那是一種從未體驗過的驚奇滋味，徹底顛覆了我對比薩的傳統認知。</p>
+                            <p>咀嚼著這份跨界美食，我不禁陷入深思。許多人批評這樣的食物是「不倫不類」的惡搞，甚至認為這是在破壞傳統飲食的純粹性。但若我們退一步看，這不正是全球化最真實的縮影嗎？交通與網路的發達打破了國界，不同文化在同一個時空中相遇，必然會產生摩擦與交融。食物，作為文化最平易近人的載體，自然首當其衝。這種「混血」美食的誕生，背後代表的是一種不受框架束縛的創造力，以及勇於嘗試新事物的開放態度。它讓我們在日常的餐桌上，就能品嘗到世界各地的風土民情，看見不同文化交織出的無限可能。</p>
+                            <p>面對這股飲食文化的交融浪潮，我們不應選擇築起防備的高牆，急於捍衛某種絕對的「正統」。相反地，我們應該抱持著「包容與開放」的心態，去細細品味每一道創新料理背後的故事。作為新世代的我們，除了勇敢嘗試這些舌尖上的新奇，更可以主動去了解這些異國食材的來源與文化背景，甚至在自家的廚房裡，嘗試將台灣的在地食材與異國料理結合。透過味蕾的交流，我們不僅能開闊自己的視野，更能學會尊重與欣賞不同文化之間的差異。</p>
+                            <p>舌尖上的世界，是一幅沒有邊界的美食地圖。透過那份泰式冬蔭功比薩，我體悟到，飲食的演進從來都不是一成不變的。只要我們願意敞開心胸，用舌尖去感受世界的寬度，那些看似衝突的食材，終能交織出令人驚豔的美味。未來，我期待看見更多充滿創意的文化料理，在世界的餐桌上，持續譜寫出包容與共好的美味篇章。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-primary/20">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】以阿嬤的傳統觀念與當今爆紅的混血美食做對比，點出這是一場「舌尖上的文化融合與碰撞」的討論方向。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】具體描寫品嘗「泰式冬蔭功比薩」的經驗。運用極佳的五感摹寫（金黃焦脆、辛辣香茅、酸辣如煙火炸開），畫面感十足。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【感受想法】反思部分人對混血美食的批評，轉而探討其背後代表的「創造力」與全球化縮影，看見不同文化交織的可能。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【行動解方】提出面對交融浪潮應有的態度：不築起防備高牆，而是抱持「包容與開放」，主動了解異國食材背景並尊重差異。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【成長體悟】回扣主題。體悟到飲食演進不是一成不變的，只要敞開心胸，衝突的食材也能交織出美味，期許未來持續包容共好。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 2：傳統堅守 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-tradition', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🍜</span> 聚焦【傳統堅守】：繁華街角的古早味</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-secondary/20 text-secondary px-3 py-1 rounded-full border border-secondary/30 font-bold">968 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-tradition" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>在社群網路高度發達的今日，我們的眼球與胃口總是被各式各樣的新奇美食所吸引。從韓國的爆漿起司熱狗、日本的抹茶珍珠冰品，到融合各國食材的創意比薩，全球化的狂風正以摧枯拉朽之勢，橫掃著台灣的街頭巷尾。然而，在面對這片令人眼花撩亂的舌尖世界時，我看見的並非只有創新的繁華，更看見了傳統在地滋味在時代洪流中，那份逐漸被邊緣化的孤寂與堅持。</p>
+                            <p>這份感慨，源自於我家巷口那間已經傳承三代的傳統滷肉飯小吃攤。那是一個沒有冷氣、沒有華麗裝潢，只有幾張斑駁鐵桌的簡陋空間。然而，那口終年熬煮的老滷鍋，卻是附近街坊鄰居共同的記憶。每當下課後，我總愛點上一碗滷肉飯。那琥珀色的滷汁晶瑩剔透，肥瘦相間的肉燥在熱騰騰的白飯上微微顫動，散發著八角與醬油交織的深沉香氣。扒下一口，豬肉的油脂與鹹香在口腔中化開，那是一種不需任何花俏包裝，就能直擊靈魂深處的純粹美味。然而，近幾年來，巷子裡陸續開了幾間裝潢時尚的異國速食店與網美咖啡廳，小吃攤前的排隊人潮肉眼可見地減少了。看著老闆佝僂著背，在蒸氣中默默攪拌著滷鍋的落寞身影，我的心頭不禁湧上一股酸楚。</p>
+                            <p>品嘗著熟悉的滋味，我不禁深思：在全球化的強勢衝擊下，難道傳統就注定要被淘汰嗎？那些融合了異國風情的創意料理固然令人驚豔，能滿足現代人求新求變的味蕾，但它們往往像是一陣絢麗的煙火，短暫燃燒後便難以留下深刻的印記。相反地，像滷肉飯這樣看似平凡的在地小吃，卻承載著這塊土地的歷史軌跡、先輩的智慧，以及濃濃的人情味。如果我們為了一味追求新潮，而任由這些承載著文化根基的傳統味道消亡，那麼我們失去的將不只是一道道美食，更是與這片土地最緊密的連結。</p>
+                            <p>面對全球化帶來的飲食危機，我們不能只是在傳統小吃攤倒閉時才發出廉價的嘆息。身為台灣文化傳承的一份子，我們應該採取實際的「尋根行動」。我們可以在追逐網美餐廳之餘，多留一些時間去品味街角的老店，用實際的消費去支持那些默默堅守傳統的手藝人。同時，我們也能運用現代科技與社群媒體，為這些傳統美食注入新的生命力，記錄下它們的故事與作法，讓更多年輕人了解並愛上這些在地滋味。更重要的是，在我們擁抱世界美食的同時，必須時刻提醒自己，不要忘記我們味覺的起點。</p>
+                            <p>舌尖上的世界雖然廣闊，但唯有扎根於泥土的味蕾，才能品嘗出生命最深邃的甘甜。那碗平凡的滷肉飯讓我體悟到，在全球化的浪潮中，我們不該隨波逐流而迷失自我。真正的美食文化，應該是「越在地，越國際」。只要我們懂得珍惜與傳承那些純粹的在地滋味，台灣的傳統美食，必能在世界的美食版圖上，散發出無可取代的雋永香氣。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-secondary/20">
+                            <h4 class="font-bold text-secondary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】以異國美食橫掃街頭的現象破題，翻轉視角，提出對「傳統在地滋味被邊緣化」的擔憂與問題意識。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】細膩描寫巷口滷肉飯（琥珀色滷汁、八角香氣）的純粹美味，並與對街新開的異國網美餐廳形成強烈且落寞的對比。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【感受想法】深入反思傳統被淘汰的危機。指出創意料理如短暫煙火，而平凡小吃承載著歷史與人情，失去它們等於失去土地連結。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【行動解方】提出「尋根行動」。呼籲用實際消費支持老店，並利用現代社群媒體為傳統注入新生命，擁抱世界時不忘味覺起點。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【成長體悟】回扣主題。體悟到「越在地，越國際」，唯有扎根泥土的味蕾才能品嘗深邃甘甜，期許台灣傳統美食散發雋永香氣。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 3：文化包容 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-tolerance', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🤝</span> 聚焦【文化包容】：從餐桌看見世界的寬度</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-tertiary/20 text-tertiary px-3 py-1 rounded-full border border-tertiary/30 font-bold">998 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-tolerance" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>在這個資訊爆炸、交通便捷的時代，我們的餐桌早已成為一個小型的聯合國。無論是義大利的義大利麵、日本的壽司，還是印度的咖哩，都在日常生活中唾手可得。然而，當不同國家的飲食文化開始打破界線，相互交融時，往往會激盪出令人意想不到的火花。面對這股飲食全球化的混血浪潮，我看見的，不僅是味蕾的無極限挑戰，更是一場打破文化刻板印象、學習包容與理解的深刻旅程。</p>
+                            <p>我永遠忘不了那次與家人共同品嘗「香菜皮蛋豬血糕比薩」的奇妙經歷。當這款號稱挑戰義大利人底線的創意比薩推出時，網路上頓時掀起了一陣論戰。有人讚嘆其創意，也有人批評這是對比薩傳統的褻瀆。那天晚上，當這盒充滿爭議的食物被打開時，一股奇特的氣味撲鼻而來：比薩起司的濃郁奶香中，竟夾雜著香菜獨特的強烈芬芳與皮蛋微嗆的氣息。看著鋪滿黑色皮蛋與豬血糕，還撒上大量翠綠香菜的餅皮，我的內心充滿了抗拒與疑惑。這三種極具台灣本土色彩、且愛惡分明的食材，真的能和西式的比薩餅皮和平共處嗎？我在家人的慫恿下，閉著眼睛咬下了一口。</p>
+                            <p>出乎意料地，想像中的可怕衝突並沒有發生。豬血糕的軟糯Q彈與比薩餅皮的酥脆形成了絕妙的口感對比；皮蛋特有的醇厚滋味在濃郁起司的包覆下，竟變得溫潤順口；而原本氣味強烈的香菜，在這裡扮演了清口解膩的角色，完美平衡了整體的油膩感。這三種看似「不倫不類」的在地食材，與來自遙遠歐洲的料理方式，竟在我的口腔中交織出一首和諧的交響樂。這份意想不到的美味，徹底擊碎了我原本的預設立場，讓我陷入了深深的震撼與沉思。</p>
+                            <p>這塊混血比薩讓我意識到，我們往往容易被既有的「刻板印象」所綁架。我們習慣用自己的標準去定義什麼是「正確」的食物，卻忘了飲食的發展本就是一個不斷流動與融合的過程。當我們對未知的組合抱持偏見與抗拒時，我們不僅錯失了品嘗新滋味的機會，更可能關上了了解另一種文化的大門。全球化帶來的飲食衝擊，其實是一面鏡子，照出了我們內心的狹隘。它提醒我們，面對不同的文化與事物，不應急著否定與批評，而是應該學會放下成見，用開放的心胸去嘗試與理解。</p>
+                            <p>為了培養這份包容的胸襟，我們應該將餐桌視為學習多元文化的最佳教室。在面對來自不同國家、不同族群的特色飲食時，即使不符合我們原有的口味，我們也該學會給予基本的尊重。我們可以主動去探索這些食物背後的歷史淵源與風土民情，理解它們為何會以這樣的形式呈現。當我們學會用欣賞的眼光看待每一道跨界料理時，我們的心胸便會如同這舌尖上的世界一般，變得無比寬廣。</p>
+                            <p>舌尖上的世界，是一場永無止境的奇妙探險。那塊香菜皮蛋豬血糕比薩，不僅驚豔了我的味蕾，更為我上了一堂名為「包容」的寶貴人生課。它讓我體悟到，真正的全球化，不是單一文化的強勢入侵，而是多元文化的和諧共存。只要我們願意打破偏見的藩籬，勇敢品嘗那些未知與不同，我們終能看見，在這個交融的世界裡，每一種獨特的滋味，都值得被溫柔地對待與品嘗。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-tertiary/20">
+                            <h4 class="font-bold text-tertiary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】以餐桌成為聯合國破題，提出面對混血浪潮，我們不只看見味蕾挑戰，更是學習「打破刻板印象與包容」的旅程。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】生動描寫品嘗爭議極大的「香菜皮蛋豬血糕比薩」過程。從氣味衝突到視覺抗拒，鋪陳出強烈的感官衝擊與猶豫。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【感受想法】描寫咬下後的「驚喜轉折」。詳細分析三種食材如何和諧交響，並反思自己原先被「刻板印象」綁架的狹隘心理。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【行動解方】提出將餐桌視為教室。呼籲面對不同文化飲食時應給予尊重，並主動探索背後歷史淵源，用欣賞眼光開闊心胸。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【成長體悟】回扣主題。體悟到全球化是多元和諧共存，這塊比薩上了一堂名為包容的人生課，期許打破偏見，溫柔對待獨特滋味。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= 頁尾識別 (Footer) ================= -->
+    <footer class="bg-slate-100 text-slate-600 py-8 mt-16 border-t border-slate-200 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-2.5">
+                <img src="../assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-8 h-8 rounded-full shadow-sm">
+                <span class="font-serif font-bold text-slate-800 text-sm sm:text-base">九上閱思龍門・舌尖上的世界</span>
+            </div>
+
+            <!-- Copyright -->
+            <div class="text-xs text-slate-500 font-medium text-center sm:text-right leading-relaxed">
+                <div>© 2026 學思軒</div>
+                <div class="text-slate-400 text-[11px] mt-0.5">&gt;&lt;&gt; &gt;&lt;&gt; &gt;&lt;&gt; ˙˙˙本網頁由黃于珊老師利用Google antigravity 2.0生成製作，僅供教學使用。˙˙˙&lt;&gt;&lt; &lt;&gt;&lt; &lt;&gt;&lt;</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Step 1: Sentence Builder Logic (情境擴寫)
+            const sentenceData = [
+                { label: "基礎敘述", text: "在全球化的影響下，出現了許多特別的食物。", words: 20, btnText: "➕ 加上「具體畫面」" },
+                { label: "情境擴寫", text: "在全球化的影響下，夜市裡出現了韓式泡菜蔥抓餅、珍珠奶茶拉麵等許多特別的食物。", words: 36, btnText: "➕ 加上「感官與修辭」" },
+                { label: "修辭擴寫", text: "在全球化的影響下，當濃郁的韓式泡菜遇上酥脆的台式蔥抓餅，或是Q彈珍珠沉浸在日式豚骨湯頭中，各種跨越國界的食材在舌尖上碰撞出令人驚奇的火花。", words: 66, btnText: "➕ 加上「內心反思」" },
+                { label: "反思擴寫 (完成)", text: "在全球化的影響下，當濃郁的韓式泡菜遇上酥脆的台式蔥抓餅，各種跨越國界的食材在舌尖上碰撞出令人驚奇的火花。然而，在追求味蕾刺激與新奇噱頭的同時，我們是否也漸漸遺忘了那些承載著歷史記憶的純粹在地滋味呢？", words: 98, btnText: "🎉 完成擴寫" }
+            ];
+
+            let currentStep = 0;
+            const elLabel = document.getElementById('sentence-label');
+            const elText = document.getElementById('sentence-text');
+            const elBadge = document.getElementById('word-count-badge');
+            const btnNext = document.getElementById('btn-next-step');
+            const btnReset = document.getElementById('btn-step-1');
+
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(ctxGrowth, {
+                type: 'bar',
+                data: {
+                    labels: ['基礎敘述', '加具象', '加修辭', '加反思'],
+                    datasets: [{
+                        label: '字數',
+                        data: [20, 0, 0, 0],
+                        backgroundColor: ['#FDEBD0', '#E25822', '#F39C12', '#27AE60'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 110, grid: { color: '#FDEBD0' }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' 字'; } } } }
+                }
+            });
+
+            btnNext.addEventListener('click', () => { if (currentStep < 3) { currentStep++; updateSentenceUI(); } });
+            btnReset.addEventListener('click', () => { currentStep = 0; updateSentenceUI(); });
+
+            function updateSentenceUI() {
+                const data = sentenceData[currentStep];
+                elText.style.opacity = 0;
+                setTimeout(() => {
+                    elLabel.textContent = data.label; elText.innerHTML = data.text;
+                    elBadge.textContent = data.words + ' 字'; elText.style.opacity = 1;
+                }, 200);
+
+                if (currentStep === 3) {
+                    btnNext.style.display = 'none'; btnReset.style.display = 'block';
+                } else {
+                    btnNext.style.display = 'block'; btnNext.textContent = data.btnText; btnReset.style.display = 'none';
+                }
+
+                const newData = [20, 0, 0, 0];
+                for (let i = 0; i <= currentStep; i++) newData[i] = sentenceData[i].words;
+                growthChart.data.datasets[0].data = newData;
+                growthChart.update();
+            }
+
+            // Step 2: Paragraph Blueprint Logic (問津趕行程五段式)
+            const paragraphData = [
+                { id: 'p1', title: "第一段：【問】問題意識", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#E25822', task: "點出全球化帶來的飲食衝擊現象，提出你對「食物跨國融合」或「傳統與創新」的問題意識與討論方向。", prompts: ["當你看到「珍珠奶茶拉麵」或「香菜豬血糕比薩」時，第一直覺是什麼？", "全球化是如何悄悄改變我們每天的餐桌風景？"], materials: "運用「對比法」，將老一輩對食物的傳統堅持，與現在網路上爆紅的混血創意美食進行對比破題。", hint: "「小時候，阿嬤總說食物要吃原味。然而，隨著全球化的浪潮襲來，當『香菜豬血糕比薩』躍上面版，我看見的不再只是噱頭，而是...」", icon: "❓" },
+                { id: 'p2', title: "第二段：【津】經驗見聞", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#F39C12', task: "寫出一次品嘗異國融合美食，或是觀察到傳統美食面臨外來飲食衝擊的具體經驗。", prompts: ["你吃過最特別的「跨界」料理是什麼？", "你家附近的傳統小吃攤，是否因為網美餐廳或異國速食店而受到影響？"], materials: "善用「五感摹寫」，把食物的外觀、香氣、口感，甚至是咬下去在舌尖炸開的感覺，生動地描繪出來。", hint: "「這場味蕾的衝擊，真實地發生在我的聚餐中。當那份泰式冬蔭功比薩端上桌時，熱氣蒸騰中，濃郁的起司奶香與...」", icon: "👁️" },
+                { id: 'p3', title: "第三段：【趕】感受想法", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#C0392B', task: "探討上一段現象背後的原因與意義。這份食物帶來的是驚喜、文化包容的體現，還是對傳統流失的擔憂？", prompts: ["咀嚼著這份食物，你心裡想到了什麼更深層的文化意涵？", "你認為大家為什麼會喜歡（或排斥）這種混血食物？"], materials: "使用「深層反思」。例如：這些不倫不類的組合，其實正是一面照出我們內心刻板印象與狹隘的鏡子。", hint: "「咀嚼著這份跨界美食，我不禁陷入深思。許多人批評這是惡搞，但若我們退一步看，這不正是全球化...」", icon: "💡" },
+                { id: 'p4', title: "第四段：【行】行動解方", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#27AE60', task: "面對全球化帶來的飲食衝擊，提出你的『行動方案』。身為新世代的我們，該抱持什麼態度？", prompts: ["我們應該全面抵制，還是無條件接受外來食物？", "除了追求新奇，我們還能如何去尋根，支持在地的傳統味道？"], materials: "提出具體解方：放下刻板印象學習包容、主動了解異國食材背景、或是用實際消費支持傳統老店。", hint: "「面對這股飲食文化的交融浪潮，我們不應選擇築起防備的高牆。相反地，我們應該抱持著...」", icon: "🏃" },
+                { id: 'p5', title: "第五段：【程】成長體悟", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#8E44AD', task: "回扣主題，寫出從這次舌尖體驗中獲得的『成長與體悟』，為全球化下的飲食文化畫下總結。", prompts: ["真正的『美食無國界』對你來說是什麼意思？", "你希望未來的世界餐桌，呈現出什麼樣的風景？"], materials: "昇華主題，展現對文化包容、或是『越在地越國際』的宏觀視野與期許。", hint: "「舌尖上的世界，是一幅沒有邊界的美食地圖。只要我們願意敞開心胸，那些看似衝突的食材...」", icon: "📈" }
+            ];
+
+            const tabContainer = document.getElementById('tab-container');
+            let activeTabIndex = 0;
+
+            paragraphData.forEach((data, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn w-full text-left px-5 py-4 rounded-lg bg-white border border-gray-100 font-bold text-ink flex items-center justify-between shadow-sm`;
+                if(index === 0) btn.classList.add('active');
+                
+                btn.innerHTML = `<span class="flex items-center gap-3"><span class="text-xl">${data.icon}</span> <span>${data.title.split('：')[0]}</span></span> <span class="text-xs font-normal opacity-70">${data.wordsStr}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.style.borderLeftColor = 'transparent'; });
+                    btn.classList.add('active'); btn.style.borderLeftColor = data.color;
+                    activeTabIndex = index;
+                    updateTabContent(index); updateDoughnutChart(index);
+                });
+                tabContainer.appendChild(btn);
+            });
+
+            function updateTabContent(index) {
+                const data = paragraphData[index];
+                document.getElementById('tab-title').textContent = data.title;
+                document.getElementById('tab-words').textContent = `建議字數：${data.wordsStr}`;
+                document.getElementById('tab-task').textContent = data.task;
+                
+                const elPrompts = document.getElementById('tab-prompts');
+                elPrompts.innerHTML = '';
+                data.prompts.forEach(p => {
+                    const li = document.createElement('li'); li.textContent = p; elPrompts.appendChild(li);
+                });
+
+                document.getElementById('tab-materials').textContent = data.materials;
+                document.getElementById('tab-hint').textContent = data.hint;
+            }
+
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            const weights = paragraphData.map(d => d.weight);
+            const baseColors = paragraphData.map(d => d.color);
+            const mutedColors = baseColors.map(c => c + '40'); 
+
+            const doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: paragraphData.map(d => d.title.split('：')[0]),
+                    datasets: [{
+                        data: weights, backgroundColor: [baseColors[0], mutedColors[1], mutedColors[2], mutedColors[3], mutedColors[4]],
+                        borderWidth: 2, borderColor: '#FFFDF9'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '70%',
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return '約 ' + context.raw + ' 字'; } } } },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+
+            function updateDoughnutChart(activeIndex) {
+                const newColors = paragraphData.map((d, i) => i === activeIndex ? baseColors[i] : mutedColors[i]);
+                doughnutChart.data.datasets[0].backgroundColor = newColors; doughnutChart.update();
+            }
+
+            tabContainer.querySelector('.tab-btn').style.borderLeftColor = paragraphData[0].color;
+            document.querySelectorAll('.hidden-content').forEach(el => el.style.display = 'none');
+            
+            // --- Step 3: AI Coach Logic ---
+            const btnAskAI = document.getElementById('btn-ask-ai');
+            const studentInput = document.getElementById('student-input');
+            const charCountDisplay = document.getElementById('char-count');
+            const charWarning = document.getElementById('char-warning');
+            const aiLoading = document.getElementById('ai-loading');
+            const aiOutputContainer = document.getElementById('ai-output-container');
+            const aiOutput = document.getElementById('ai-output');
+            const aiError = document.getElementById('ai-error');
+            const quickDraftBtns = document.querySelectorAll('.quick-draft-btn');
+            const btnCopyAi = document.getElementById('btn-copy-ai');
+            
+            const accumulatedDraft = document.getElementById('accumulated-draft');
+            const accumulatedCharCount = document.getElementById('accumulated-char-count');
+
+                        const inspirationQuotes = [
+                "一撮來自喜馬拉雅的岩鹽，一勺來自地中海的橄欖油，在舌尖碰撞出跨越文明與山海的奇妙滋味。",
+                "酸甜苦辣鹹，五味雜陳的滋味在口腔中層層綻放，宛如人生起伏跌宕的各個階段，引人尋味。",
+                "品味異國美食不只是一種口腹之慾，更是用最溫和且謙遜的感官，走進另一種文化的生活哲學。",
+                "最樸實無華的白米飯，在細細咀嚼之後散發出的淡淡甘甜，往往才是撫慰疲憊靈魂的終極滋味。"
+            ];
+
+            const btnInspirationDice = document.getElementById('btn-inspiration-dice');
+            const promptChips = document.querySelectorAll('.prompt-chip-btn');
+            const btnAskText = document.getElementById('btn-ask-text');
+
+            // 雙欄卡片相關元件
+            const beforeAfterContainer = document.getElementById('before-after-container');
+            const cardBeforeText = document.getElementById('card-before-text');
+            const badgeBeforeCount = document.getElementById('badge-before-count');
+            const cardAfterPureText = document.getElementById('card-after-pure-text');
+            const cardAfterBreakdown = document.getElementById('card-after-breakdown');
+            const cardAfterBreakdownList = document.getElementById('card-after-breakdown-list');
+            const badgeAfterCount = document.getElementById('badge-after-count');
+            const coachReviewCard = document.getElementById('coach-review-card');
+            const coachReviewContent = document.getElementById('coach-review-content');
+            const aiStreamBox = document.getElementById('ai-stream-box');
+            const streamBadge = document.getElementById('stream-badge');
+            const btnAdoptAi = document.getElementById('btn-adopt-ai');
+            const aiErrorText = document.getElementById('ai-error-text');
+
+            // 隨機靈感骰子
+            if (btnInspirationDice) {
+                btnInspirationDice.addEventListener('click', () => {
+                    const randomQuote = inspirationQuotes[Math.floor(Math.random() * inspirationQuotes.length)];
+                    insertAtCursor(studentInput, randomQuote);
+                    btnInspirationDice.classList.add('rotate-12', 'scale-105');
+                    setTimeout(() => btnInspirationDice.classList.remove('rotate-12', 'scale-105'), 200);
+                });
+            }
+
+            // 在光標處插入文字輔助函式
+            function insertAtCursor(myField, myValue) {
+                if (document.selection) {
+                    myField.focus();
+                    const sel = document.selection.createRange();
+                    sel.text = myValue;
+                } else if (myField.selectionStart || myField.selectionStart == '0') {
+                    const startPos = myField.selectionStart;
+                    const endPos = myField.selectionEnd;
+                    myField.value = myField.value.substring(0, startPos)
+                        + myValue
+                        + myField.value.substring(endPos, myField.value.length);
+                    myField.selectionStart = startPos + myValue.length;
+                    myField.selectionEnd = startPos + myValue.length;
+                } else {
+                    myField.value += myValue;
+                }
+                updateCharCount();
+                myField.focus();
+            }
+
+            // 快捷提示詞按鈕監聽
+            promptChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const promptText = this.getAttribute('data-prompt');
+                    insertAtCursor(studentInput, promptText);
+                    this.classList.add('scale-105', 'bg-blue-100');
+                    setTimeout(() => this.classList.remove('scale-105', 'bg-blue-100'), 200);
+                });
+            });
+
+            // 通道設定相關元件
+            const btnToggleConfig = document.getElementById('btn-toggle-config');
+            const configPanel = document.getElementById('config-panel');
+            const channelMode = document.getElementById('channel-mode');
+            const workerUrlInput = document.getElementById('worker-url-input');
+            const workerUrlGroup = document.getElementById('worker-url-group');
+            const customKeyGroup = document.getElementById('custom-key-group');
+            const customApiKeyInput = document.getElementById('custom-api-key');
+            const customModelInput = document.getElementById('custom-model-input');
+            const channelBadge = document.getElementById('channel-badge');
+            const statusText = document.getElementById('status-text');
+            const btnSaveConfig = document.getElementById('btn-save-config');
+            const btnResetConfig = document.getElementById('btn-reset-config');
+            const toggleKeyVisibility = document.getElementById('toggle-key-visibility');
+            const btnSaveCustomKey = document.getElementById('btn-save-custom-key');
+
+            // 預設端點設定 (預設已包含您的 Worker 專屬網址)
+            const DEFAULT_WORKER_URL = "https://gemini-stream-coach.oaoadna.workers.dev";
+            const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbwTX1R33gA3Sz_gPOJ-FXRRK5buWGHZvybTsNUKAD57y48sSJVdjAiaRMzbuxqRJoUtLA/exec";
+            
+            let currentMode = localStorage.getItem('ai_coach_channel') || 'worker';
+            let currentWorkerUrl = localStorage.getItem('ai_coach_worker_url') || DEFAULT_WORKER_URL;
+            let currentCustomKey = localStorage.getItem('ai_coach_custom_key') || localStorage.getItem('gemini_zuowen_key') || '';
+            let currentCustomModel = localStorage.getItem('ai_coach_custom_model') || 'gemini-2.5-flash';
+
+            function updateConfigUI() {
+                channelMode.value = currentMode;
+                workerUrlInput.value = currentWorkerUrl;
+                customApiKeyInput.value = currentCustomKey;
+                customModelInput.value = currentCustomModel;
+
+                if (currentMode === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
+                    if (currentWorkerUrl) {
+                        channelBadge.innerHTML = '⚡ Cloudflare 串流 (極速)';
+                        channelBadge.className = 'bg-blue-100 text-primary px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '通道就緒：使用 Cloudflare 邊緣串流多金鑰池 (SSE)';
+                    } else {
+                        channelBadge.innerHTML = '⚡ Cloudflare 串流 (未設網址)';
+                        channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '提示：尚未填寫 Worker 網址，送出時將自動備援轉為 GAS';
+                    }
+                } else if (currentMode === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                    if (currentCustomKey) {
+                        channelBadge.innerHTML = '自備 Gemini Key';
+                        channelBadge.className = 'bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = `通道就緒：使用個人 API Key 直連原廠 (${currentCustomModel || 'gemini-2.5-flash'})`;
+                    } else {
+                        channelBadge.innerHTML = '🔑 自備 Key (未填寫)';
+                        channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '提示：請輸入您的 Gemini API Key 後點擊「保存金鑰」';
+                    }
+                } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
+                    channelBadge.innerHTML = '🛡️ GAS 安全通道';
+                    channelBadge.className = 'bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[11px] font-bold';
+                    statusText.textContent = '通道就緒：使用 Google Apps Script 安全備援通道';
+                }
+            }
+            updateConfigUI();
+
+            channelMode.addEventListener('change', () => {
+                if (channelMode.value === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
+                } else if (channelMode.value === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
+                }
+            });
+
+            btnToggleConfig.addEventListener('click', () => {
+                configPanel.classList.toggle('hidden');
+            });
+
+            if (toggleKeyVisibility && customApiKeyInput) {
+                toggleKeyVisibility.addEventListener('click', () => {
+                    const isPass = customApiKeyInput.type === 'password';
+                    customApiKeyInput.type = isPass ? 'text' : 'password';
+                    toggleKeyVisibility.textContent = isPass ? '🔒' : '👁️';
+                });
+            }
+
+            if (btnSaveCustomKey && customApiKeyInput) {
+                btnSaveCustomKey.addEventListener('click', () => {
+                    const keyVal = customApiKeyInput.value.trim();
+                    currentCustomKey = keyVal;
+                    localStorage.setItem('ai_coach_custom_key', keyVal);
+                    localStorage.setItem('gemini_zuowen_key', keyVal);
+                    updateConfigUI();
+                    if (keyVal) {
+                        statusText.textContent = '🔑 自備 Gemini Key 已安全儲存於本機！';
+                        alert('已成功保存 Gemini API Key！可直接進行點評。');
+                    } else {
+                        statusText.textContent = '⚠️ 已清除自備金鑰';
+                    }
+                });
+            }
+
+            btnSaveConfig.addEventListener('click', () => {
+                currentMode = channelMode.value;
+                currentWorkerUrl = workerUrlInput.value.trim();
+                currentCustomKey = customApiKeyInput.value.trim();
+                currentCustomModel = customModelInput.value.trim() || 'gemini-2.5-flash';
+                localStorage.setItem('ai_coach_channel', currentMode);
+                localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
+                updateConfigUI();
+                configPanel.classList.add('hidden');
+                alert('✅ 代理通道設定已成功儲存！');
+            });
+
+            btnResetConfig.addEventListener('click', () => {
+                currentMode = 'worker';
+                currentWorkerUrl = DEFAULT_WORKER_URL;
+                currentCustomKey = '';
+                currentCustomModel = 'gemini-2.5-flash';
+                localStorage.setItem('ai_coach_channel', currentMode);
+                localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
+                updateConfigUI();
+                alert('已還原為專屬 Cloudflare 預設設定！');
+            });
+
+            quickDraftBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    studentInput.value = this.innerText;
+                    updateCharCount();
+                    this.classList.add('bg-highlight');
+                    setTimeout(() => this.classList.remove('bg-highlight'), 200);
+                });
+            });
+
+            function updateCharCount() {
+                const len = studentInput.value.length;
+                charCountDisplay.textContent = len;
+                if (len >= 200) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數已達上限 (200字)！請分批讓教練指導。';
+                    charCountDisplay.classList.add('text-danger', 'font-bold');
+                } else if (len > 150) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。';
+                    charCountDisplay.classList.add('text-yellow-600', 'font-bold');
+                    charCountDisplay.classList.remove('text-danger');
+                } else {
+                    charWarning.classList.add('opacity-0');
+                    charCountDisplay.classList.remove('text-danger', 'text-yellow-600', 'font-bold');
+                }
+            }
+            studentInput.addEventListener('input', updateCharCount);
+
+            accumulatedDraft.addEventListener('input', () => {
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+            });
+
+            // 智慧分離「純淨 6 級分故事美句」與「寫作技法拆解說明」
+            function separateProseAndBreakdown(demoRaw) {
+                // 1. 若內容中明確含有 <ul> 或 <ol> 標籤列表
+                const listMatch = demoRaw.match(/<(?:ul|ol)[\s\S]*?<\/(?:ul|ol)>/i);
+                if (listMatch) {
+                    const breakdownHtml = listMatch[0];
+                    const proseHtml = demoRaw.replace(listMatch[0], '').trim();
+                    return { prose: proseHtml, breakdown: breakdownHtml };
+                }
+
+                // 2. 若包含特定拆解關鍵字
+                const breakdownKeywords = ['【擴寫技法拆解】', '【寫作技法拆解】', '【技巧拆解】', '【寫作手法拆解】', '【擴寫手法】', '擴寫技法拆解', '寫作技法拆解'];
+                for (const kw of breakdownKeywords) {
+                    const idx = demoRaw.indexOf(kw);
+                    if (idx !== -1) {
+                        return {
+                            prose: demoRaw.substring(0, idx).trim(),
+                            breakdown: demoRaw.substring(idx + kw.length).trim()
+                        };
+                    }
+                }
+
+                // 3. 按段落分割 (<p>, </li>, <br> 或 \n)，識別出含有技法解析特徵的行
+                const rawBlocks = demoRaw.split(/(?:<\/p>|<\/li>|<br\s*\/?>|\n+)/).map(b => b.trim()).filter(Boolean);
+                const proseBlocks = [];
+                const breakdownBlocks = [];
+                let isBreakdownSection = false;
+
+                for (const block of rawBlocks) {
+                    const cleanText = block.replace(/<[^>]+>/g, '').trim();
+                    if (!cleanText) continue;
+
+                    // 判斷是否為技法解析特徵行
+                    const isExplanation = /^[•\-\*]/.test(cleanText)
+                        || /^(?:\d+[\.、\)]|✨|🔍|💡|👉)/.test(cleanText)
+                        || /(?:：|:)\s*(?:將|詳述|運用|修辭|動作|具體|暗示|言外之意|摹寫|呈現|加強|說明|解析)/.test(cleanText)
+                        || /(?:運用|使用|採用)了?(?:譬喻|轉化|映襯|誇飾|象徵|細節|摹寫|動態|靜態)/.test(cleanText);
+
+                    if (isExplanation) {
+                        isBreakdownSection = true;
+                    }
+
+                    if (isBreakdownSection) {
+                        breakdownBlocks.push(block);
+                    } else {
+                        proseBlocks.push(block);
+                    }
+                }
+
+                if (breakdownBlocks.length > 0) {
+                    return {
+                        prose: proseBlocks.join('<br>'),
+                        breakdown: breakdownBlocks.join('<br>')
+                    };
+                }
+
+                return { prose: demoRaw, breakdown: '' };
+            }
+
+            // 📋 複製純淨 6 級分美句 (僅複製作文句子，不含說明)
+            btnCopyAi.addEventListener('click', () => {
+                let textToCopy = cardAfterPureText.innerText.trim();
+                if (!textToCopy) {
+                    textToCopy = cardBeforeText.innerText.trim();
+                }
+                textToCopy = textToCopy.replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '').trim();
+
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+
+                const originalHTML = btnCopyAi.innerHTML;
+                btnCopyAi.innerHTML = '✅ 已複製純淨美句！';
+                btnCopyAi.classList.add('bg-primary', 'text-white');
+                setTimeout(() => { 
+                    btnCopyAi.innerHTML = originalHTML;
+                    btnCopyAi.classList.remove('bg-primary', 'text-white');
+                }, 2000);
+            });
+
+            // 🚀 一鍵採納至累積區 (100% 僅採納純淨美句，完全不含任何解析說明)
+            btnAdoptAi.addEventListener('click', () => {
+                let textToAdopt = cardAfterPureText.innerText.trim();
+                
+                if (!textToAdopt) {
+                    alert('目前尚無潤飾美句可採納喔！');
+                    return;
+                }
+
+                // 再次確保去除任何多餘標籤
+                textToAdopt = textToAdopt.replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '').trim();
+
+                if (accumulatedDraft.value.trim().length > 0) {
+                    accumulatedDraft.value += '\n\n' + textToAdopt;
+                } else {
+                    accumulatedDraft.value = textToAdopt;
+                }
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+
+                // 平滑滾動至累積區並做醒目閃爍反饋
+                accumulatedDraft.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                accumulatedDraft.classList.add('ring-4', 'ring-amber-400', 'bg-amber-50/70');
+                setTimeout(() => {
+                    accumulatedDraft.classList.remove('ring-4', 'ring-amber-400', 'bg-amber-50/70');
+                }, 1500);
+
+                const origHTML = btnAdoptAi.innerHTML;
+                btnAdoptAi.innerHTML = '🎉 已成功採納純淨美句！';
+                btnAdoptAi.classList.replace('from-primary', 'from-emerald-600');
+                btnAdoptAi.classList.replace('to-blue-700', 'to-emerald-700');
+                setTimeout(() => {
+                    btnAdoptAi.innerHTML = origHTML;
+                    btnAdoptAi.classList.replace('from-emerald-600', 'from-primary');
+                    btnAdoptAi.classList.replace('to-emerald-700', 'to-blue-700');
+                }, 2500);
+            });
+
+            // 文字美化與排版清理
+            function formatAiText(raw) {
+                let formatted = raw.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                return formatted;
+            }
+
+            // 渲染「Before / After」雙欄對照卡片與修辭標籤
+            function renderBeforeAfterCards(originalDraft, fullAiText) {
+                aiStreamBox.classList.add('hidden');
+                coachReviewCard.classList.remove('hidden');
+                beforeAfterContainer.classList.remove('hidden');
+
+                cardBeforeText.textContent = originalDraft;
+                badgeBeforeCount.textContent = originalDraft.length + ' 字';
+
+                // 拆解【教練評語】與【潤飾示範】
+                let reviewText = '';
+                let afterDemoText = fullAiText;
+
+                const demoKeywords = ['【潤飾示範與拆解】', '【潤飾示範】', '【改寫示範】', '潤飾示範'];
+                let demoIndex = -1;
+                let foundKeyword = '';
+
+                for (const kw of demoKeywords) {
+                    const idx = fullAiText.indexOf(kw);
+                    if (idx !== -1) {
+                        demoIndex = idx;
+                        foundKeyword = kw;
+                        break;
+                    }
+                }
+
+                if (demoIndex !== -1) {
+                    reviewText = fullAiText.substring(0, demoIndex).trim();
+                    afterDemoText = fullAiText.substring(demoIndex + foundKeyword.length).trim();
+                } else {
+                    reviewText = fullAiText;
+                }
+
+                coachReviewContent.innerHTML = formatAiText(reviewText);
+
+                // 分離出「純淨美句」與「說明拆解」
+                const { prose, breakdown } = separateProseAndBreakdown(afterDemoText);
+
+                // 純淨美句去除任何多餘標籤與括號說明
+                let cleanProse = prose
+                    .replace(/<[^>]+>/g, '')
+                    .replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '')
+                    .replace(/【6級分範文美句】/g, '')
+                    .trim();
+
+                // 填入純淨美句
+                cardAfterPureText.textContent = cleanProse;
+                badgeAfterCount.textContent = cleanProse.length + ' 字';
+
+                // 處理技法拆解區塊 (轉換為彩色膠囊標籤)
+                if (breakdown && breakdown.trim().length > 0) {
+                    let styledBreakdown = breakdown.replace(/[\(（]([^）\)]+?)[\)）]/g, (match, tagContent) => {
+                        let colorClass = 'bg-blue-100 text-blue-800 border-blue-200';
+                        if (tagContent.includes('譬喻') || tagContent.includes('比喻') || tagContent.includes('擬人') || tagContent.includes('轉化') || tagContent.includes('修辭')) {
+                            colorClass = 'bg-purple-100 text-purple-800 border-purple-300';
+                        } else if (tagContent.includes('動態') || tagContent.includes('動作') || tagContent.includes('細部') || tagContent.includes('具體')) {
+                            colorClass = 'bg-amber-100 text-amber-800 border-amber-300';
+                        } else if (tagContent.includes('言外之意') || tagContent.includes('情感') || tagContent.includes('心境') || tagContent.includes('昇華') || tagContent.includes('反思')) {
+                            colorClass = 'bg-rose-100 text-rose-800 border-rose-300';
+                        } else if (tagContent.includes('五感') || tagContent.includes('視覺') || tagContent.includes('聽覺') || tagContent.includes('嗅覺') || tagContent.includes('摹寫')) {
+                            colorClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                        }
+                        return `<span class="inline-flex items-center px-2 py-0.5 m-0.5 rounded-full text-xs font-bold border ` + colorClass + ` shadow-2xs">✨ ` + tagContent + `</span>`;
+                    });
+
+                    cardAfterBreakdownList.innerHTML = formatAiText(styledBreakdown);
+                    cardAfterBreakdown.classList.remove('hidden');
+                } else {
+                    cardAfterBreakdown.classList.add('hidden');
+                }
+            }
+
+            // Cloudflare Workers SSE 串流讀取函式
+            async function streamFromWorker(workerUrl, payload, originalDraft) {
+                const response = await fetch(workerUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...payload, stream: true })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    let errMsg = errText;
+                    try {
+                        const parsed = JSON.parse(errText);
+                        errMsg = parsed.error?.message || errText;
+                    } catch(e) {}
+                    throw new Error(`Worker 連線異常 (` + response.status + `)：` + errMsg);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                let accumulatedText = '';
+
+                // 重設並啟動即時串流打字介面
+                streamBadge.classList.remove('hidden');
+                aiLoading.classList.add('hidden');
+                aiOutputContainer.classList.remove('hidden');
+                aiStreamBox.classList.remove('hidden');
+                coachReviewCard.classList.add('hidden');
+                beforeAfterContainer.classList.add('hidden');
+
+                aiOutput.innerHTML = '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('data:')) {
+                            const jsonStr = trimmed.slice(5).trim();
+                            if (jsonStr) {
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const chunkText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                                    if (chunkText) {
+                                        accumulatedText += chunkText;
+                                        aiOutput.innerHTML = formatAiText(accumulatedText) + '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+                                    }
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+
+                // 串流結束：移除打字標籤並切換為 Before/After 雙欄卡片
+                streamBadge.classList.add('hidden');
+                renderBeforeAfterCards(originalDraft, accumulatedText);
+                return accumulatedText;
+            }
+
+
+            // 自訂 Gemini API Key 原廠直連 SSE 串流讀取函式
+            async function streamFromDirectGemini(apiKey, targetModel, payload, originalDraft) {
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:streamGenerateContent?alt=sse&key=${apiKey}`;
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    let errMsg = errText;
+                    try {
+                        const parsed = JSON.parse(errText);
+                        errMsg = parsed.error?.message || errText;
+                    } catch(e) {}
+                    throw new Error(`Google 原廠直連異常 (${response.status})：${errMsg}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                let accumulatedText = '';
+
+                // 重設並啟動即時串流打字介面
+                streamBadge.classList.remove('hidden');
+                aiLoading.classList.add('hidden');
+                aiOutputContainer.classList.remove('hidden');
+                aiStreamBox.classList.remove('hidden');
+                coachReviewCard.classList.add('hidden');
+                beforeAfterContainer.classList.add('hidden');
+
+                aiOutput.innerHTML = '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('data:')) {
+                            const jsonStr = trimmed.slice(5).trim();
+                            if (jsonStr) {
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const chunkText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                                    if (chunkText) {
+                                        accumulatedText += chunkText;
+                                        aiOutput.innerHTML = formatAiText(accumulatedText) + '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+                                    }
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+
+                streamBadge.classList.add('hidden');
+                renderBeforeAfterCards(originalDraft, accumulatedText);
+                return accumulatedText;
+            }
+
+            // GAS 備援請求函式
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+            async function fetchWithRetry(url, payload, retries = 3) {
+                const delays = [1000, 2000, 4000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ` + response.status);
+                        
+                        const textResponse = await response.text();
+                        try {
+                            return JSON.parse(textResponse);
+                        } catch (parseError) {
+                            throw new Error('回傳格式錯誤，請確認 API 連線或 GAS 權限設定。');
+                        }
+                    } catch (error) {
+                        if (i === retries - 1) throw error;
+                        await delay(delays[i]);
+                    }
+                }
+            }
+
+            btnAskAI.addEventListener('click', async () => {
+                const text = studentInput.value.trim();
+                if (!text) {
+                    alert('請先輸入草稿喔！');
+                    return;
+                }
+
+                const selectedFocus = document.querySelector('input[name="focus"]:checked').value;
+
+                btnAskAI.disabled = true;
+                btnAskAI.classList.add('opacity-50', 'cursor-not-allowed');
+                btnAskText.textContent = '⚡ 教練動筆中...';
+                aiOutputContainer.classList.add('hidden');
+                aiError.classList.add('hidden');
+                aiLoading.classList.remove('hidden');
+
+                const systemPrompt = `你是一位專業且溫柔的國中寫作教練，正在指導學生寫「舌尖上的世界」的會考作文。
+主題探討：全球化下的飲食文化衝擊與融合（如：異國創意美食、傳統在地滋味的沒落、文化包容與刻板印象）。
+請根據學生輸入的草稿給予回饋。
+
+【特別任務】學生希望這次能特別加強：**${selectedFocus}**。請在給予建議時，特別針對這點進行指導。
+
+回饋必須使用繁體中文，格式請嚴格遵守以下三個段落（請直接使用簡單的 HTML 標籤如 <p>, <b>, <ul>, <li> 進行排版，不要使用 Markdown 星號）：
+
+<p><b>【教練的肯定】</b><br>簡短稱讚學生的選材或反思視角，給予鼓勵。</p>
+<p><b>【具體建議】</b><br>針對學生選擇的加強重點給出具體的修改方向。用語要像是親切的對話。</p>
+<p><b>【潤飾示範與拆解】</b><br>給出一段改寫後的美句示範（符合國中生 6級分程度），並在句子後面用括號標註你使用了什麼寫作技巧（如：五感摹寫、對比修辭、連續提問等）。</p>`;
+
+                const payload = {
+                    model: "gemini-2.5-flash",
+                    contents: [{ role: "user", parts: [{ text: text }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                try {
+                    // 1. 自訂 Gemini API Key 個人直連串流模式
+                    if (currentMode === 'custom') {
+                        if (!currentCustomKey) {
+                            configPanel.classList.remove('hidden');
+                            throw new Error('您已選擇「自訂 API Key」模式，但尚未填寫金鑰。請在上方輸入您的 Gemini API Key 後點擊「儲存設定」。');
+                        }
+                        const targetModel = currentCustomModel || 'gemini-2.5-flash';
+                        const directPayload = {
+                            contents: [{ role: "user", parts: [{ text: text }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        };
+                        await streamFromDirectGemini(currentCustomKey, targetModel, directPayload, text);
+                    } 
+                    // 2. Cloudflare Worker 邊緣多金鑰池串流模式
+                    else if (currentMode === 'worker' && currentWorkerUrl) {
+                        await streamFromWorker(currentWorkerUrl, payload, text);
+                    } 
+                    // 3. GAS 安全備援模式
+                    else {
+                        // 使用 GAS 安全備援模式
+                        const result = await fetchWithRetry(DEFAULT_GAS_URL, payload);
+                        const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                        
+                        if (generatedText) {
+                            aiLoading.classList.add('hidden');
+                            aiOutputContainer.classList.remove('hidden');
+                            renderBeforeAfterCards(text, generatedText);
+                        } else {
+                            const apiErrorMsg = result.error?.message || '未回傳有效文字';
+                            throw new Error(`API 錯誤：` + apiErrorMsg);
+                        }
+                    }
+                } catch (error) {
+                    console.error('AI Coach Error:', error);
+                    aiLoading.classList.add('hidden');
+                    streamBadge.classList.add('hidden');
+                    aiError.classList.remove('hidden');
+                    aiErrorText.innerHTML = `抱歉，教練目前遇到連線問題：<br><strong class="text-sm">` + error.message + `</strong><br>👉 您可點擊上方「⚙️ 代理通道設定」檢查設定、切換至 GAS 備援或輸入自訂 API Key。`;
+                } finally {
+                    btnAskAI.disabled = false;
+                    btnAskAI.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnAskText.textContent = '🚀 請教練指導';
+                }
+            });
+
+
+        });
+
+        // Teacher Checklist Toggle
+        function toggleChecklist(element) {
+            const content = element.querySelector('.hidden-content');
+            const hint = element.querySelector('.show-more-hint');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                element.classList.replace('bg-teacher', 'bg-teacher-light');
+                hint.style.display = 'none';
+            } else {
+                content.style.display = 'none';
+                element.classList.replace('bg-teacher-light', 'bg-teacher');
+                hint.style.display = 'block';
+            }
+        }
+
+        // 範文賞析 Toggle
+        function toggleEssay(essayId, btnElement) {
+            const content = document.getElementById(essayId);
+            const isExpanded = btnElement.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.classList.remove('open');
+                btnElement.setAttribute('aria-expanded', 'false');
+            } else {
+                content.classList.add('open');
+                btnElement.setAttribute('aria-expanded', 'true');
+            }
+        }
+    </script>
+</body>
+</html>

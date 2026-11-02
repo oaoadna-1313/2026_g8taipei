@@ -1,0 +1,1577 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✍️ 小魚兒探龍門_一次難忘的考試經驗 寫作指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FFF8F0',      /* 暖沙白 */
+                        ink: '#4A3B32',        /* 深焙褐 */
+                        primary: '#D97757',    /* 陶土紅 */
+                        secondary: '#E2A03F',  /* 暖陽橘 */
+                        tertiary: '#C48B71',   /* 奶茶棕 */
+                        highlight: '#FEEBC8',  /* 蜜桃亮 */
+                        danger: '#D45D5D',     /* 磚瓦紅 */
+                        teacher: '#5B493E',    /* 教師區預設底色 */
+                        'teacher-light': '#6E5A4D' /* 教師區展開底色 */
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap');
+        
+        body {
+            background-color: #FFF8F0;
+            color: #4A3B32;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .step-transition {
+            transition: all 0.5s ease-in-out;
+        }
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #F3F4F6;
+        }
+        .tab-btn.active {
+            background-color: #4A3B32 !important;
+            color: #FFF8F0 !important;
+            border-left: 4px solid #D97757;
+        }
+        .checklist-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .checklist-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Loading Animation for AI */
+        .dot-flashing {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #D97757;
+            color: #D97757;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #D97757;
+            color: #D97757;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #D97757;
+            color: #D97757;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #D97757; }
+            50%, 100% { background-color: rgba(217, 119, 87, 0.2); }
+        }
+        
+        /* Styled AI Output */
+        .ai-content b { color: #D97757; font-weight: 700; }
+        .ai-content ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .ai-content li { margin-bottom: 0.25rem; }
+        .ai-content br { margin-bottom: 0.5rem; }
+
+        /* Essay Toggle Transition */
+        .essay-content {
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .essay-content.open {
+            max-height: 3000px; /* Large enough for the content */
+            opacity: 1;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        .essay-icon {
+            transition: transform 0.3s ease;
+        }
+        .essay-btn[aria-expanded="true"] .essay-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased">
+            <!-- ==================== 1. STICKY HEADER (閱思龍門標準頂部導覽列與螢光筆網頁書籤) ==================== -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand & Title (品牌識別與標題) -->
+            <div class="flex items-center space-x-3">
+                <a href="#hero" class="flex items-center space-x-2.5 group no-underline" style="text-decoration:none;">
+                    <img src="../assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-10 h-10 object-contain rounded-full shadow-sm group-hover:rotate-12 transition-transform duration-300">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="font-serif font-bold text-lg sm:text-xl text-slate-900 tracking-wide group-hover:text-amber-800 transition-colors">小魚兒探龍門</span>
+                            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">七上閱思龍門・記敘描寫</span>
+                        </div>
+                        <p class="text-[11px] text-slate-700 font-medium hidden md:block">
+                            <span class="bg-yellow-200/90 text-amber-950 px-1.5 py-0.5 rounded shadow-xs">從敘述到畫面・突破平淡衝突感的滿分好文</span>
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Navigation Links (螢光筆網頁書籤) -->
+            <nav class="flex items-center space-x-1 sm:space-x-1.5 font-medium text-xs sm:text-sm">
+                <a href="#expansion-tool" class="px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all flex items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>🌱 畫面擴寫</span>
+                </a>
+                <a href="#structure-blueprint" class="px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all flex items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>🏗️ 起承轉合</span>
+                </a>
+                <a href="#ai-coach-section" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-amber-950 bg-yellow-300 hover:bg-yellow-400 font-bold shadow-xs transition-all flex items-center gap-1 border border-yellow-400/80 ring-2 ring-yellow-200 no-underline" style="text-decoration:none;">
+                    <span>🤖 AI 寫作教練</span>
+                </a>
+                <a href="#sample-essays" class="hidden sm:flex px-2 sm:px-2.5 py-1.5 rounded-lg text-slate-700 hover:text-amber-950 hover:bg-yellow-100 transition-all items-center gap-1 no-underline" style="text-decoration:none;">
+                    <span>📚 範文賞析</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <header class="bg-highlight/40 text-ink py-12 px-4 shadow-sm text-center border-b border-highlight/60" id="hero">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-4xl mb-4">🐟小魚兒探龍門⛩️</div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight"><span class="text-tertiary">一次難忘的考試經驗 寫作指南</span></h1>
+            <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto font-medium leading-relaxed">
+                「請以一次令你印象深刻的考試經驗為題材，完整描述其過程，並寫出當下的心情，完成一篇８００字左右的文章。」<br>
+                跟著下方的互動步驟，學習如何將平淡的考試過程，轉化為具備衝突感、細節畫面與深刻體悟的滿分好文。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-12 space-y-16 md:space-y-20">
+
+        <!-- 第一步：擴寫練習 -->
+        <section id="expansion-tool" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🌱</span> 第一步：從「敘述」到「畫面」的擴寫術
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    記敘文最怕流水帳。透過互動式的「句子長大術」，觀察我們如何將一句平淡無奇的「我很緊張」，透過加入<b>「情境」</b>、<b>「感官譬喻」</b>與<b>「內心反思」</b>，擴充成一段立體且充滿考場氛圍的生動段落。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <div class="bg-paper p-6 rounded-xl border border-gray-200 min-h-[200px] flex flex-col justify-center">
+                        <div class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide" id="sentence-label">基礎敘述</div>
+                        <p class="text-xl md:text-2xl leading-relaxed text-ink step-transition font-serif" id="sentence-text">
+                            那次考試讓我非常緊張。
+                        </p>
+                        <div class="mt-4 text-right">
+                            <span class="inline-block bg-ink text-paper px-3 py-1 rounded-full text-sm font-bold shadow" id="word-count-badge">11 字</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button id="btn-step-1" class="px-5 py-3 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition w-full md:w-auto hidden">↺ 重新開始</button>
+                        <button id="btn-next-step" class="px-5 py-3 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition w-full md:w-auto shadow-md">➕ 加上「具體情境」</button>
+                    </div>
+
+                    <div class="bg-highlight/30 border-l-4 border-secondary p-4 rounded-r-lg mt-4">
+                        <p class="text-sm text-ink font-medium">💡 <strong>教師引導語：</strong>「不要只寫出『緊張』兩個字，要用周遭的環境、身體的反應，讓讀者跟著你一起在考場裡冒冷汗！」</p>
+                    </div>
+                </div>
+
+                <div class="bg-paper/50 rounded-xl p-4 border border-gray-100">
+                    <h3 class="text-center font-bold text-tertiary mb-2 text-sm uppercase tracking-wider">字數與畫面感成長</h3>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二步：文章骨架 -->
+        <section id="structure-blueprint" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🏗️</span> 第二步：起承轉合的骨架搭建
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    寫「經驗」最怕頭重腳輕，前面寫太多起床出門，到了重點卻草草結束。本區塊採用<b>「起、承、轉、行、合」</b>的五段式敘事架構，請點擊左側標籤，探索各段落的寫作任務與引導提問。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 flex flex-col gap-2" id="tab-container">
+                </div>
+
+                <div class="lg:col-span-8 bg-paper rounded-xl border border-gray-200 p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="flex-1 space-y-6">
+                        <div class="border-b-2 border-gray-200 pb-4">
+                            <h3 class="text-2xl font-bold text-ink font-serif" id="tab-title">第一段：【起】破題與背景營造</h3>
+                            <p class="text-tertiary mt-1 font-medium" id="tab-words">建議字數：約 100-150 字</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">🎯</span> 寫作任務</h4>
+                            <p class="text-gray-700 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-task">點出「哪一場」考試，並營造考試前夕的氛圍（自信滿滿、準備不足、或是極度焦慮），為後面的「意外」或「挫折」埋下伏筆。</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">❓</span> 引導提問</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-prompts">
+                                <li>學生生涯考過無數次試，為什麼偏偏是「這一次」讓你難忘？</li>
+                                <li>進考場前，你的心情是如何？天氣或周遭環境是怎樣的？</li>
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">寫作策略</h4>
+                                <p class="text-sm text-gray-700" id="tab-materials">運用「烘托法」，用考場的安靜、同學翻書的沙沙聲，或是窗外的大雨，來對比你內心的狀態。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">開頭句型提示</h4>
+                                <p class="text-sm text-gray-700 italic" id="tab-hint">「記憶的抽屜裡，散落著無數張考卷，但唯獨國一那次的數學段考，深深烙印在我的腦海中...」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/3 flex flex-col justify-center items-center">
+                        <h4 class="text-center font-bold text-tertiary mb-4 text-sm uppercase tracking-wider">段落字數佔比</h4>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三步：AI 教練與檢核 -->
+        <section id="ai-coach-section" class="bg-ink text-paper rounded-2xl shadow-xl p-6 md:p-10 border-t-8 border-primary">
+            <div class="mb-8 border-b border-tertiary/30 pb-6">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🤖</span> 第三步：檢核與潤飾 (AI 寫作教練)
+                </h2>
+                <p class="text-paper/90 text-lg">
+                    考場上的恐慌夠具體嗎？考後的體悟夠深刻嗎？將你寫好的草稿貼在下方，專屬的 <b>AI 寫作教練</b> 會給你優化建議，讓你的文字從平淡的紀錄升級為充滿張力的故事！
+                </p>
+            </div>
+
+            <!-- AI 教練互動區 -->
+            <div class="bg-paper text-ink rounded-xl p-6 mb-8 shadow-inner">
+                
+                <!-- 防呆破冰：草稿快捷鍵 -->
+                <div class="mb-4 flex flex-wrap items-center gap-2">
+                    <span class="text-sm text-tertiary font-bold bg-highlight/50 px-2 py-1 rounded">💡 沒靈感嗎？點擊試試：</span>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">那次數學考試我因為粗心，把答案卡劃錯格，導致成績滿江紅，真的超級難過。</button>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">段考前一天我還在打電動，結果考試當下腦袋一片空白，那一刻我才後悔莫及。</button>
+                </div>
+
+                    <!-- 靈感工具列：靈感骰子 + 快捷提示詞 -->
+                    <div class="flex flex-wrap items-center gap-2 p-2.5 bg-paper rounded-xl border border-gray-200 shadow-2xs">
+                        <button id="btn-inspiration-dice" class="text-xs bg-secondary hover:bg-secondary/90 text-white font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-xs transform hover:scale-105 active:scale-95">
+                            <span class="text-sm">🎲</span>
+                            <span>靈感骰子 (考場起手式)</span>
+                        </button>
+                        <span class="text-gray-300 hidden sm:inline">|</span>
+                        <span class="text-xs text-gray-500 font-medium hidden sm:inline">快捷注入句型：</span>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="手心微汗，心臟在胸腔裡瘋狂撞擊，彷彿隨時會跳出來，……">
+                            💓 ＋考場緊張
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="只剩下時鐘秒針一格一格移動的滴答聲，與試卷翻動的沙沙響，……">
+                            👂 ＋考場音效
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="我的視線死死鎖定在最後那道空白的題目上，大腦一片空白，……">
+                            👁️ ＋視線焦點
+                        </button>
+                        <button class="prompt-chip-btn text-xs bg-white hover:bg-blue-50 text-primary font-semibold px-2.5 py-1 rounded-lg border border-primary/30 transition shadow-2xs flex items-center gap-1 active:bg-blue-100" data-prompt="那一場考試讓我終於明白，分數只是一時的尺規，真正的考驗是……">
+                            💡 ＋深刻省思
+                        </button>
+                    </div>
+
+
+                <div class="mb-6">
+                    <label for="student-input" class="block text-ink font-bold mb-2">✏️ 貼上你的草稿 (請輸入 200 字以內)：</label>
+                    <textarea id="student-input" rows="4" maxlength="200" class="w-full bg-white border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="請貼上你的一段敘述或想法，例如你在考場上遇到什麼突發狀況，或是看到成績單那一刻的心情..."></textarea>
+                    
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="char-warning" class="text-xs text-danger font-bold opacity-0 transition-opacity">⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。</span>
+                        <div class="text-right text-xs text-gray-400"><span id="char-count">0</span> / 200 字</div>
+                    </div>
+                </div>
+
+                <!-- 賦予選擇權：自訂指導重點 -->
+                <div class="mb-6 bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                    <label class="block text-ink font-bold mb-3">🎯 教練，我這次想加強...</label>
+                    <div class="flex flex-wrap gap-3" id="focus-areas">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="具體情境描寫 (使用感官摹寫、動態細節，讓考場的緊張氣氛變得有畫面感)" class="peer sr-only" checked>
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🎬 強化考場氛圍描寫</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="深化反思 (幫助我從這次的考試失利或意外中，挖掘出更深層的心理變化或成長體悟)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🧠 深化考後體悟反思</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="改善流水帳 (加入起承轉合的連接詞，修飾句子讓事件的邏輯與情緒推進更通順)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🔗 改善記事流水帳</div>
+                        </label>
+                    </div>
+                </div>
+
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <button id="btn-toggle-config" class="text-xs text-gray-500 hover:text-primary transition flex items-center gap-1.5 py-1.5 px-3 rounded-lg border border-gray-200 hover:bg-gray-100 bg-white w-fit shadow-xs">
+                        <span>⚙️ 代理通道設定</span>
+                        <span id="channel-badge" class="bg-blue-100 text-primary px-2 py-0.5 rounded text-[11px] font-bold">⚡ Cloudflare 串流 (極速)</span>
+                    </button>
+                    <button id="btn-ask-ai" class="bg-primary hover:opacity-90 text-white font-bold py-3 px-8 rounded-lg shadow transition flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                        <span id="btn-ask-text" class="text-lg">🚀 請教練指導</span>
+                    </button>
+                </div>
+
+                <!-- 代理通道設定面板 (可展開/收合) -->
+                <div id="config-panel" class="hidden mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200 text-sm shadow-inner transition-all">
+                    <div class="flex items-center justify-between mb-3 border-b border-gray-200 pb-2">
+                        <h4 class="font-bold text-ink flex items-center gap-2">
+                            <span>⚙️</span> AI 代理通道切換與端點設定
+                        </h4>
+                        <span class="text-xs text-gray-400">設定將自動保存在瀏覽器</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div>
+                            <label class="block font-bold text-xs text-gray-700 mb-1">通道選擇：</label>
+                            <select id="channel-mode" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary">
+                                <option value="worker">⚡ Cloudflare Worker 邊緣串流 (推薦・極速打字機)</option>
+                                <option value="gas">🛡️ Google Apps Script (原版安全中繼)</option>
+                                <option value="custom">🔑 自備 Gemini API Key（直連 Google）</option>
+                            </select>
+                        </div>
+                        <div id="worker-url-group">
+                            <label class="block font-bold text-xs text-gray-700 mb-1">Cloudflare Worker 網址：</label>
+                            <input id="worker-url-input" type="url" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary" placeholder="請貼上你的 Worker 網址，例如 https://gemini-stream-coach.xxx.workers.dev">
+                        </div>
+                                                <!-- 自備 Key 輸入區塊 -->
+                        <div id="custom-key-group" class="hidden md:col-span-2 p-3 bg-blue-50/70 rounded-lg border border-blue-200 space-y-2">
+                            <div class="flex flex-wrap justify-between items-center gap-1 text-xs">
+                                <span class="font-bold text-blue-900">自備 Google Gemini API Key（安全存放於本機 LocalStorage）</span>
+                                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline text-[11px] hover:text-blue-800 font-medium">前往 Google AI Studio 免費領取</a>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <input type="password" id="custom-api-key" placeholder="貼上 AI Studio 取得的 API Key (AIzaSy...)" class="w-full text-xs font-mono border border-gray-300 rounded-lg px-3 py-2 pr-8 bg-white focus:ring-2 focus:ring-primary">
+                                    <button type="button" id="toggle-key-visibility" class="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-xs" title="顯示/隱藏金鑰">👁️</button>
+                                </div>
+                                <button type="button" id="btn-save-custom-key" class="text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium px-3.5 py-1.5 rounded-lg transition shrink-0 cursor-pointer shadow-xs">
+                                    保存金鑰
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-2 pt-0.5">
+                                <label class="text-[11px] text-gray-600 font-medium shrink-0">自訂模型代號 (選填)：</label>
+                                <input id="custom-model-input" type="text" class="bg-white border border-gray-300 rounded px-2 py-0.5 text-xs font-mono w-40 focus:ring-1 focus:ring-primary" placeholder="預設 gemini-2.5-flash">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-gray-500 gap-2">
+                        <div id="connection-status" class="flex items-center gap-1.5 text-tertiary font-medium">
+                            <span class="w-2 h-2 rounded-full bg-tertiary inline-block"></span>
+                            <span id="status-text">通道就緒：優先採用 Cloudflare 邊緣串流</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="btn-reset-config" class="text-gray-500 hover:text-gray-700 px-3 py-1 rounded border border-gray-300 hover:bg-gray-100 transition">
+                                恢復預設值
+                            </button>
+                            <button id="btn-save-config" class="bg-primary text-white font-bold px-4 py-1.5 rounded hover:opacity-90 transition shadow-xs">
+                                儲存並測試
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading 狀態 -->
+                <div id="ai-loading" class="hidden mt-6 p-6 bg-paper rounded-lg flex flex-col items-center justify-center gap-4 border border-gray-200 shadow-sm">
+                    <div class="dot-flashing"></div>
+                    <p class="text-primary font-medium mt-2">教練正在細細審閱你的草稿，為您提供專屬建議中...</p>
+                </div>
+
+                <!-- AI 回饋輸出區 -->
+                <div id="ai-output-container" class="hidden mt-8 space-y-6">
+                    <div class="flex items-center justify-between border-l-4 border-primary pl-3">
+                        <h3 class="font-bold text-xl text-ink flex items-center gap-2">
+                            <span>💡</span> 教練的回饋與升級示範
+                            <span id="stream-badge" class="hidden text-xs bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full font-bold animate-pulse">⚡ 打字串流中...</span>
+                        </h3>
+                    </div>
+
+                    <!-- 即時串流打字顯示框 (串流時顯示) -->
+                    <div id="ai-stream-box" class="bg-paper border border-gray-300 rounded-xl p-5 text-ink leading-relaxed shadow-xs min-h-[120px]">
+                        <div id="ai-output" class="ai-content leading-relaxed">
+                            <!-- AI Response goes here -->
+                        </div>
+                    </div>
+
+                    <!-- 生成完畢後展示：教練評語卡片 -->
+                    <div id="coach-review-card" class="hidden bg-blue-50/70 border border-blue-200 rounded-xl p-5 shadow-xs">
+                        <h4 class="font-bold text-primary mb-2 flex items-center gap-2">
+                            <span>👩‍🏫</span> 教練的寫作講評：
+                        </h4>
+                        <div id="coach-review-content" class="text-sm text-ink leading-relaxed space-y-2">
+                            <!-- 教練肯定與建議 -->
+                        </div>
+                    </div>
+
+                    <!-- 生成完畢後展示：「Before / After」雙欄卡片對照 -->
+                    <div id="before-after-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Before: 學生原文 -->
+                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+                                    <span class="font-bold text-sm text-gray-700 flex items-center gap-1.5">
+                                        <span>📝</span>【你的原始草稿】
+                                    </span>
+                                    <span id="badge-before-count" class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded font-medium">0 字</span>
+                                </div>
+                                <div id="card-before-text" class="text-gray-800 font-serif leading-relaxed text-base italic">
+                                    <!-- 學生原文 -->
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-400">
+                                原文基礎：有構思雛形，等待展開細節與感情
+                            </div>
+                        </div>
+
+                        <!-- After: 6級分升級版 -->
+                        <div class="bg-amber-50/70 border-2 border-amber-300 rounded-xl p-5 shadow-md flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -top-6 -right-6 w-20 h-20 bg-amber-400/20 rounded-full blur-xl pointer-events-none"></div>
+                            <div>
+                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200/80">
+                                    <span class="font-bold text-sm text-amber-900 flex items-center gap-1.5">
+                                        <span>✨</span>【6 級分潤飾升級版】
+                                    </span>
+                                    <span class="text-xs bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-bold">滿級分示範</span>
+                                </div>
+                                <!-- 純淨 6 級分美句區 (採納與複製專用) -->
+                                <div id="card-after-pure-text" class="text-ink font-serif leading-relaxed text-base p-4 bg-white/95 rounded-xl border border-amber-200/90 shadow-2xs mb-3 select-all">
+                                    <!-- 純淨美句 -->
+                                </div>
+                                <!-- 寫作技法深度拆解 (僅供學生觀摩，不入作文) -->
+                                <div id="card-after-breakdown" class="text-xs space-y-1.5 pt-2 border-t border-amber-200/80">
+                                    <div class="font-bold text-amber-900 mb-1.5 flex items-center gap-1">
+                                        <span>🔍</span> 寫作技法深度拆解 (供觀摩，不入作文)：
+                                    </div>
+                                    <div id="card-after-breakdown-list" class="space-y-1.5 text-gray-700 leading-normal">
+                                        <!-- 彩色修辭標籤與說明 -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-amber-200/80 flex flex-wrap items-center justify-between gap-2">
+                                <span class="text-xs text-amber-800 font-medium">💡 採納與複製將「僅帶入純淨美句」</span>
+                                <span id="badge-after-count" class="text-xs bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded font-bold">0 字</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 操作按鈕列 -->
+                    <div class="flex flex-wrap justify-end gap-3 pt-2">
+                        <button id="btn-adopt-ai" class="text-sm bg-gradient-to-r from-primary to-blue-700 hover:opacity-95 text-white px-5 py-2.5 rounded-lg font-bold transition flex items-center gap-2 shadow-md transform hover:-translate-y-0.5 active:translate-y-0">
+                            <span class="text-base">🚀</span>
+                            <span>一鍵採納至累積區</span>
+                        </button>
+                        <button id="btn-copy-ai" class="text-sm bg-white hover:bg-gray-100 text-ink px-4 py-2.5 rounded-lg font-bold transition flex items-center gap-2 border border-gray-300 shadow-xs">
+                            <span>📋 複製潤飾</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-error" class="hidden mt-6 bg-red-50 border-l-4 border-danger p-4 text-danger rounded-r-lg">
+                    <p id="ai-error-text">抱歉，教練目前遇到連線問題，請確認您的連線或稍後再試一次！</p>
+                </div>
+<!-- 我的文章累積區 -->
+                <div class="mt-10 bg-white border-2 border-tertiary/50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-ink flex items-center gap-2">
+                            <span class="text-2xl">📝</span> 我的文章累積區
+                        </h3>
+                    </div>
+                    <p class="text-sm text-tertiary mb-4 font-medium">
+                        看過教練的建議後，把你自己修改好的「優美句子」貼到這裡吧！你可以依照「起承轉合」的順序，慢慢拼成一篇完整的 800 字文章。
+                    </p>
+                    <textarea id="accumulated-draft" rows="8" class="w-full border border-gray-200 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-tertiary focus:border-transparent transition bg-paper" placeholder="將潤飾好的段落貼上來，或是直接在這裡修改你的最終文章..."></textarea>
+                    
+                    <div class="flex justify-end items-center mt-2">
+                        <div class="text-right text-sm text-tertiary font-bold">目前累積字數：<span id="accumulated-char-count" class="text-primary">0</span> / 800 字</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 教師人工巡桌指南 -->
+            <div class="mt-10 pt-6 border-t border-tertiary/30">
+                <h3 class="text-xl font-bold mb-4 text-paper flex items-center gap-2"><span class="text-2xl">👩‍🏫</span> 教師巡桌指導備忘錄</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🚫</span>
+                            <h4 class="text-lg font-bold text-paper">1. 打破「記事流水帳」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：從早上起床吃早餐，一路寫到搭公車、進校門，才開始寫考試。<br>
+                            <span class="text-secondary font-bold">引導：請學生直接從「進考場那一刻」或「鐘聲響起時」破題，刪去無關緊要的瑣碎過程，將篇幅留給核心事件。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">⚡</span>
+                            <h4 class="text-lg font-bold text-paper">2. 放大「核心衝突點」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            「難忘」通常伴隨著意外或強烈情緒。是筆突然斷水？是發現自己完全看不懂題目？還是劃錯卡？<br>
+                            <span class="text-secondary font-bold">引導：「在考試當下，哪一個『瞬間』讓你心跳加速？請把那個瞬間的動作和內心獨白用放慢鏡頭的方式寫出來。」</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🌱</span>
+                            <h4 class="text-lg font-bold text-paper">3. 提升「體悟的層次」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            結尾不能只是喊口號「我下次會更努力讀書」、「我以後不會再粗心了」。<br>
+                            <span class="text-secondary font-bold">引導：這場考試教會了你什麼人生道理？是「面對意外的從容」、「僥倖心態的代價」，還是「過程比結果更重要」？將感悟昇華。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四步：優秀範文賞析 -->
+        <section id="sample-essays" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📚</span> 優秀範文賞析
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    觀摩不同的「考試情境」如何運用五段式結構營造畫面與張力。點擊下方標題，即可展開閱讀完整範文與段落架構解析。
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- 範文 1：驕兵必敗 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-arrogance', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">📝</span> 驕兵必敗的教訓：準備不足的段考</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-primary/20 text-primary px-3 py-1 rounded-full border border-primary/30 font-bold">748 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-arrogance" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>學生的日常總是被大大小小的考試填滿，多數的考卷如同過眼雲煙，考完便被揉進資源回收桶中。然而，國一下學期那次生物段考，卻像是一道響亮的耳光，狠狠地打醒了我，成為我求學生涯中最難忘的一場考試。</p>
+                            <p>一直以來，生物是我的拿手科目。憑著一點小聰明，我總能在考前臨時抱佛腳，輕鬆拿下高分。那次段考前夕，同學們都在挑燈夜戰，我卻沉迷於新買的電玩遊戲中，心存僥倖地認為：「反正上課都聽懂了，隨便考也能及格。」考試當天早晨，陽光刺眼得令人心煩，我帶著滿滿的自信與熬夜打電動的疲憊，踏入了安靜得令人窒息的考場。</p>
+                            <p>「噹——噹——」無情的鐘聲響起，監考老師發下試卷。我輕蔑地掃了一眼題目，手中的筆卻僵在半空中。原本以為會是熟悉的基礎題，卻全是需要複雜計算與觀念轉彎的進階題。第一大題的力學圖表像是一團亂麻，徹底纏住了我的思緒。時間一分一秒流逝，周圍同學振筆疾書的「沙沙」聲，此刻聽起來宛如倒數計時的催命符。我的腦袋一片空白，掌心沁出冷汗，原本的自信瞬間瓦解，取而代之的是深不見底的恐慌與懊悔。</p>
+                            <p>那漫長的五十分鐘，我彷彿在深海中溺水，四處抓不到浮木。交卷那一刻，我看著大半空白的答案卷，羞愧得不敢抬起頭。成績揭曉，那刺眼的紅字不僅宣告了我的慘敗，更無情地戳破了我自欺欺人的虛榮心。回家後，我把自己關在房間裡大哭了一場。擦乾眼淚後，我拿出那張慘不忍睹的考卷，不再逃避，而是逼著自己一題一題重新訂正，把不懂的觀念徹底釐清。</p>
+                            <p>那次慘痛的考試經驗，讓我深刻體會到「驕兵必敗」的道理。它如同一面鏡子，照出了我輕浮與僥倖的態度。我終於明白，無論天資多麼聰穎，都無法取代腳踏實地的努力。現在，每當我面對任何挑戰而想要懈怠時，那張滿江紅的考卷就會浮現在我腦海，提醒我保持謙卑，穩紮穩打地走好每一步。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-tertiary/20">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第一段（起）：</span> 破題點出「國一生物段考」像一道耳光，留下強烈懸念。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第二段（承）：</span> 描述考前的「驕傲與僥倖」，對比考場當天刺眼的陽光與窒息的氣氛。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第三段（轉）：</span> 描寫考試當下遇到難題的「恐慌與腦袋空白」，將同學寫字的聲音比喻為催命符，充滿張力。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第四段（行）：</span> 寫出考後面對慘敗的態度：不再逃避，而是面對紅字，逐題訂正釐清。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第五段（合）：</span> 昇華體悟，明白聰明無法取代努力，將這次失敗化為未來保持謙卑的動力。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 2：意外狀況 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-accident', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">⏳</span> 考場上的意外：劃錯答案卡的驚魂記</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-secondary/20 text-secondary px-3 py-1 rounded-full border border-secondary/30 font-bold">772 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-accident" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>考試，就像是一場沒有硝煙的戰爭。我們在考場上不僅要對抗刁鑽的題目，有時更要面對突如其來的意外。對我而言，最難忘的一場戰役，不是因為題目多麼艱澀，而是因為一張差點被我毀掉的答案卡，那是一次心跳幾乎停止的驚魂記。</p>
+                            <p>那是國一第一次段考，考的是我最有把握的社會科。鐘聲響起，我胸有成竹地翻開題本，題目如我預期般平易近人。我下筆如有神，視線在題本與答案卡之間快速來回跳躍。黑色的2B鉛筆在紙上發出有節奏的塗痕聲，這一切都顯得那麼順利。距離考試結束還有二十分鐘時，我滿意地寫到了最後一題（第六十題），準備為這場考試畫下完美的句點。</p>
+                            <p>然而，當我的筆尖對準答案卡時，我的血液瞬間凝固了——答案卡上最後一題的空格，赫然印著「五十九」。我不敢置信地揉了揉眼睛，倒抽了一口涼氣。我竟然在不知道第幾題的時候跳了一格，導致後面所有的答案全部錯位！看著時鐘秒針無情地轉動，我的手開始不受控制地發抖。是從哪裡開始錯的？我還有時間改嗎？如果擦掉重寫，會不會擦破答案卡？一連串的恐慌如海嘯般將我淹沒。</p>
+                            <p>深呼吸。我在心裡對自己大喊。慌亂解決不了問題，我強迫自己冷靜下來，拿著橡皮擦，從最後一題開始往前核對，終於在第三十題找到了那個致命的空白。我咬緊牙關，將三十一題到五十九題的答案全部擦掉，然後以最快的速度，一邊核對題本，一邊重新填塗。橡皮擦屑灑滿了桌面，汗水順著臉頰滑落，但我沒有時間擦拭。就在鐘聲響起的前一秒，我塗滿了最後一個圓圈，癱軟在椅子上。</p>
+                            <p>那次段考，我的社會科依然拿到了滿意的分數，但過程中的驚心動魄卻讓我永生難忘。這場意外給我上了寶貴的一課：實力固然重要，但面對危機時的「臨危不亂」與平時作答的「謹慎細心」，更是決定成敗的關鍵。人生就像一張無法預知何時會錯位的答案卡，唯有保持冷靜，步步為營，我們才能在時間的鐘聲敲響前，填上無悔的答案。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-tertiary/20">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第一段（起）：</span> 以「沒有硝煙的戰爭」為喻，直接點出難忘的不是題目難，而是「答案卡的驚魂記」。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第二段（承）：</span> 營造前半段的「極度順利」與胸有成竹，為接下來的巨大轉折製造反差。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第三段（轉）：</span> 發現劃錯卡的瞬間。精準描寫血液凝固、手發抖、內心連串自我懷疑的恐慌感。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第四段（行）：</span> 面對危機的具體行動：深呼吸強迫冷靜、尋找斷點、瘋狂擦拭與重劃，營造與時間賽跑的緊張節奏。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第五段（合）：</span> 將劃錯卡的經驗，昇華為「臨危不亂」與「謹慎細心」的人生態度，結尾句富有哲理。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 3：克服心魔 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-overcome', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🏃</span> 戰勝心魔的體育考：跨越那道欄架</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-tertiary/20 text-tertiary px-3 py-1 rounded-full border border-tertiary/30 font-bold">726 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-overcome" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>說到考試，多數人聯想到的是密密麻麻的文字與數字，然而，我生命中最難忘的一次測驗，卻發生在陽光曝曬的紅色PU跑道上。那不是一場考驗智力的紙筆測驗，而是一場名為「一百公尺跨欄」的體育期末考，更是我與內心恐懼正面交鋒的戰役。</p>
+                            <p>剛升上國一的某次練習中，我曾因為起跳時機不對，重重地摔在木製欄架上，膝蓋磨破了一大片。從此，那高聳的欄架就像一隻張牙舞爪的怪獸，在我心中留下了難以抹滅的陰影。每當靠近它，我便會不由自主地減速、退縮。隨著期末考的日子逼近，我的焦慮也達到了頂點。測驗當天，烈日當空，連吹來的微風都帶著燥熱。我看著同學們一個個流暢地躍過欄架，輪到我站在起跑線上時，雙腿竟像灌了鉛一般沉重。</p>
+                            <p>「嗶——」哨聲響起。我硬著頭皮向前衝，但就在距離第一個欄架剩不到三步時，那股熟悉的恐懼感再次襲來。我的大腦瞬間被「我會摔倒」的念頭佔據，步伐開始凌亂。就在我準備像往常一樣煞車放棄時，場邊傳來了體育老師的喊聲：「不要看地上！眼睛看前方！相信你自己！」</p>
+                            <p>那一瞬間，時間彷彿慢了下來。我問自己，難道我要一輩子被這點挫折困住嗎？我咬緊牙關，決定把心一橫。我不再盯著眼前可怕的障礙，而是將目光鎖定在終點線。起跳、騰空、落地。雖然姿勢不夠優美，甚至鞋底稍微擦到了欄架邊緣，但我沒有摔倒。我跨過去了！接下來的幾個欄架，我憑著那股重新找回的勇氣，一鼓作氣地跑完了全程。</p>
+                            <p>當我大口喘著氣，踩上終點線時，成績雖然只是勉強及格，但我內心的激動卻難以言喻。那次難忘的跨欄測驗，我跨越的不只是跑道上的木架，更是心中的那道恐懼之牆。它讓我明白，人生中會遇到許多看似無法跨越的障礙，但只要我們不低頭看著恐懼，而是抬頭望向目標，勇敢邁出步伐，我們終能戰勝心魔，迎來屬於自己的勝利。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-tertiary/20">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第一段（起）：</span> 打破一般紙筆測驗的框架，選材「跨欄體育考」，定義這是一場與恐懼交鋒的戰役。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第二段（承）：</span> 交代過去受傷的陰影（背景），對比測驗當天的燥熱天氣與雙腿灌鉛的沉重感。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第三段（轉）：</span> 哨聲響起後的起跑與退縮，藉由老師的一句話「眼睛看前方」，點燃轉折的契機。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第四段（行）：</span> 內心獨白的激勵，將視線從障礙物轉移到終點。生動描寫「起跳、騰空、落地」的克服過程。</li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第五段（合）：</span> 呼應破題，得出體悟：不看恐懼、望向目標，就能跨越人生的障礙。選材特別且寓意深刻。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= 頁尾識別 (Footer) ================= -->
+    <footer class="bg-slate-100 text-slate-600 py-8 mt-16 border-t border-slate-200 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-2.5">
+                <img src="../assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-8 h-8 rounded-full shadow-sm">
+                <span class="font-serif font-bold text-slate-800 text-sm sm:text-base">七上閱思龍門・小魚兒探龍門</span>
+            </div>
+
+            <!-- Copyright -->
+            <div class="text-xs text-slate-500 font-medium text-center sm:text-right leading-relaxed">
+                <div>© 2026 學思軒</div>
+                <div class="text-slate-400 text-[11px] mt-0.5">&gt;&lt;&gt; &gt;&lt;&gt; &gt;&lt;&gt; ˙˙˙本網頁由黃于珊老師利用Google antigravity 2.0生成製作，僅供教學使用。˙˙˙&lt;&gt;&lt; &lt;&gt;&lt; &lt;&gt;&lt;</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Step 1: Sentence Builder Logic (情境擴寫)
+            const sentenceData = [
+                { label: "基礎敘述", text: "那次考試讓我非常緊張。", words: 11, btnText: "➕ 加上「具體情境」" },
+                { label: "情境擴寫", text: "國一第一次段考的鐘聲響起，面對發下來的試卷，那次考試讓我非常緊張。", words: 34, btnText: "➕ 加上「感官與譬喻」" },
+                { label: "修辭擴寫", text: "國一第一次段考那刺耳的鐘聲劃破寧靜，望著桌上密密麻麻的試卷，我的心臟彷彿快跳出嗓子眼，掌心直冒冷汗，那次考試讓我非常緊張。", words: 62, btnText: "➕ 加上「內心反思」" },
+                { label: "反思擴寫 (完成)", text: "國一第一次段考那刺耳的鐘聲劃破寧靜，望著桌上密密麻麻的試卷，我的心臟彷彿快跳出嗓子眼。那一刻，強烈的緊張感不僅吞噬了我，更讓我深刻體會到平時心存僥倖、準備不足所帶來的無力與懊悔。", words: 91, btnText: "🎉 完成擴寫" }
+            ];
+
+            let currentStep = 0;
+            const elLabel = document.getElementById('sentence-label');
+            const elText = document.getElementById('sentence-text');
+            const elBadge = document.getElementById('word-count-badge');
+            const btnNext = document.getElementById('btn-next-step');
+            const btnReset = document.getElementById('btn-step-1');
+
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(ctxGrowth, {
+                type: 'bar',
+                data: {
+                    labels: ['基礎敘述', '加情境', '加感官', '加反思'],
+                    datasets: [{
+                        label: '字數',
+                        data: [11, 0, 0, 0],
+                        backgroundColor: ['#E2E8F0', '#D97757', '#E2A03F', '#C48B71'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: '#FEEBC8' }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' 字'; } } } }
+                }
+            });
+
+            btnNext.addEventListener('click', () => { if (currentStep < 3) { currentStep++; updateSentenceUI(); } });
+            btnReset.addEventListener('click', () => { currentStep = 0; updateSentenceUI(); });
+
+            function updateSentenceUI() {
+                const data = sentenceData[currentStep];
+                elText.style.opacity = 0;
+                setTimeout(() => {
+                    elLabel.textContent = data.label; elText.innerHTML = data.text;
+                    elBadge.textContent = data.words + ' 字'; elText.style.opacity = 1;
+                }, 200);
+
+                if (currentStep === 3) {
+                    btnNext.style.display = 'none'; btnReset.style.display = 'block';
+                } else {
+                    btnNext.style.display = 'block'; btnNext.textContent = data.btnText; btnReset.style.display = 'none';
+                }
+
+                const newData = [11, 0, 0, 0];
+                for (let i = 0; i <= currentStep; i++) newData[i] = sentenceData[i].words;
+                growthChart.data.datasets[0].data = newData;
+                growthChart.update();
+            }
+
+            // Step 2: Paragraph Blueprint Logic (起承轉合五段式)
+            const paragraphData = [
+                { id: 'p1', title: "第一段：【起】破題與背景營造", wordsStr: "約 100-150 字 (約 5-7 行)", weight: 125, color: '#D97757', task: "點出「哪一場」考試，並營造考試前夕的氛圍（自信滿滿、準備不足、或是極度焦慮），為後面的「意外」或「挫折」埋下伏筆。", prompts: ["學生生涯考過無數次試，為什麼偏偏是「這一次」讓你難忘？", "進考場前，你的心情是如何？天氣或周遭環境是怎樣的？"], materials: "運用「烘托法」，用考場的安靜、同學翻書的沙沙聲，或是窗外的大雨，來對比你內心的狀態。", hint: "「記憶的抽屜裡，散落著無數張考卷，但唯獨國一那次的數學段考，深深烙印在我的腦海中...」", icon: "🎬" },
+                { id: 'p2', title: "第二段：【承】考場實況與衝突點", wordsStr: "約 200-250 字 (約 10-12 行)", weight: 225, color: '#E2A03F', task: "具體描述考試當下的「核心事件」。發生了什麼意想不到的狀況？是題目太難、文具故障、還是劃錯答案卡？", prompts: ["考試鐘聲響起後，發生了什麼事打破了你原本的預期？", "把那個「發現不對勁」的瞬間，用放慢鏡頭的方式寫出來。"], materials: "善用「五感摹寫」，寫出手心冒汗、筆尖顫抖、腦袋嗡嗡作響的真實感。", hint: "「當監考老師喊下『開始作答』，我滿懷信心地翻開試卷，卻赫然發現...」", icon: "⚡" },
+                { id: 'p3', title: "第三段：【轉】當下的心理轉折", wordsStr: "約 150-200 字 (約 7-9 行)", weight: 175, color: '#D45D5D', task: "聚焦在「內心戲」。面對突發狀況，你當下的情緒是什麼？從恐慌到冷靜，或是從懊悔到自責？", prompts: ["看著時間一分一秒流逝，你心裡在想什麼？", "你如何從當下的崩潰情緒中找到一絲理智？"], materials: "使用「內心獨白」或「自我詰問」。例如：難道我就要在這裡放棄嗎？", hint: "「看著時間一分一秒流逝，我的腦袋一片空白。懊悔與恐懼交織成一張網...」", icon: "💭" },
+                { id: 'p4', title: "第四段：【行】具體的應對與改變", wordsStr: "約 150-200 字 (約 7-9 行)", weight: 175, color: '#C48B71', task: "寫出你在考場上的「應變」，或是考後發放成績單時，你的「後續行動與改變」。", prompts: ["為了挽救局面，你做了什麼努力？（例如：冷靜下來擦掉重寫）", "考完試後，你如何面對慘烈的成績？"], materials: "使用轉折與行動句型（深呼吸後我決定...、回家後我不再逃避...）。", hint: "「鐘聲再次響起，我失魂落魄地交出考卷。回家後，我沒有逃避，反而...」", icon: "🏃" },
+                { id: 'p5', title: "第五段：【合】難忘的意義與體悟", wordsStr: "約 100-150 字 (約 5-7 行)", weight: 125, color: '#8C624E', task: "收束全文，呼應第一段的破題。解釋這場考試為何「難忘」，它教會了你什麼人生道理。", prompts: ["這場考試對你後來的學習態度有什麼影響？", "它讓你明白了什麼比分數更重要的事？"], materials: "昇華主題，不要只寫「下次要考好」，要寫出人生態度（謙卑、臨危不亂、踏實）。", hint: "「這場難忘的考試，分數雖然不盡人意，卻給我上了一堂無價的課。它讓我明白...」", icon: "✨" }
+            ];
+
+            const tabContainer = document.getElementById('tab-container');
+            let activeTabIndex = 0;
+
+            paragraphData.forEach((data, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn w-full text-left px-5 py-4 rounded-lg bg-white border border-gray-100 font-bold text-ink flex items-center justify-between shadow-sm`;
+                if(index === 0) btn.classList.add('active');
+                
+                btn.innerHTML = `<span class="flex items-center gap-3"><span class="text-xl">${data.icon}</span> <span>${data.title.split('：')[0]}</span></span> <span class="text-xs font-normal opacity-70">${data.wordsStr}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.style.borderLeftColor = 'transparent'; });
+                    btn.classList.add('active'); btn.style.borderLeftColor = data.color;
+                    activeTabIndex = index;
+                    updateTabContent(index); updateDoughnutChart(index);
+                });
+                tabContainer.appendChild(btn);
+            });
+
+            function updateTabContent(index) {
+                const data = paragraphData[index];
+                document.getElementById('tab-title').textContent = data.title;
+                document.getElementById('tab-words').textContent = `建議字數：${data.wordsStr}`;
+                document.getElementById('tab-task').textContent = data.task;
+                
+                const elPrompts = document.getElementById('tab-prompts');
+                elPrompts.innerHTML = '';
+                data.prompts.forEach(p => {
+                    const li = document.createElement('li'); li.textContent = p; elPrompts.appendChild(li);
+                });
+
+                document.getElementById('tab-materials').textContent = data.materials;
+                document.getElementById('tab-hint').textContent = data.hint;
+            }
+
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            const weights = paragraphData.map(d => d.weight);
+            const baseColors = paragraphData.map(d => d.color);
+            const mutedColors = baseColors.map(c => c + '40'); 
+
+            const doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: paragraphData.map(d => d.title.split('：')[0]),
+                    datasets: [{
+                        data: weights, backgroundColor: [baseColors[0], mutedColors[1], mutedColors[2], mutedColors[3], mutedColors[4]],
+                        borderWidth: 2, borderColor: '#FFF8F0'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '70%',
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return '約 ' + context.raw + ' 字'; } } } },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+
+            function updateDoughnutChart(activeIndex) {
+                const newColors = paragraphData.map((d, i) => i === activeIndex ? baseColors[i] : mutedColors[i]);
+                doughnutChart.data.datasets[0].backgroundColor = newColors; doughnutChart.update();
+            }
+
+            tabContainer.querySelector('.tab-btn').style.borderLeftColor = paragraphData[0].color;
+            document.querySelectorAll('.hidden-content').forEach(el => el.style.display = 'none');
+            
+            // --- Step 3: AI Coach Logic ---
+            const btnAskAI = document.getElementById('btn-ask-ai');
+            const studentInput = document.getElementById('student-input');
+            const charCountDisplay = document.getElementById('char-count');
+            const charWarning = document.getElementById('char-warning');
+            const aiLoading = document.getElementById('ai-loading');
+            const aiOutputContainer = document.getElementById('ai-output-container');
+            const aiOutput = document.getElementById('ai-output');
+            const aiError = document.getElementById('ai-error');
+            const quickDraftBtns = document.querySelectorAll('.quick-draft-btn');
+            const btnCopyAi = document.getElementById('btn-copy-ai');
+            
+            const accumulatedDraft = document.getElementById('accumulated-draft');
+            const accumulatedCharCount = document.getElementById('accumulated-char-count');
+
+                        const inspirationQuotes = [
+                "試卷發下的那一瞬間，原本溫熱的手心突然滲出細密的冷汗，心臟在胸腔裡瘋狂撞擊，彷彿隨時會跳出來。",
+                "時鐘的秒針在寂靜的考場裡一格一格無情地移動，每一聲滴答，都像敲擊在我緊繃的神經上。",
+                "我的目光死死鎖定在最後那道空白的題目上，腦海裡一片混亂，握著筆的手指已然泛白。",
+                "走出考場，迎面而來的陽光刺痛了眼眶，那一刻我明白，有些遺憾將成為青春最深刻的烙印。"
+            ];
+
+            const btnInspirationDice = document.getElementById('btn-inspiration-dice');
+            const promptChips = document.querySelectorAll('.prompt-chip-btn');
+            const btnAskText = document.getElementById('btn-ask-text');
+
+            // 雙欄卡片相關元件
+            const beforeAfterContainer = document.getElementById('before-after-container');
+            const cardBeforeText = document.getElementById('card-before-text');
+            const badgeBeforeCount = document.getElementById('badge-before-count');
+            const cardAfterPureText = document.getElementById('card-after-pure-text');
+            const cardAfterBreakdown = document.getElementById('card-after-breakdown');
+            const cardAfterBreakdownList = document.getElementById('card-after-breakdown-list');
+            const badgeAfterCount = document.getElementById('badge-after-count');
+            const coachReviewCard = document.getElementById('coach-review-card');
+            const coachReviewContent = document.getElementById('coach-review-content');
+            const aiStreamBox = document.getElementById('ai-stream-box');
+            const streamBadge = document.getElementById('stream-badge');
+            const btnAdoptAi = document.getElementById('btn-adopt-ai');
+            const aiErrorText = document.getElementById('ai-error-text');
+
+            // 隨機靈感骰子
+            if (btnInspirationDice) {
+                btnInspirationDice.addEventListener('click', () => {
+                    const randomQuote = inspirationQuotes[Math.floor(Math.random() * inspirationQuotes.length)];
+                    insertAtCursor(studentInput, randomQuote);
+                    btnInspirationDice.classList.add('rotate-12', 'scale-105');
+                    setTimeout(() => btnInspirationDice.classList.remove('rotate-12', 'scale-105'), 200);
+                });
+            }
+
+            // 在光標處插入文字輔助函式
+            function insertAtCursor(myField, myValue) {
+                if (document.selection) {
+                    myField.focus();
+                    const sel = document.selection.createRange();
+                    sel.text = myValue;
+                } else if (myField.selectionStart || myField.selectionStart == '0') {
+                    const startPos = myField.selectionStart;
+                    const endPos = myField.selectionEnd;
+                    myField.value = myField.value.substring(0, startPos)
+                        + myValue
+                        + myField.value.substring(endPos, myField.value.length);
+                    myField.selectionStart = startPos + myValue.length;
+                    myField.selectionEnd = startPos + myValue.length;
+                } else {
+                    myField.value += myValue;
+                }
+                updateCharCount();
+                myField.focus();
+            }
+
+            // 快捷提示詞按鈕監聽
+            promptChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const promptText = this.getAttribute('data-prompt');
+                    insertAtCursor(studentInput, promptText);
+                    this.classList.add('scale-105', 'bg-blue-100');
+                    setTimeout(() => this.classList.remove('scale-105', 'bg-blue-100'), 200);
+                });
+            });
+
+            // 通道設定相關元件
+            const btnToggleConfig = document.getElementById('btn-toggle-config');
+            const configPanel = document.getElementById('config-panel');
+            const channelMode = document.getElementById('channel-mode');
+            const workerUrlInput = document.getElementById('worker-url-input');
+            const workerUrlGroup = document.getElementById('worker-url-group');
+            const customKeyGroup = document.getElementById('custom-key-group');
+            const customApiKeyInput = document.getElementById('custom-api-key');
+            const customModelInput = document.getElementById('custom-model-input');
+            const channelBadge = document.getElementById('channel-badge');
+            const statusText = document.getElementById('status-text');
+            const btnSaveConfig = document.getElementById('btn-save-config');
+            const btnResetConfig = document.getElementById('btn-reset-config');
+            const toggleKeyVisibility = document.getElementById('toggle-key-visibility');
+            const btnSaveCustomKey = document.getElementById('btn-save-custom-key');
+
+            // 預設端點設定 (預設已包含您的 Worker 專屬網址)
+            const DEFAULT_WORKER_URL = "https://gemini-stream-coach.oaoadna.workers.dev";
+            const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbwTX1R33gA3Sz_gPOJ-FXRRK5buWGHZvybTsNUKAD57y48sSJVdjAiaRMzbuxqRJoUtLA/exec";
+            
+            let currentMode = localStorage.getItem('ai_coach_channel') || 'worker';
+            let currentWorkerUrl = localStorage.getItem('ai_coach_worker_url') || DEFAULT_WORKER_URL;
+            let currentCustomKey = localStorage.getItem('ai_coach_custom_key') || localStorage.getItem('gemini_zuowen_key') || '';
+            let currentCustomModel = localStorage.getItem('ai_coach_custom_model') || 'gemini-2.5-flash';
+
+            function updateConfigUI() {
+                channelMode.value = currentMode;
+                workerUrlInput.value = currentWorkerUrl;
+                customApiKeyInput.value = currentCustomKey;
+                customModelInput.value = currentCustomModel;
+
+                if (currentMode === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
+                    if (currentWorkerUrl) {
+                        channelBadge.innerHTML = '⚡ Cloudflare 串流 (極速)';
+                        channelBadge.className = 'bg-blue-100 text-primary px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '通道就緒：使用 Cloudflare 邊緣串流多金鑰池 (SSE)';
+                    } else {
+                        channelBadge.innerHTML = '⚡ Cloudflare 串流 (未設網址)';
+                        channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '提示：尚未填寫 Worker 網址，送出時將自動備援轉為 GAS';
+                    }
+                } else if (currentMode === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                    if (currentCustomKey) {
+                        channelBadge.innerHTML = '自備 Gemini Key';
+                        channelBadge.className = 'bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = `通道就緒：使用個人 API Key 直連原廠 (${currentCustomModel || 'gemini-2.5-flash'})`;
+                    } else {
+                        channelBadge.innerHTML = '🔑 自備 Key (未填寫)';
+                        channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '提示：請輸入您的 Gemini API Key 後點擊「保存金鑰」';
+                    }
+                } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
+                    channelBadge.innerHTML = '🛡️ GAS 安全通道';
+                    channelBadge.className = 'bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[11px] font-bold';
+                    statusText.textContent = '通道就緒：使用 Google Apps Script 安全備援通道';
+                }
+            }
+            updateConfigUI();
+
+            channelMode.addEventListener('change', () => {
+                if (channelMode.value === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
+                } else if (channelMode.value === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
+                }
+            });
+
+            btnToggleConfig.addEventListener('click', () => {
+                configPanel.classList.toggle('hidden');
+            });
+
+            if (toggleKeyVisibility && customApiKeyInput) {
+                toggleKeyVisibility.addEventListener('click', () => {
+                    const isPass = customApiKeyInput.type === 'password';
+                    customApiKeyInput.type = isPass ? 'text' : 'password';
+                    toggleKeyVisibility.textContent = isPass ? '🔒' : '👁️';
+                });
+            }
+
+            if (btnSaveCustomKey && customApiKeyInput) {
+                btnSaveCustomKey.addEventListener('click', () => {
+                    const keyVal = customApiKeyInput.value.trim();
+                    currentCustomKey = keyVal;
+                    localStorage.setItem('ai_coach_custom_key', keyVal);
+                    localStorage.setItem('gemini_zuowen_key', keyVal);
+                    updateConfigUI();
+                    if (keyVal) {
+                        statusText.textContent = '🔑 自備 Gemini Key 已安全儲存於本機！';
+                        alert('已成功保存 Gemini API Key！可直接進行點評。');
+                    } else {
+                        statusText.textContent = '⚠️ 已清除自備金鑰';
+                    }
+                });
+            }
+
+            btnSaveConfig.addEventListener('click', () => {
+                currentMode = channelMode.value;
+                currentWorkerUrl = workerUrlInput.value.trim();
+                currentCustomKey = customApiKeyInput.value.trim();
+                currentCustomModel = customModelInput.value.trim() || 'gemini-2.5-flash';
+                localStorage.setItem('ai_coach_channel', currentMode);
+                localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
+                updateConfigUI();
+                configPanel.classList.add('hidden');
+                alert('✅ 代理通道設定已成功儲存！');
+            });
+
+            btnResetConfig.addEventListener('click', () => {
+                currentMode = 'worker';
+                currentWorkerUrl = DEFAULT_WORKER_URL;
+                currentCustomKey = '';
+                currentCustomModel = 'gemini-2.5-flash';
+                localStorage.setItem('ai_coach_channel', currentMode);
+                localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
+                updateConfigUI();
+                alert('已還原為專屬 Cloudflare 預設設定！');
+            });
+
+            quickDraftBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    studentInput.value = this.innerText;
+                    updateCharCount();
+                    this.classList.add('bg-highlight');
+                    setTimeout(() => this.classList.remove('bg-highlight'), 200);
+                });
+            });
+
+            function updateCharCount() {
+                const len = studentInput.value.length;
+                charCountDisplay.textContent = len;
+                if (len >= 200) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數已達上限 (200字)！請分批讓教練指導。';
+                    charCountDisplay.classList.add('text-danger', 'font-bold');
+                } else if (len > 150) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。';
+                    charCountDisplay.classList.add('text-yellow-600', 'font-bold');
+                    charCountDisplay.classList.remove('text-danger');
+                } else {
+                    charWarning.classList.add('opacity-0');
+                    charCountDisplay.classList.remove('text-danger', 'text-yellow-600', 'font-bold');
+                }
+            }
+            studentInput.addEventListener('input', updateCharCount);
+
+            accumulatedDraft.addEventListener('input', () => {
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+            });
+
+            // 智慧分離「純淨 6 級分故事美句」與「寫作技法拆解說明」
+            function separateProseAndBreakdown(demoRaw) {
+                // 1. 若內容中明確含有 <ul> 或 <ol> 標籤列表
+                const listMatch = demoRaw.match(/<(?:ul|ol)[\s\S]*?<\/(?:ul|ol)>/i);
+                if (listMatch) {
+                    const breakdownHtml = listMatch[0];
+                    const proseHtml = demoRaw.replace(listMatch[0], '').trim();
+                    return { prose: proseHtml, breakdown: breakdownHtml };
+                }
+
+                // 2. 若包含特定拆解關鍵字
+                const breakdownKeywords = ['【擴寫技法拆解】', '【寫作技法拆解】', '【技巧拆解】', '【寫作手法拆解】', '【擴寫手法】', '擴寫技法拆解', '寫作技法拆解'];
+                for (const kw of breakdownKeywords) {
+                    const idx = demoRaw.indexOf(kw);
+                    if (idx !== -1) {
+                        return {
+                            prose: demoRaw.substring(0, idx).trim(),
+                            breakdown: demoRaw.substring(idx + kw.length).trim()
+                        };
+                    }
+                }
+
+                // 3. 按段落分割 (<p>, </li>, <br> 或 \n)，識別出含有技法解析特徵的行
+                const rawBlocks = demoRaw.split(/(?:<\/p>|<\/li>|<br\s*\/?>|\n+)/).map(b => b.trim()).filter(Boolean);
+                const proseBlocks = [];
+                const breakdownBlocks = [];
+                let isBreakdownSection = false;
+
+                for (const block of rawBlocks) {
+                    const cleanText = block.replace(/<[^>]+>/g, '').trim();
+                    if (!cleanText) continue;
+
+                    // 判斷是否為技法解析特徵行
+                    const isExplanation = /^[•\-\*]/.test(cleanText)
+                        || /^(?:\d+[\.、\)]|✨|🔍|💡|👉)/.test(cleanText)
+                        || /(?:：|:)\s*(?:將|詳述|運用|修辭|動作|具體|暗示|言外之意|摹寫|呈現|加強|說明|解析)/.test(cleanText)
+                        || /(?:運用|使用|採用)了?(?:譬喻|轉化|映襯|誇飾|象徵|細節|摹寫|動態|靜態)/.test(cleanText);
+
+                    if (isExplanation) {
+                        isBreakdownSection = true;
+                    }
+
+                    if (isBreakdownSection) {
+                        breakdownBlocks.push(block);
+                    } else {
+                        proseBlocks.push(block);
+                    }
+                }
+
+                if (breakdownBlocks.length > 0) {
+                    return {
+                        prose: proseBlocks.join('<br>'),
+                        breakdown: breakdownBlocks.join('<br>')
+                    };
+                }
+
+                return { prose: demoRaw, breakdown: '' };
+            }
+
+            // 📋 複製純淨 6 級分美句 (僅複製作文句子，不含說明)
+            btnCopyAi.addEventListener('click', () => {
+                let textToCopy = cardAfterPureText.innerText.trim();
+                if (!textToCopy) {
+                    textToCopy = cardBeforeText.innerText.trim();
+                }
+                textToCopy = textToCopy.replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '').trim();
+
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+
+                const originalHTML = btnCopyAi.innerHTML;
+                btnCopyAi.innerHTML = '✅ 已複製純淨美句！';
+                btnCopyAi.classList.add('bg-primary', 'text-white');
+                setTimeout(() => { 
+                    btnCopyAi.innerHTML = originalHTML;
+                    btnCopyAi.classList.remove('bg-primary', 'text-white');
+                }, 2000);
+            });
+
+            // 🚀 一鍵採納至累積區 (100% 僅採納純淨美句，完全不含任何解析說明)
+            btnAdoptAi.addEventListener('click', () => {
+                let textToAdopt = cardAfterPureText.innerText.trim();
+                
+                if (!textToAdopt) {
+                    alert('目前尚無潤飾美句可採納喔！');
+                    return;
+                }
+
+                // 再次確保去除任何多餘標籤
+                textToAdopt = textToAdopt.replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '').trim();
+
+                if (accumulatedDraft.value.trim().length > 0) {
+                    accumulatedDraft.value += '\n\n' + textToAdopt;
+                } else {
+                    accumulatedDraft.value = textToAdopt;
+                }
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+
+                // 平滑滾動至累積區並做醒目閃爍反饋
+                accumulatedDraft.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                accumulatedDraft.classList.add('ring-4', 'ring-amber-400', 'bg-amber-50/70');
+                setTimeout(() => {
+                    accumulatedDraft.classList.remove('ring-4', 'ring-amber-400', 'bg-amber-50/70');
+                }, 1500);
+
+                const origHTML = btnAdoptAi.innerHTML;
+                btnAdoptAi.innerHTML = '🎉 已成功採納純淨美句！';
+                btnAdoptAi.classList.replace('from-primary', 'from-emerald-600');
+                btnAdoptAi.classList.replace('to-blue-700', 'to-emerald-700');
+                setTimeout(() => {
+                    btnAdoptAi.innerHTML = origHTML;
+                    btnAdoptAi.classList.replace('from-emerald-600', 'from-primary');
+                    btnAdoptAi.classList.replace('to-emerald-700', 'to-blue-700');
+                }, 2500);
+            });
+
+            // 文字美化與排版清理
+            function formatAiText(raw) {
+                let formatted = raw.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                return formatted;
+            }
+
+            // 渲染「Before / After」雙欄對照卡片與修辭標籤
+            function renderBeforeAfterCards(originalDraft, fullAiText) {
+                aiStreamBox.classList.add('hidden');
+                coachReviewCard.classList.remove('hidden');
+                beforeAfterContainer.classList.remove('hidden');
+
+                cardBeforeText.textContent = originalDraft;
+                badgeBeforeCount.textContent = originalDraft.length + ' 字';
+
+                // 拆解【教練評語】與【潤飾示範】
+                let reviewText = '';
+                let afterDemoText = fullAiText;
+
+                const demoKeywords = ['【潤飾示範與拆解】', '【潤飾示範】', '【改寫示範】', '潤飾示範'];
+                let demoIndex = -1;
+                let foundKeyword = '';
+
+                for (const kw of demoKeywords) {
+                    const idx = fullAiText.indexOf(kw);
+                    if (idx !== -1) {
+                        demoIndex = idx;
+                        foundKeyword = kw;
+                        break;
+                    }
+                }
+
+                if (demoIndex !== -1) {
+                    reviewText = fullAiText.substring(0, demoIndex).trim();
+                    afterDemoText = fullAiText.substring(demoIndex + foundKeyword.length).trim();
+                } else {
+                    reviewText = fullAiText;
+                }
+
+                coachReviewContent.innerHTML = formatAiText(reviewText);
+
+                // 分離出「純淨美句」與「說明拆解」
+                const { prose, breakdown } = separateProseAndBreakdown(afterDemoText);
+
+                // 純淨美句去除任何多餘標籤與括號說明
+                let cleanProse = prose
+                    .replace(/<[^>]+>/g, '')
+                    .replace(/[\(（][^）\)]*?(?:修辭|動作|具體|摹寫|意境|言外之意|譬喻|轉化|映襯|誇飾|象徵|細節)[^）\)]*?[\)）]/g, '')
+                    .replace(/【6級分範文美句】/g, '')
+                    .trim();
+
+                // 填入純淨美句
+                cardAfterPureText.textContent = cleanProse;
+                badgeAfterCount.textContent = cleanProse.length + ' 字';
+
+                // 處理技法拆解區塊 (轉換為彩色膠囊標籤)
+                if (breakdown && breakdown.trim().length > 0) {
+                    let styledBreakdown = breakdown.replace(/[\(（]([^）\)]+?)[\)）]/g, (match, tagContent) => {
+                        let colorClass = 'bg-blue-100 text-blue-800 border-blue-200';
+                        if (tagContent.includes('譬喻') || tagContent.includes('比喻') || tagContent.includes('擬人') || tagContent.includes('轉化') || tagContent.includes('修辭')) {
+                            colorClass = 'bg-purple-100 text-purple-800 border-purple-300';
+                        } else if (tagContent.includes('動態') || tagContent.includes('動作') || tagContent.includes('細部') || tagContent.includes('具體')) {
+                            colorClass = 'bg-amber-100 text-amber-800 border-amber-300';
+                        } else if (tagContent.includes('言外之意') || tagContent.includes('情感') || tagContent.includes('心境') || tagContent.includes('昇華') || tagContent.includes('反思')) {
+                            colorClass = 'bg-rose-100 text-rose-800 border-rose-300';
+                        } else if (tagContent.includes('五感') || tagContent.includes('視覺') || tagContent.includes('聽覺') || tagContent.includes('嗅覺') || tagContent.includes('摹寫')) {
+                            colorClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                        }
+                        return `<span class="inline-flex items-center px-2 py-0.5 m-0.5 rounded-full text-xs font-bold border ` + colorClass + ` shadow-2xs">✨ ` + tagContent + `</span>`;
+                    });
+
+                    cardAfterBreakdownList.innerHTML = formatAiText(styledBreakdown);
+                    cardAfterBreakdown.classList.remove('hidden');
+                } else {
+                    cardAfterBreakdown.classList.add('hidden');
+                }
+            }
+
+            // Cloudflare Workers SSE 串流讀取函式
+            async function streamFromWorker(workerUrl, payload, originalDraft) {
+                const response = await fetch(workerUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...payload, stream: true })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    let errMsg = errText;
+                    try {
+                        const parsed = JSON.parse(errText);
+                        errMsg = parsed.error?.message || errText;
+                    } catch(e) {}
+                    throw new Error(`Worker 連線異常 (` + response.status + `)：` + errMsg);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                let accumulatedText = '';
+
+                // 重設並啟動即時串流打字介面
+                streamBadge.classList.remove('hidden');
+                aiLoading.classList.add('hidden');
+                aiOutputContainer.classList.remove('hidden');
+                aiStreamBox.classList.remove('hidden');
+                coachReviewCard.classList.add('hidden');
+                beforeAfterContainer.classList.add('hidden');
+
+                aiOutput.innerHTML = '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('data:')) {
+                            const jsonStr = trimmed.slice(5).trim();
+                            if (jsonStr) {
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const chunkText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                                    if (chunkText) {
+                                        accumulatedText += chunkText;
+                                        aiOutput.innerHTML = formatAiText(accumulatedText) + '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+                                    }
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+
+                // 串流結束：移除打字標籤並切換為 Before/After 雙欄卡片
+                streamBadge.classList.add('hidden');
+                renderBeforeAfterCards(originalDraft, accumulatedText);
+                return accumulatedText;
+            }
+
+
+            // 自訂 Gemini API Key 原廠直連 SSE 串流讀取函式
+            async function streamFromDirectGemini(apiKey, targetModel, payload, originalDraft) {
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:streamGenerateContent?alt=sse&key=${apiKey}`;
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    let errMsg = errText;
+                    try {
+                        const parsed = JSON.parse(errText);
+                        errMsg = parsed.error?.message || errText;
+                    } catch(e) {}
+                    throw new Error(`Google 原廠直連異常 (${response.status})：${errMsg}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                let accumulatedText = '';
+
+                // 重設並啟動即時串流打字介面
+                streamBadge.classList.remove('hidden');
+                aiLoading.classList.add('hidden');
+                aiOutputContainer.classList.remove('hidden');
+                aiStreamBox.classList.remove('hidden');
+                coachReviewCard.classList.add('hidden');
+                beforeAfterContainer.classList.add('hidden');
+
+                aiOutput.innerHTML = '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('data:')) {
+                            const jsonStr = trimmed.slice(5).trim();
+                            if (jsonStr) {
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const chunkText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                                    if (chunkText) {
+                                        accumulatedText += chunkText;
+                                        aiOutput.innerHTML = formatAiText(accumulatedText) + '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+                                    }
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+
+                streamBadge.classList.add('hidden');
+                renderBeforeAfterCards(originalDraft, accumulatedText);
+                return accumulatedText;
+            }
+
+            // GAS 備援請求函式
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+            async function fetchWithRetry(url, payload, retries = 3) {
+                const delays = [1000, 2000, 4000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ` + response.status);
+                        
+                        const textResponse = await response.text();
+                        try {
+                            return JSON.parse(textResponse);
+                        } catch (parseError) {
+                            throw new Error('回傳格式錯誤，請確認 API 連線或 GAS 權限設定。');
+                        }
+                    } catch (error) {
+                        if (i === retries - 1) throw error;
+                        await delay(delays[i]);
+                    }
+                }
+            }
+
+            btnAskAI.addEventListener('click', async () => {
+                const text = studentInput.value.trim();
+                if (!text) {
+                    alert('請先輸入草稿喔！');
+                    return;
+                }
+
+                const selectedFocus = document.querySelector('input[name="focus"]:checked').value;
+
+                btnAskAI.disabled = true;
+                btnAskAI.classList.add('opacity-50', 'cursor-not-allowed');
+                btnAskText.textContent = '⚡ 教練動筆中...';
+                aiOutputContainer.classList.add('hidden');
+                aiError.classList.add('hidden');
+                aiLoading.classList.remove('hidden');
+
+                const systemPrompt = `你是一位專業且溫柔的國中寫作教練，正在指導學生寫「一次難忘的考試經驗」的會考作文。
+請根據學生輸入的草稿給予回饋。
+
+【特別任務】學生希望這次能特別加強：**${selectedFocus}**。請在給予建議時，特別針對這點進行指導。
+
+回饋必須使用繁體中文，格式請嚴格遵守以下三個段落（請直接使用簡單的 HTML 標籤如 <p>, <b>, <ul>, <li> 進行排版，不要使用 Markdown 星號）：
+
+<p><b>【教練的肯定】</b><br>簡短稱讚學生的選材或敘述勇氣，給予鼓勵。</p>
+<p><b>【具體建議】</b><br>針對學生選擇的加強重點給出具體的修改方向。用語要像是親切的對話。</p>
+<p><b>【潤飾示範與拆解】</b><br>給出一段改寫後的美句示範（符合國中生 6級分程度），並在句子後面用括號標註你使用了什麼寫作技巧（如：五感摹寫、動態感、內心獨白等）。</p>`;
+
+                const payload = {
+                    model: "gemini-2.5-flash",
+                    contents: [{ role: "user", parts: [{ text: text }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                try {
+                    // 1. 自訂 Gemini API Key 個人直連串流模式
+                    if (currentMode === 'custom') {
+                        if (!currentCustomKey) {
+                            configPanel.classList.remove('hidden');
+                            throw new Error('您已選擇「自訂 API Key」模式，但尚未填寫金鑰。請在上方輸入您的 Gemini API Key 後點擊「儲存設定」。');
+                        }
+                        const targetModel = currentCustomModel || 'gemini-2.5-flash';
+                        const directPayload = {
+                            contents: [{ role: "user", parts: [{ text: text }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        };
+                        await streamFromDirectGemini(currentCustomKey, targetModel, directPayload, text);
+                    } 
+                    // 2. Cloudflare Worker 邊緣多金鑰池串流模式
+                    else if (currentMode === 'worker' && currentWorkerUrl) {
+                        await streamFromWorker(currentWorkerUrl, payload, text);
+                    } 
+                    // 3. GAS 安全備援模式
+                    else {
+                        // 使用 GAS 安全備援模式
+                        const result = await fetchWithRetry(DEFAULT_GAS_URL, payload);
+                        const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                        
+                        if (generatedText) {
+                            aiLoading.classList.add('hidden');
+                            aiOutputContainer.classList.remove('hidden');
+                            renderBeforeAfterCards(text, generatedText);
+                        } else {
+                            const apiErrorMsg = result.error?.message || '未回傳有效文字';
+                            throw new Error(`API 錯誤：` + apiErrorMsg);
+                        }
+                    }
+                } catch (error) {
+                    console.error('AI Coach Error:', error);
+                    aiLoading.classList.add('hidden');
+                    streamBadge.classList.add('hidden');
+                    aiError.classList.remove('hidden');
+                    aiErrorText.innerHTML = `抱歉，教練目前遇到連線問題：<br><strong class="text-sm">` + error.message + `</strong><br>👉 您可點擊上方「⚙️ 代理通道設定」檢查設定、切換至 GAS 備援或輸入自訂 API Key。`;
+                } finally {
+                    btnAskAI.disabled = false;
+                    btnAskAI.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnAskText.textContent = '🚀 請教練指導';
+                }
+            });
+
+
+        });
+
+        // Teacher Checklist Toggle
+        function toggleChecklist(element) {
+            const content = element.querySelector('.hidden-content');
+            const hint = element.querySelector('.show-more-hint');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                element.classList.replace('bg-teacher', 'bg-teacher-light');
+                hint.style.display = 'none';
+            } else {
+                content.style.display = 'none';
+                element.classList.replace('bg-teacher-light', 'bg-teacher');
+                hint.style.display = 'block';
+            }
+        }
+
+        // 範文賞析 Toggle
+        function toggleEssay(essayId, btnElement) {
+            const content = document.getElementById(essayId);
+            const isExpanded = btnElement.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.classList.remove('open');
+                btnElement.setAttribute('aria-expanded', 'false');
+            } else {
+                content.classList.add('open');
+                btnElement.setAttribute('aria-expanded', 'true');
+            }
+        }
+    </script>
+</body>
+</html>

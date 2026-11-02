@@ -1,0 +1,9 @@
+# Git ignore for 2026_g8taipei
+taipei
+*.doc
+*.docx
+*.zip
+*.tmp
+Thumbs.db
+.DS_Store
+extracted_assets/

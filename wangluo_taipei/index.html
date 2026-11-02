@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>網羅臺北——數位媒體識讀教學平台｜八上閱思龍門</title>
+
+  <!-- Google Fonts: Noto Serif TC, Noto Sans TC, Ma Shan Zheng -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Noto Serif TC"', 'serif'],
+            sans: ['"Noto Sans TC"', 'sans-serif'],
+            calligraphy: ['"Ma Shan Zheng"', 'cursive']
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 自訂滾動條 */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* 浮水印背景 */
+    .watermark-bg {
+      position: absolute;
+      right: 3%;
+      bottom: -15px;
+      font-size: 8rem;
+      line-height: 1;
+      color: rgba(148, 163, 184, 0.12);
+      pointer-events: none;
+      user-select: none;
+      font-family: 'Ma Shan Zheng', cursive;
+    }
+
+    /* 文本標註高亮效果 */
+    .hl-danger {
+      background-color: #fee2e2;
+      color: #991b1b;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border-bottom: 2px dashed #ef4444;
+      font-weight: 500;
+    }
+    .hl-success {
+      background-color: #dcfce7;
+      color: #166534;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border-bottom: 2px solid #22c55e;
+      font-weight: 500;
+    }
+    .hl-warning {
+      background-color: #fef3c7;
+      color: #92400e;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border-bottom: 2px solid #f59e0b;
+      font-weight: 500;
+    }
+
+    /* 列印樣式優化 */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-page-break {
+        page-break-before: always;
+      }
+      .print-shadow-none {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .print-expanded {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
+
+  <!-- ==================== STICKY HEADER (依閱思龍門規範) ==================== -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Brand & Title (閱思龍門標準品牌標題) -->
+      <div class="flex items-center space-x-3">
+        <a href="#hero" class="flex items-center space-x-2 group">
+          <img src="assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-10 h-10 object-contain rounded-full shadow-sm group-hover:rotate-12 transition-transform duration-300">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-serif font-bold text-lg sm:text-xl text-slate-900 tracking-wide">網羅臺北</span>
+              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">八上閱思龍門・數位媒體識讀</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium hidden md:block">穿梭數位資訊洪流・鍛造求真辨偽的思辨之眼</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden lg:flex items-center space-x-1 font-medium text-sm text-slate-600">
+        <a href="#quiz" class="px-3 py-1.5 rounded-lg hover:text-blue-600 hover:bg-blue-50/80 transition-colors flex items-center gap-1">
+          <i data-lucide="help-circle" class="w-4 h-4 text-blue-500"></i> 迷思破冰
+        </a>
+        <a href="#sources" class="px-3 py-1.5 rounded-lg hover:text-blue-600 hover:bg-blue-50/80 transition-colors flex items-center gap-1">
+          <i data-lucide="layers" class="w-4 h-4 text-indigo-500"></i> 出處光譜
+        </a>
+        <a href="#criteria" class="px-3 py-1.5 rounded-lg hover:text-blue-600 hover:bg-blue-50/80 transition-colors flex items-center gap-1">
+          <i data-lucide="radar" class="w-4 h-4 text-emerald-500"></i> 五星雷達
+        </a>
+        <a href="#cases" class="px-3 py-1.5 rounded-lg hover:text-blue-600 hover:bg-blue-50/80 transition-colors flex items-center gap-1">
+          <i data-lucide="swords" class="w-4 h-4 text-amber-500"></i> 案例擂台
+        </a>
+        <a href="#search-tips" class="px-3 py-1.5 rounded-lg hover:text-blue-600 hover:bg-blue-50/80 transition-colors flex items-center gap-1">
+          <i data-lucide="search" class="w-4 h-4 text-cyan-500"></i> 搜尋密技
+        </a>
+        <a href="#worksheet" class="ml-2 px-3.5 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition-all flex items-center gap-1 text-xs sm:text-sm font-semibold">
+          <i data-lucide="file-edit" class="w-4 h-4"></i> 探究任務單
+        </a>
+      </nav>
+
+      <!-- 行動裝置按鈕 -->
+      <div class="flex items-center space-x-2 lg:hidden">
+        <a href="#worksheet" class="px-2.5 py-1 text-xs font-semibold bg-blue-600 text-white rounded-md">
+          探究單
+        </a>
+        <button id="mobile-menu-btn" class="p-2 text-slate-600 hover:text-slate-900 focus:outline-none" aria-label="選單">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 行動裝置展開選單 -->
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 bg-white/95 px-4 pt-2 pb-4 space-y-1">
+      <a href="#quiz" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-blue-50">迷思破冰 3 題挑戰</a>
+      <a href="#sources" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-blue-50">出處光譜：認識五大文本</a>
+      <a href="#criteria" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-blue-50">五星評鑑雷達規準</a>
+      <a href="#cases" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-blue-50">案例擂台：真實對照鑑定</a>
+      <a href="#search-tips" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-blue-50">搜尋密技工具箱</a>
+      <a href="#worksheet" class="block px-3 py-2 rounded-md text-sm font-medium bg-blue-50 text-blue-700 font-semibold">自主探究任務單</a>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section id="hero" class="relative overflow-hidden bg-gradient-to-b from-blue-50/60 via-white to-slate-50 pt-10 pb-16 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <!-- 頂端徽章膠囊 -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/80 border border-blue-200 text-blue-800 text-xs font-semibold tracking-wide shadow-sm">
+          <i data-lucide="compass" class="w-3.5 h-3.5 text-blue-600"></i>
+          國中語文素養 × 跨領域數位媒體識讀專題
+        </div>
+
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+          網羅臺北<br class="sm:hidden">
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 font-serif">
+            數位文本品質與正確性評鑑
+          </span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+          當我們在搜尋引擎鍵入「臺北」，迎面而來的是官方觀光宣傳、深入調查報導、文青打卡食記，還是聳動的內容農場？
+          本課程引導你掌握<strong class="text-blue-700 font-semibold">「五星評鑑雷達法規」</strong>，穿透資訊迷霧，辨識出處動機，鍛造獨立思辨的數位素養之眼。
+        </p>
+
+        <!-- 核心學習目標三大卡片 -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 text-left">
+          <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-slate-200 shadow-sm flex items-start gap-3 hover:border-blue-300 transition-all">
+            <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold">1</div>
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">認識多元出處</h2>
+              <p class="text-xs text-slate-500 mt-0.5">剖析官方、百科、新聞、社群到內容農場的特性與盲點。</p>
+            </div>
+          </div>
+          <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-slate-200 shadow-sm flex items-start gap-3 hover:border-indigo-300 transition-all">
+            <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold">2</div>
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">五星評鑑雷達</h2>
+              <p class="text-xs text-slate-500 mt-0.5">依權威、佐證、動機、時效與避雷五向度客觀診斷品質。</p>
+            </div>
+          </div>
+          <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-slate-200 shadow-sm flex items-start gap-3 hover:border-emerald-300 transition-all">
+            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">3</div>
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">自選主題實作</h2>
+              <p class="text-xs text-slate-500 mt-0.5">運用布林進階搜尋密技，網羅有興趣的文本並完成評鑑單。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 快捷行動按鈕 -->
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
+          <a href="#quiz" class="px-5 py-2.5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 shadow-md shadow-blue-500/20 transition-all flex items-center gap-2">
+            <i data-lucide="play-circle" class="w-4 h-4"></i> 啟動迷思破冰測驗
+          </a>
+          <a href="#worksheet" class="px-5 py-2.5 rounded-xl bg-white text-slate-700 font-medium hover:bg-slate-50 border border-slate-300 shadow-sm transition-all flex items-center gap-2">
+            <i data-lucide="pencil" class="w-4 h-4 text-blue-600"></i> 直接填寫探究單
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 1. 迷思破冰——真假臺北資訊大挑戰 ==================== -->
+  <section id="quiz" class="py-14 bg-white border-b border-slate-200 relative">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="text-xs font-bold text-blue-600 tracking-wider uppercase flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 第一階段・課堂破冰
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900 mt-1">真假臺北資訊：識讀直覺大考驗</h2>
+          <p class="text-sm text-slate-500 mt-1">以下三種在網路常見的臺北資訊，請運用你的媒體識讀直覺做出判斷：</p>
+        </div>
+        <div class="hidden sm:flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100">
+          <i data-lucide="award" class="w-4 h-4 text-blue-600"></i>
+          <span class="text-xs font-semibold text-blue-800" id="quiz-score-badge">已完成 0 / 3 題</span>
+        </div>
+      </div>
+
+      <!-- 測驗卡片網格 -->
+      <div class="space-y-6">
+        <!-- 題 1 -->
+        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:shadow-md transition-all" id="quiz-card-1">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center shrink-0">1</span>
+              <h3 class="text-base font-bold text-slate-800">
+                滑手機時看見這則標題：「驚爆！臺北大眾捷運這條線竟藏有百年靈異黑幕？萬人嚇哭！點進去真相讓人傻眼！」
+              </h3>
+            </div>
+            <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-slate-200 text-slate-700 shrink-0">標題辨析</span>
+          </div>
+
+          <p class="text-xs text-slate-500 mt-2 ml-8">請問：依據數位媒體識讀準則，這篇文本最可能屬於哪一類資訊？我們應採取什麼行動？</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-4 ml-8">
+            <button onclick="checkQuiz(1, 'A', false)" class="quiz-btn-1 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              A. 臺北捷運局官方發布的重要行車安全公告，應立刻轉傳家人。
+            </button>
+            <button onclick="checkQuiz(1, 'B', true)" class="quiz-btn-1 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              B. 典型的「內容農場點擊誘餌（Clickbait）」，充斥情緒字眼與廣告騙點閱，不應輕信與轉發。
+            </button>
+            <button onclick="checkQuiz(1, 'C', false)" class="quiz-btn-1 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              C. 專業調查記者的深度報導，雖然標題誇張但內容一定絕對屬實。
+            </button>
+            <button onclick="checkQuiz(1, 'D', false)" class="quiz-btn-1 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              D. 維基百科志工所修訂的最權威歷史研究報告。
+            </button>
+          </div>
+
+          <!-- 解析區塊 -->
+          <div id="quiz-feedback-1" class="hidden mt-4 ml-8 p-4 rounded-xl border text-xs sm:text-sm leading-relaxed"></div>
+        </div>
+
+        <!-- 題 2 -->
+        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:shadow-md transition-all" id="quiz-card-2">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center shrink-0">2</span>
+              <h3 class="text-base font-bold text-slate-800">
+                在「臺北市政府觀光傳播局官網」讀到介紹大稻埕：「文創青年進駐使老街容光煥發，傳統老店紛紛轉型，成為繁華進步典範。」
+              </h3>
+            </div>
+            <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-slate-200 text-slate-700 shrink-0">官方立場</span>
+          </div>
+
+          <p class="text-xs text-slate-500 mt-2 ml-8">請問：對於官方政府網站的數位文本，下列哪一種理解態度最符合「媒體識讀」素養？</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-4 ml-8">
+            <button onclick="checkQuiz(2, 'A', false)" class="quiz-btn-2 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              A. 只要是政府官方寫的，就代表整個社會所有人的唯一真實心聲，不需要看其他資料。
+            </button>
+            <button onclick="checkQuiz(2, 'B', false)" class="quiz-btn-2 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              B. 官方資料一定都是造假欺騙，應該完全否定並改看社群匿名留言。
+            </button>
+            <button onclick="checkQuiz(2, 'C', true)" class="quiz-btn-2 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              C. 認可官方基本數據與法規之權威性，但理解其多站在政策宣導視角，需輔以在地居民與深度調查報導以得全貌。
+            </button>
+            <button onclick="checkQuiz(2, 'D', false)" class="quiz-btn-2 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              D. 官方網站只要有蓋章就一定是客觀科學報告，不可能有價值選擇。
+            </button>
+          </div>
+
+          <!-- 解析區塊 -->
+          <div id="quiz-feedback-2" class="hidden mt-4 ml-8 p-4 rounded-xl border text-xs sm:text-sm leading-relaxed"></div>
+        </div>
+
+        <!-- 題 3 -->
+        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:shadow-md transition-all" id="quiz-card-3">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center shrink-0">3</span>
+              <h3 class="text-base font-bold text-slate-800">
+                撰寫臺北古蹟報告時查閱「維基百科」，看到某句寫著：「此古蹟地下在日治時期曾是秘密金庫」。
+              </h3>
+            </div>
+            <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-slate-200 text-slate-700 shrink-0">佐證查驗</span>
+          </div>
+
+          <p class="text-xs text-slate-500 mt-2 ml-8">請問：根據「佐證查核」準則，下列哪一項是檢驗這句話是否屬實的關鍵動作？</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-4 ml-8">
+            <button onclick="checkQuiz(3, 'A', false)" class="quiz-btn-3 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              A. 看看排版字體好不好看，字體端正就是真的。
+            </button>
+            <button onclick="checkQuiz(3, 'B', true)" class="quiz-btn-3 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              B. 檢視該句後方是否有上標腳註引用（例如 [1]），並點進去確認來源是否為學術史料、文獻或檔案。
+            </button>
+            <button onclick="checkQuiz(3, 'C', false)" class="quiz-btn-3 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              C. 只要維基百科寫的，就可以直接複製貼上當作作業結論。
+            </button>
+            <button onclick="checkQuiz(3, 'D', false)" class="quiz-btn-3 p-3 text-left rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/50 text-xs sm:text-sm font-medium transition-all">
+              D. 去問論壇網友誰有去過地下室挖過寶。
+            </button>
+          </div>
+
+          <!-- 解析區塊 -->
+          <div id="quiz-feedback-3" class="hidden mt-4 ml-8 p-4 rounded-xl border text-xs sm:text-sm leading-relaxed"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 2. 出處光譜——五大數位文本特性辨析 ==================== -->
+  <section id="sources" class="py-14 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold text-indigo-600 tracking-wider uppercase flex items-center justify-center gap-1.5">
+          <i data-lucide="compass" class="w-3.5 h-3.5"></i> 第二階段・識源地圖
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900 mt-1">數位文本出處光譜圖</h2>
+        <p class="text-sm text-slate-500 mt-2">
+          網路上的臺北資訊五花八門，依「權威性」、「查核度」與「傳播動機」，可歸納為五大典型光譜。點擊各出處深入解析：
+        </p>
+      </div>
+
+      <!-- 出處快速選擇按鈕列 -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-8" id="source-tabs">
+        <button onclick="switchSourceTab('gov')" class="source-tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-blue-600 text-white border-blue-600 shadow-sm" data-tab="gov">
+          🏛️ 1. 政府與公部門 (.gov.tw)
+        </button>
+        <button onclick="switchSourceTab('wiki')" class="source-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-white text-slate-700 border-slate-200 hover:bg-slate-100" data-tab="wiki">
+          📚 2. 百科與協作資料庫
+        </button>
+        <button onclick="switchSourceTab('news')" class="source-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-white text-slate-700 border-slate-200 hover:bg-slate-100" data-tab="news">
+          📰 3. 專業調查與主流新聞
+        </button>
+        <button onclick="switchSourceTab('social')" class="source-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-white text-slate-700 border-slate-200 hover:bg-slate-100" data-tab="social">
+          📱 4. 社群論壇與網紅部落格
+        </button>
+        <button onclick="switchSourceTab('farm')" class="source-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border bg-white text-slate-700 border-slate-200 hover:bg-slate-100" data-tab="farm">
+          ⚠️ 5. 內容農場與點擊誘餌
+        </button>
+      </div>
+
+      <!-- 出處詳情展示卡片 (動態切換) -->
+      <div id="source-detail-card" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm transition-all">
+        <!-- 內容將由 JavaScript 動態填入 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. 評鑑法寶——五星評鑑雷達規準 ==================== -->
+  <section id="criteria" class="py-14 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold text-emerald-600 tracking-wider uppercase flex items-center justify-center gap-1.5">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> 第三階段・評鑑法寶
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900 mt-1">五星評鑑雷達法寶 (CRAAP+ 原則)</h2>
+        <p class="text-sm text-slate-500 mt-2">
+          學思軒轉化國際經典資訊評鑑標準，為國中生量身打造五大向度規準。點選右側範例，即時預覽雷達圖輪廓！
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- 左側：五大指標規準手冊 (7 cols) -->
+        <div class="lg:col-span-7 space-y-3.5">
+          <!-- 指標 1 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-blue-300 transition-all">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">1</span>
+                <h3 class="text-sm sm:text-base font-bold text-slate-900">權威歸屬 (Authority)</h3>
+              </div>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700">「誰寫的？他憑什麼？」</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              檢視文章是否有具名作者、責任編輯或主辦機構。作者是否具備相關文史、建築或市政專業？是否附有清晰聯絡方式或自我介紹？
+            </p>
+          </div>
+
+          <!-- 指標 2 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-indigo-300 transition-all">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">2</span>
+                <h3 class="text-sm sm:text-base font-bold text-slate-900">佐證查核 (Accuracy)</h3>
+              </div>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700">「證據在哪？能查驗嗎？」</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              文中所提的統計數據、歷史年代或事件，是否有具體文獻引註、法規公文、訪談紀錄或外部權威連結？能否與其他資料庫交叉印證？
+            </p>
+          </div>
+
+          <!-- 指標 3 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-emerald-300 transition-all">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">3</span>
+                <h3 class="text-sm sm:text-base font-bold text-slate-900">立場動機 (Purpose)</h3>
+              </div>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">「為何而寫？賣貨還宣傳？」</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              分辨文本動機是公共傳播、學術教育、商業置入（業配開箱）還是政黨宣傳？文字是否客觀理性，或充斥過度煽情與情緒勒索？
+            </p>
+          </div>
+
+          <!-- 指標 4 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-amber-300 transition-all">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold">4</span>
+                <h3 class="text-sm sm:text-base font-bold text-slate-900">時效歷程 (Currency)</h3>
+              </div>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-700">「何時發布？更新了嗎？」</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              檢查文章的時間戳記（發布日與修訂日）。臺北都市環境日新月異，捷運路線、老屋現況或法規是否已經改版？超連結是否死鏈失效？
+            </p>
+          </div>
+
+          <!-- 指標 5 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-rose-300 transition-all">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center text-xs font-bold">5</span>
+                <h3 class="text-sm sm:text-base font-bold text-slate-900">格式避雷 (Presentation)</h3>
+              </div>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-rose-50 text-rose-700">「標題騙人？蓋版廣告？」</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              辨識內容農場三大雷點：文不對題的懸疑式標題、滿版遮擋廣告、機器翻譯簡轉繁錯別字（如「後台變後臺」、「乾麵變干麵」）。
+            </p>
+          </div>
+        </div>
+
+        <!-- 右側：雷達圖即時展示與交互切換 (5 cols) -->
+        <div class="lg:col-span-5 bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col items-center">
+          <div class="w-full flex items-center justify-between mb-3">
+            <h4 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="activity" class="w-4 h-4 text-blue-600"></i> 雷達指標特徵對比
+            </h4>
+            <span class="text-[11px] text-slate-500">點選快速切換：</span>
+          </div>
+
+          <!-- 切換預設資料集 -->
+          <div class="grid grid-cols-2 gap-1.5 w-full mb-4">
+            <button onclick="updateRadarPreset('gov')" class="radar-btn px-2.5 py-1 text-xs rounded-lg border font-medium bg-blue-100 text-blue-800 border-blue-300">
+              🏛️ 官方觀傳局
+            </button>
+            <button onclick="updateRadarPreset('news')" class="radar-btn px-2.5 py-1 text-xs rounded-lg border font-medium bg-white text-slate-700 border-slate-200 hover:bg-slate-100">
+              📰 調查報導專題
+            </button>
+            <button onclick="updateRadarPreset('blog')" class="radar-btn px-2.5 py-1 text-xs rounded-lg border font-medium bg-white text-slate-700 border-slate-200 hover:bg-slate-100">
+              📱 網紅打卡食記
+            </button>
+            <button onclick="updateRadarPreset('farm')" class="radar-btn px-2.5 py-1 text-xs rounded-lg border font-medium bg-white text-slate-700 border-slate-200 hover:bg-slate-100">
+              ⚠️ 內容農場誘餌
+            </button>
+          </div>
+
+          <!-- Chart Canvas -->
+          <div class="w-full relative h-64 sm:h-72">
+            <canvas id="radarChart"></canvas>
+          </div>
+
+          <p class="text-xs text-slate-500 mt-3 text-center" id="radar-caption">
+            目前展示：<strong>臺北市官方網站</strong>（權威度高、數據精準，但多官方政策宣導視角）
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. 案例擂台——真實風格文本對照鑑定 ==================== -->
+  <section id="cases" class="py-14 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+        <div>
+          <span class="text-xs font-bold text-amber-600 tracking-wider uppercase flex items-center gap-1.5">
+            <i data-lucide="eye" class="w-3.5 h-3.5"></i> 第四階段・擂台實戰
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900 mt-1">文本鑑定擂台：大稻埕老屋風華</h2>
+          <p class="text-sm text-slate-500 mt-1">針對同一主題「大稻埕迪化街文創與老屋」，閱讀下列三篇不同出處的文本片段，點擊抓漏放大鏡！</p>
+        </div>
+
+        <!-- 輔助操作工具列 -->
+        <div class="mt-4 md:mt-0 flex items-center gap-2">
+          <button onclick="toggleClues()" id="clue-toggle-btn" class="px-3.5 py-1.5 rounded-xl border border-amber-300 bg-amber-50 text-amber-800 text-xs font-semibold hover:bg-amber-100 transition-all flex items-center gap-1.5">
+            <i data-lucide="search" class="w-3.5 h-3.5"></i> 開啟抓漏放大鏡（線索高亮）
+          </button>
+          <button onclick="revealAllAnalysis()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-semibold hover:bg-slate-900 transition-all flex items-center gap-1.5">
+            <i data-lucide="unlock" class="w-3.5 h-3.5"></i> 一鍵揭曉專家診斷
+          </button>
+        </div>
+      </div>
+
+      <!-- 三篇對照卡片 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 文本甲：官方網站 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800">文本甲・官方網站</span>
+              <span class="text-xs text-slate-400">來源：臺北旅遊網</span>
+            </div>
+
+            <h3 class="font-serif font-bold text-base text-slate-900 mt-3">
+              漫遊大稻埕：百年茶香與歷史街區的璀璨轉身
+            </h3>
+            <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-2">
+              <span>發布：臺北市政府觀光傳播局</span>
+              <span>•</span>
+              <span>更新：2026/03</span>
+            </div>
+
+            <div class="mt-4 text-xs text-slate-600 leading-relaxed space-y-2">
+              <p>
+                大稻埕自清末開港以來，即是北臺灣最重要的茶葉與布匹貿易樞紐。在市府積極推動的<span class="clue-tag hl-success hidden">「大稻埕歷史風貌特定專用區容積移轉法規」</span>獎勵下，迪化街傳統閩南式、洋樓式與仿巴洛克式街屋均獲得完善修復。
+              </p>
+              <p>
+                如今，新一代文創品牌、老茶行與藝文咖啡館完美共融。<span class="clue-tag hl-warning hidden">街區繁榮興盛，展現首善之都活化文化資產的卓越成就，深獲國內外旅客一致好評。</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- 診斷摺疊區 -->
+          <div class="mt-5 pt-3 border-t border-slate-100">
+            <button onclick="toggleDiagnosis(1)" class="w-full py-1.5 px-3 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs font-semibold flex items-center justify-between">
+              <span>查看專家識讀診斷</span>
+              <i data-lucide="chevron-down" class="w-4 h-4" id="diag-icon-1"></i>
+            </button>
+            <div id="diag-content-1" class="hidden mt-2 p-3 bg-blue-50/60 rounded-xl text-xs text-slate-700 space-y-1">
+              <p><strong>🎯 優勢</strong>：歷史法規與古蹟建構準確，資訊具備高度權威。</p>
+              <p><strong>⚠️ 盲點</strong>：純宣傳口吻，將整體轉型描繪得毫無瑕疵，未提及文創進駐帶來的租金飛漲與傳統南北貨老店搬遷困境。</p>
+              <div class="pt-1 text-[11px] font-bold text-blue-800">五星評定：權威 5★｜佐證 4★｜立場 3★｜時效 5★｜格式 5★</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 文本乙：深度調查報導 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-800">文本乙・調查新聞</span>
+              <span class="text-xs text-slate-400">來源：《報導者》文化專題</span>
+            </div>
+
+            <h3 class="font-serif font-bold text-base text-slate-900 mt-3">
+              老屋新生還是記憶蒸發？大稻埕仕紳化浪潮下的商行苦水
+            </h3>
+            <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-2">
+              <span>記者：林○○、特約記者 張○○</span>
+              <span>•</span>
+              <span>2025/11</span>
+            </div>
+
+            <div class="mt-4 text-xs text-slate-600 leading-relaxed space-y-2">
+              <p>
+                <span class="clue-tag hl-success hidden">根據都市發展局統計，近五年迪化街租金漲幅達 42.5%</span>。記者實地走訪走過八十年歲月的「李順發中藥行」，第三代傳人李先生感嘆：「觀光客只要拍照打卡，誰來買苦味的中藥？房東轉租給網美文青店，我們只能退到後街。」
+              </p>
+              <p>
+                <span class="clue-tag hl-success hidden">在地文史工作者葉○○受訪指出</span>，老街若只剩下外皮而失去生活與產業，大稻埕將淪為缺乏靈魂的「懷舊迪士尼影城」。文化局則回應正研擬租金平抑與傳統產業扶植方案。
+              </p>
+            </div>
+          </div>
+
+          <!-- 診斷摺疊區 -->
+          <div class="mt-5 pt-3 border-t border-slate-100">
+            <button onclick="toggleDiagnosis(2)" class="w-full py-1.5 px-3 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs font-semibold flex items-center justify-between">
+              <span>查看專家識讀診斷</span>
+              <i data-lucide="chevron-down" class="w-4 h-4" id="diag-icon-2"></i>
+            </button>
+            <div id="diag-content-2" class="hidden mt-2 p-3 bg-emerald-50/60 rounded-xl text-xs text-slate-700 space-y-1">
+              <p><strong>🎯 優勢</strong>：具名記者採訪、引用具體數據、多方平衡（採訪老店、學者、官方回應），具備深厚思辨價值。</p>
+              <p><strong>⚠️ 注意</strong>：帶有批判性議題倡議，讀者需留意個案抽樣是否能代表全部街區。</p>
+              <div class="pt-1 text-[11px] font-bold text-emerald-800">五星評定：權威 5★｜佐證 5★｜立場 5★｜時效 4★｜格式 5★</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 文本丙：內容農場點擊誘餌 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-rose-100 text-rose-800">文本丙・內容農場</span>
+              <span class="text-xs text-slate-400">來源：奇趣熱榜網</span>
+            </div>
+
+            <h3 class="font-serif font-bold text-base text-slate-900 mt-3">
+              <span class="clue-tag hl-danger hidden">震驚！千萬別去大稻埕這間老屋？</span>在地老伯痛哭揭開不可告人的驚天黑幕！
+            </h3>
+            <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-2">
+              <span class="clue-tag hl-danger hidden">作者：熱文小編998</span>
+              <span>•</span>
+              <span class="clue-tag hl-danger hidden">日期：剛剛更新</span>
+            </div>
+
+            <div class="mt-4 text-xs text-slate-600 leading-relaxed space-y-2">
+              <p>
+                <span class="clue-tag hl-danger hidden">你知道嗎？所有人都驚呆了！</span>最近大稻埕老街竟然傳出恐怖傳說，有位老伯伯在路邊痛哭流涕，說這裡的老屋地下其實有不可告人的巨大黑幕？
+              </p>
+              <p>
+                <span class="clue-tag hl-danger hidden">專家私下透露</span>，這裡賣的東西其實都在坑人，千萬不要轉發給別人看，趕快按讚收藏才不會吃虧！想知道老伯說了什麼？請點擊下方繼續閱讀...
+              </p>
+            </div>
+          </div>
+
+          <!-- 診斷摺疊區 -->
+          <div class="mt-5 pt-3 border-t border-slate-100">
+            <button onclick="toggleDiagnosis(3)" class="w-full py-1.5 px-3 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs font-semibold flex items-center justify-between">
+              <span>查看專家識讀診斷</span>
+              <i data-lucide="chevron-down" class="w-4 h-4" id="diag-icon-3"></i>
+            </button>
+            <div id="diag-content-3" class="hidden mt-2 p-3 bg-rose-50/60 rounded-xl text-xs text-slate-700 space-y-1">
+              <p><strong>🚨 致命破綻</strong>：匿名作者、無日期、無明確人名與專家機構、情緒勒索騙點閱、廣告滿版。</p>
+              <p><strong>🛡️ 處置建議</strong>：立刻關閉頁面，切勿轉傳，避免成為假訊息傳播鏈幫兇。</p>
+              <div class="pt-1 text-[11px] font-bold text-rose-800">五星評定：權威 1★｜佐證 1★｜立場 1★｜時效 1★｜格式 1★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. 搜尋工具箱——進階搜尋神技 ==================== -->
+  <section id="search-tips" class="py-14 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold text-cyan-600 tracking-wider uppercase flex items-center justify-center gap-1.5">
+          <i data-lucide="terminal" class="w-3.5 h-3.5"></i> 第五階段・搜尋工具箱
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900 mt-1">網羅臺北：進階搜尋密技 (Boolean Operators)</h2>
+        <p class="text-sm text-slate-500 mt-2">
+          學會像專業記者一樣搜尋！善用以下四種關鍵字指令，能在 0.5 秒內過濾 90% 的垃圾內容農場與業配干擾：
+        </p>
+      </div>
+
+      <!-- 四大神技網格 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- 密技 1 -->
+        <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-blue-400 hover:shadow-sm transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm mb-3">
+              " "
+            </div>
+            <h3 class="font-bold text-slate-900 text-sm">雙引號：精確詞組搜尋</h3>
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              強制搜尋引擎完整比對引號內的字串，不拆碎關鍵字。
+            </p>
+            <div class="mt-3 p-2 bg-slate-100 rounded-lg text-xs font-mono text-slate-700">
+              "臺北老屋活化"
+            </div>
+          </div>
+          <button onclick="copyToClipboard('&quot;臺北老屋活化&quot;')" class="mt-4 w-full py-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-white border border-blue-200 rounded-lg flex items-center justify-center gap-1">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> 複製範例語法
+          </button>
+        </div>
+
+        <!-- 密技 2 -->
+        <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-rose-400 hover:shadow-sm transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-sm mb-3">
+              -
+            </div>
+            <h3 class="font-bold text-slate-900 text-sm">減號：排除干擾雜訊</h3>
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              排除含有特定字眼的網頁，輕鬆過濾浮濫業配或打卡文。
+            </p>
+            <div class="mt-3 p-2 bg-slate-100 rounded-lg text-xs font-mono text-slate-700">
+              大稻埕歷史 -美食 -打卡
+            </div>
+          </div>
+          <button onclick="copyToClipboard('大稻埕歷史 -美食 -打卡')" class="mt-4 w-full py-1.5 text-xs font-semibold text-rose-600 hover:text-rose-700 bg-white border border-rose-200 rounded-lg flex items-center justify-center gap-1">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> 複製範例語法
+          </button>
+        </div>
+
+        <!-- 密技 3 -->
+        <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-emerald-400 hover:shadow-sm transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm mb-3">
+              site:
+            </div>
+            <h3 class="font-bold text-slate-900 text-sm">site: 鎖定權威網域</h3>
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              專門搜尋特定網域，例如只查政府公報或教育學術機構。
+            </p>
+            <div class="mt-3 p-2 bg-slate-100 rounded-lg text-xs font-mono text-slate-700">
+              site:gov.tw 臺北大巨蛋
+            </div>
+          </div>
+          <button onclick="copyToClipboard('site:gov.tw 臺北大巨蛋')" class="mt-4 w-full py-1.5 text-xs font-semibold text-emerald-600 hover:text-emerald-700 bg-white border border-emerald-200 rounded-lg flex items-center justify-center gap-1">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> 複製範例語法
+          </button>
+        </div>
+
+        <!-- 密技 4 -->
+        <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-indigo-400 hover:shadow-sm transition-all flex flex-col justify-between">
+          <div>
+            <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm mb-3">
+              file:
+            </div>
+            <h3 class="font-bold text-slate-900 text-sm">filetype: 挖出研究報告</h3>
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              直接鎖定 PDF 文件，快速取得政府白皮書、學者論文或簡報。
+            </p>
+            <div class="mt-3 p-2 bg-slate-100 rounded-lg text-xs font-mono text-slate-700">
+              臺北夜市 演變 filetype:pdf
+            </div>
+          </div>
+          <button onclick="copyToClipboard('臺北夜市 演變 filetype:pdf')" class="mt-4 w-full py-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-700 bg-white border border-indigo-200 rounded-lg flex items-center justify-center gap-1">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> 複製範例語法
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. 自主探究任務單 (線上實作與匯出) ==================== -->
+  <section id="worksheet" class="py-14 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-md p-6 sm:p-10 relative overflow-hidden print-shadow-none">
+        <div class="watermark-bg">網羅臺北</div>
+
+        <!-- 學習單表頭 -->
+        <div class="border-b border-slate-200 pb-6 mb-8">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
+                  實作評量
+                </span>
+                <span class="text-xs text-slate-500">八上閱思龍門・數位媒體識讀</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900 mt-1.5">
+                「網羅臺北」數位文本評鑑探究任務單
+              </h2>
+            </div>
+
+            <!-- 操作工具 (複製、列印、清空) -->
+            <div class="flex items-center gap-2 no-print shrink-0">
+              <button onclick="window.print()" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-all">
+                <i data-lucide="printer" class="w-4 h-4"></i> 列印學習單
+              </button>
+              <button onclick="generateReport()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm flex items-center gap-1.5 transition-all">
+                <i data-lucide="file-check" class="w-4 h-4"></i> 產出成果報告
+              </button>
+            </div>
+          </div>
+
+          <!-- 學生個人資料欄 -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-4 border-t border-slate-100">
+            <div>
+              <label for="ws-class" class="block text-xs font-semibold text-slate-600 mb-1">班級</label>
+              <input type="text" id="ws-class" placeholder="例：八年 10 班" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs sm:text-sm focus:border-blue-500 focus:outline-none bg-slate-50 focus:bg-white transition-all">
+            </div>
+            <div>
+              <label for="ws-seat" class="block text-xs font-semibold text-slate-600 mb-1">座號</label>
+              <input type="text" id="ws-seat" placeholder="例：08" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs sm:text-sm focus:border-blue-500 focus:outline-none bg-slate-50 focus:bg-white transition-all">
+            </div>
+            <div>
+              <label for="ws-name" class="block text-xs font-semibold text-slate-600 mb-1">姓名</label>
+              <input type="text" id="ws-name" placeholder="請填寫姓名" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs sm:text-sm focus:border-blue-500 focus:outline-none bg-slate-50 focus:bg-white transition-all">
+            </div>
+          </div>
+        </div>
+
+        <!-- 任務步驟一：自選探究主題與關鍵字 -->
+        <div class="mb-8">
+          <h3 class="text-sm font-bold text-blue-900 flex items-center gap-2 mb-3">
+            <span class="w-5 h-5 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">1</span>
+            步驟一：選擇感興趣的臺北主題，並擬定搜尋關鍵字
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="ws-topic" class="block text-xs font-semibold text-slate-600 mb-1">探究主題（可自訂或選取推薦）</label>
+              <select id="ws-topic" onchange="applyTopicPreset(this.value)" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs sm:text-sm focus:border-blue-500 focus:outline-none bg-slate-50 focus:bg-white">
+                <option value="【大稻埕迪化街文創轉型與老街保存】">【大稻埕迪化街文創轉型與老街保存】</option>
+                <option value="【臺北大眾捷運與都會生活空間變遷】">【臺北大眾捷運與都會生活空間變遷】</option>
+                <option value="【臺北夜市庶民美食與國際觀光發展】">【臺北夜市庶民美食與國際觀光發展】</option>
+                <option value="【臺北大巨蛋公共安全與疏散規劃】">【臺北大巨蛋公共安全與疏散規劃】</option>
+                <option value="【陽明山地熱生態與臺北盆地綠廊】">【陽明山地熱生態與臺北盆地綠廊】</option>
+                <option value="自訂主題">-- 自訂其他臺北主題 --</option>
+              </select>
+            </div>
+            <div>
+              <label for="ws-keywords" class="block text-xs font-semibold text-slate-600 mb-1">實際使用的進階關鍵字組合</label>
+              <input type="text" id="ws-keywords" value='"大稻埕" 老屋活化 -美食 site:gov.tw' class="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs sm:text-sm focus:border-blue-500 focus:outline-none bg-slate-50 focus:bg-white font-mono">
+            </div>
+          </div>
+        </div>
+
+        <!-- 任務步驟二：搜集兩篇不同出處的數位文本並評鑑 -->
+        <div class="mb-8">
+          <h3 class="text-sm font-bold text-blue-900 flex items-center gap-2 mb-3">
+            <span class="w-5 h-5 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">2</span>
+            步驟二：網羅 2 篇不同出處文本，運用「五星評鑑雷達」線上評分
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 文本一評鑑卡片 -->
+            <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/70">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200">
+                <span class="font-bold text-xs sm:text-sm text-slate-800">📄 數位文本 A</span>
+                <select id="t1-source-type" class="text-xs px-2 py-1 rounded border border-slate-200 bg-white font-medium">
+                  <option value="政府官方網站">政府官方網站</option>
+                  <option value="百科與協作庫">百科與協作庫</option>
+                  <option value="專業新聞媒體">專業新聞媒體</option>
+                  <option value="社群與部落格">社群與部落格</option>
+                  <option value="內容農場網站">內容農場網站</option>
+                </select>
+              </div>
+
+              <div class="space-y-3">
+                <div>
+                  <label for="t1-title" class="block text-[11px] font-semibold text-slate-500">文本標題</label>
+                  <input type="text" id="t1-title" placeholder="輸入文章標題" value="漫遊大稻埕：歷史街區的璀璨轉身" class="w-full mt-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white">
+                </div>
+                <div>
+                  <label for="t1-url" class="block text-[11px] font-semibold text-slate-500">網址或平台出處</label>
+                  <input type="text" id="t1-url" placeholder="例：https://travel.taipei/..." value="臺北旅遊網 (travel.taipei)" class="w-full mt-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-mono">
+                </div>
+
+                <!-- 五星打分器 -->
+                <div class="pt-2 border-t border-slate-200 space-y-2">
+                  <span class="text-[11px] font-bold text-slate-700 block">五星評鑑雷達給分 (1~5 星)：</span>
+
+                  <div class="grid grid-cols-5 gap-1 text-center">
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">1.權威</span>
+                      <select id="t1-s1" class="w-full text-xs border rounded p-1 text-center font-bold text-blue-700">
+                        <option value="5" selected>5★</option>
+                        <option value="4">4★</option>
+                        <option value="3">3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">2.佐證</span>
+                      <select id="t1-s2" class="w-full text-xs border rounded p-1 text-center font-bold text-blue-700">
+                        <option value="5">5★</option>
+                        <option value="4" selected>4★</option>
+                        <option value="3">3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">3.動機</span>
+                      <select id="t1-s3" class="w-full text-xs border rounded p-1 text-center font-bold text-blue-700">
+                        <option value="5">5★</option>
+                        <option value="4">4★</option>
+                        <option value="3" selected>3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">4.時效</span>
+                      <select id="t1-s4" class="w-full text-xs border rounded p-1 text-center font-bold text-blue-700">
+                        <option value="5" selected>5★</option>
+                        <option value="4">4★</option>
+                        <option value="3">3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">5.避雷</span>
+                      <select id="t1-s5" class="w-full text-xs border rounded p-1 text-center font-bold text-blue-700">
+                        <option value="5" selected>5★</option>
+                        <option value="4">4★</option>
+                        <option value="3">3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label for="t1-notes" class="block text-[11px] font-semibold text-slate-500">文本 A 優點與盲點短評</label>
+                  <textarea id="t1-notes" rows="2" class="w-full mt-1 p-2 rounded-lg border border-slate-200 text-xs bg-white" placeholder="填寫該篇作者身分、有沒有引用佐證或商業宣傳傾向...">市府觀傳局官方維護，古蹟法規與交通資料極其準確；但全文站在官方觀光宣傳立場，缺少對於商行租金上漲與老居民流失的討論。</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- 文本二評鑑卡片 -->
+            <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/70">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200">
+                <span class="font-bold text-xs sm:text-sm text-slate-800">📄 數位文本 B</span>
+                <select id="t2-source-type" class="text-xs px-2 py-1 rounded border border-slate-200 bg-white font-medium">
+                  <option value="政府官方網站">政府官方網站</option>
+                  <option value="百科與協作庫">百科與協作庫</option>
+                  <option value="專業新聞媒體" selected>專業新聞媒體</option>
+                  <option value="社群與部落格">社群與部落格</option>
+                  <option value="內容農場網站">內容農場網站</option>
+                </select>
+              </div>
+
+              <div class="space-y-3">
+                <div>
+                  <label for="t2-title" class="block text-[11px] font-semibold text-slate-500">文本標題</label>
+                  <input type="text" id="t2-title" placeholder="輸入文章標題" value="老屋新生還是記憶蒸發？大稻埕仕紳化浪潮" class="w-full mt-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white">
+                </div>
+                <div>
+                  <label for="t2-url" class="block text-[11px] font-semibold text-slate-500">網址或平台出處</label>
+                  <input type="text" id="t2-url" placeholder="例：https://twreporter.org/..." value="報導者 (twreporter.org)" class="w-full mt-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-mono">
+                </div>
+
+                <!-- 五星打分器 -->
+                <div class="pt-2 border-t border-slate-200 space-y-2">
+                  <span class="text-[11px] font-bold text-slate-700 block">五星評鑑雷達給分 (1~5 星)：</span>
+
+                  <div class="grid grid-cols-5 gap-1 text-center">
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">1.權威</span>
+                      <select id="t2-s1" class="w-full text-xs border rounded p-1 text-center font-bold text-indigo-700">
+                        <option value="5" selected>5★</option>
+                        <option value="4">4★</option>
+                        <option value="3">3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">2.佐證</span>
+                      <select id="t2-s2" class="w-full text-xs border rounded p-1 text-center font-bold text-indigo-700">
+                        <option value="5" selected>5★</option>
+                        <option value="4">4★</option>
+                        <option value="3">3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">3.動機</span>
+                      <select id="t2-s3" class="w-full text-xs border rounded p-1 text-center font-bold text-indigo-700">
+                        <option value="5" selected>5★</option>
+                        <option value="4">4★</option>
+                        <option value="3">3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">4.時效</span>
+                      <select id="t2-s4" class="w-full text-xs border rounded p-1 text-center font-bold text-indigo-700">
+                        <option value="5">5★</option>
+                        <option value="4" selected>4★</option>
+                        <option value="3">3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                    <div>
+                      <span class="text-[10px] text-slate-500 block">5.避雷</span>
+                      <select id="t2-s5" class="w-full text-xs border rounded p-1 text-center font-bold text-indigo-700">
+                        <option value="5" selected>5★</option>
+                        <option value="4">4★</option>
+                        <option value="3">3★</option>
+                        <option value="2">2★</option>
+                        <option value="1">1★</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label for="t2-notes" class="block text-[11px] font-semibold text-slate-500">文本 B 優點與盲點短評</label>
+                  <textarea id="t2-notes" rows="2" class="w-full mt-1 p-2 rounded-lg border border-slate-200 text-xs bg-white" placeholder="填寫該篇作者身分、有沒有引用佐證或商業宣傳傾向...">具名記者實地深度訪談中藥行老闆、學者與文化局官員，引用都市發展局租金數據，多角度探討仕紳化衝擊，具備高度思辨深度。</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 任務步驟三：跨文本思辨與總結心得 -->
+        <div class="mb-6">
+          <h3 class="text-sm font-bold text-blue-900 flex items-center gap-2 mb-2">
+            <span class="w-5 h-5 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">3</span>
+            步驟三：跨文本綜合思辨——這兩篇文本帶給我什麼啟發？
+          </h3>
+          <p class="text-xs text-slate-500 mb-2">
+            請比較兩篇文本在出處視角、證據充分性或立場偏誤上的差異，寫下你的總結心得（約 100~200 字）：
+          </p>
+          <textarea id="ws-reflection" rows="4" class="w-full p-3 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-blue-500 focus:outline-none bg-slate-50 focus:bg-white transition-all leading-relaxed" placeholder="請寫下你的思辨發現，例如：當我們要認識大稻埕時，如果只看官方網站可能會以為一切很美好，但配合調查報導後，才會發現光鮮文創背後老店鋪的生存掙扎。我們應該交叉閱讀不同出處，才能拼湊出完整的真實全貌。">閱讀兩篇文本後我發現：文本 A（官方網站）能提供我們準確的歷史沿革與建築古蹟等級，是認識大稻埕很好的入門資料；但若要理解當代真實的社會議題，文本 B（調查報導）透過實地訪談老中藥行與租金數據，揭露了文創風潮背後傳統產業面臨的困境。這讓我深刻體會到，網路上的文本各有其立場與目的，唯有學會辨識出處並交叉檢驗，才不會被單一視角所局限。</textarea>
+        </div>
+
+        <!-- 底部產生按鈕 -->
+        <div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4 border-t border-slate-200 no-print">
+          <button onclick="resetWorksheet()" class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-semibold">
+            重設重填
+          </button>
+          <button onclick="generateReport()" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> 完成並產出評鑑報告
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 產生成果彈出視窗 (Modal) ==================== -->
+  <div id="report-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <img src="assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-7 h-7 rounded-full">
+          <h3 class="font-serif font-bold text-slate-800 text-base">數位媒體識讀・學習成果報告</h3>
+        </div>
+        <button onclick="closeReportModal()" class="text-slate-400 hover:text-slate-700 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-700">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs whitespace-pre-wrap leading-relaxed select-all" id="report-text-area">
+          <!-- 生成的文字報告將填入於此 -->
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+        <span class="text-xs text-slate-500" id="copy-status-hint">點擊複製鈕可直接貼入作業或學習歷程檔案</span>
+        <div class="flex items-center gap-2">
+          <button onclick="copyReportText()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
+            <i data-lucide="copy" class="w-4 h-4"></i> 一鍵複製完整成果
+          </button>
+          <button onclick="closeReportModal()" class="px-3 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-medium">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER (依閱思龍門規範) ==================== -->
+  <footer class="bg-slate-100 text-slate-600 py-6 border-t border-slate-200 no-print mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Left: Logo, Title & Tagline -->
+        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3 text-center sm:text-left">
+          <div class="flex items-center space-x-2">
+            <img src="assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-8 h-8 rounded-full shadow-sm">
+            <span class="font-serif font-bold text-slate-800 text-base">八上閱思龍門・網羅臺北</span>
+          </div>
+          <span class="hidden sm:inline text-slate-300">|</span>
+          <span class="text-xs text-slate-500 font-medium">穿梭數位資訊洪流・鍛造求真辨偽的思辨之眼</span>
+        </div>
+
+        <!-- Right: Copyright -->
+        <div class="text-xs text-slate-500 font-medium text-center sm:text-right space-y-1">
+          <div>© 2026 學思軒</div>
+          <div class="text-[11px] text-slate-400">&gt;&lt;&gt; &gt;&lt;&gt; &gt;&lt;&gt; ˙˙˙本網頁由黃于珊老師利用Google antigravity 2.0生成製作，僅供教學使用。˙˙˙&lt;&gt;&lt; &lt;&gt;&lt; &lt;&gt;&lt;</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // 初始化 Lucide Icons
+    lucide.createIcons();
+
+    // 手機版選單切換
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuBtn?.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // ------------------- 1. 迷思破冰測驗邏輯 -------------------
+    let answeredQuestions = new Set();
+    const quizFeedbackData = {
+      1: {
+        correct: true,
+        explain: "<strong>✅ 答對了！</strong>此類標題採用大量感嘆號、懸疑問句（『萬人嚇哭』、『真相讓人傻眼』），目的是刺激點擊率以賺取廣告費。這正是典型的內容農場與點擊誘餌，其內容多未經事實查證，切勿盲目相信或轉發。"
+      },
+      2: {
+        correct: true,
+        explain: "<strong>✅ 答對了！</strong>媒體識讀的核心不是全信或全不信，而是『明白其出處定位』。官方網站對於開放時間、公文法規、古蹟等級具有高度法律與事實權威；但因其肩負政策宣傳任務，往往只強調美好政績，需要對照在地調查與居民聲音才能看見全貌。"
+      },
+      3: {
+        correct: true,
+        explain: "<strong>✅ 答對了！</strong>維基百科採開放協作制，其可靠度的核心在於『可查證性（Verifiability）』。閱讀維基百科時，最重要是檢視句末的腳註引用來源（如學術專書、官方史料），若無引用或引用自農場論壇，其真實性便大打折扣。"
+      }
+    };
+
+    function checkQuiz(qNum, selectedOption, isCorrect) {
+      const fbBox = document.getElementById(`quiz-feedback-${qNum}`);
+      const card = document.getElementById(`quiz-card-${qNum}`);
+      const buttons = document.querySelectorAll(`.quiz-btn-${qNum}`);
+
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-60', 'cursor-not-allowed');
+      });
+
+      fbBox.classList.remove('hidden');
+
+      if (isCorrect) {
+        fbBox.className = "mt-4 ml-8 p-4 rounded-xl border text-xs sm:text-sm leading-relaxed bg-emerald-50 border-emerald-200 text-emerald-900";
+        fbBox.innerHTML = quizFeedbackData[qNum].explain;
+        answeredQuestions.add(qNum);
+      } else {
+        fbBox.className = "mt-4 ml-8 p-4 rounded-xl border text-xs sm:text-sm leading-relaxed bg-rose-50 border-rose-200 text-rose-900";
+        fbBox.innerHTML = `<strong>❌ 再想想看喔！</strong>你選了 (${selectedOption})。${quizFeedbackData[qNum].explain}`;
+        answeredQuestions.add(qNum);
+      }
+
+      document.getElementById('quiz-score-badge').innerText = `已完成 ${answeredQuestions.size} / 3 題`;
+    }
+
+    // ------------------- 2. 出處光譜資料庫與切換 -------------------
+    const sourcesData = {
+      gov: {
+        title: "🏛️ 1. 政府與公部門官方網站 (.gov.tw)",
+        badge: "官方權威來源",
+        badgeClass: "bg-blue-100 text-blue-800",
+        examples: "臺北市政府觀傳局「臺北旅遊網」、文化局文化資產資料庫、臺北捷運公司官網",
+        pros: "資訊發布者具備法律責任，各項統計數據、市政計畫、古蹟認定級別、營運時間皆為最權威之一手資料。",
+        cons: "肩負官方宣傳與政績行銷任務，較少揭露政策引發的爭議、弱勢居民心聲或都市變遷中的負面衝擊。",
+        tips: "查證具體事實（如捷運各站首末班車時間、古蹟法定名稱、官方補助法規）時最可靠；但寫評論分析時應搭配民間多元觀點。",
+        scores: [5, 4, 3, 5, 5] // 權威, 佐證, 動機, 時效, 避雷
+      },
+      wiki: {
+        title: "📚 2. 百科全書與協作型知識庫",
+        badge: "群眾協作與引註審核",
+        badgeClass: "bg-slate-100 text-slate-800",
+        examples: "中文維基百科（Wikipedia）、國家文化記憶庫、臺北文史協作數位典藏",
+        pros: "條目架構完整宏大，提供跨時代歷史沿革與概念統整；要求每句話均標註文獻腳註以供查核。",
+        cons: "開放任何人編輯修改，可能存在短暫的惡作劇塗鴉、未察覺的個人主觀偏見，或修訂版本尚未同步。",
+        tips: "善用其作為研究起點與『文獻目錄庫』，但務必點進每條腳註檢視原始期刊文獻，勿盲目複製百科字面文字。",
+        scores: [4, 4, 4, 4, 4]
+      },
+      news: {
+        title: "📰 3. 專業調查報導與公共新聞媒體",
+        badge: "獨立查證與平衡報導",
+        badgeClass: "bg-emerald-100 text-emerald-800",
+        examples: "《報導者》臺北文化專題、公視新聞網深度訪談、中央社專題調查",
+        pros: "由具名專業記者實地採訪，提供多方當事人說法（正反平衡），揭露數據背後的社會脈絡與生活血肉。",
+        cons: "深度調查報導往往具有特定議題倡議傾向（如保護老屋、居住正義），需留意其選取採訪對象的代表性。",
+        tips: "尋找具名報導，注意是否有平衡採訪不同立場當事人；避開標題過於煽情或未標記記者的即時跑馬燈抄稿。",
+        scores: [5, 5, 5, 4, 5]
+      },
+      social: {
+        title: "📱 4. 社群論壇、個人部落格與自媒體",
+        badge: "個人經驗與主觀感受",
+        badgeClass: "bg-amber-100 text-amber-800",
+        examples: "Dcard 旅遊版、PTT 八卦/棒球版、IG 打卡文、Medium 獨立文史部落格",
+        pros: "第一線生活現場感強烈、情感生動、用語接地氣，能最即時反映民間普通民眾的真實情緒與最新體驗。",
+        cons: "缺乏嚴格編輯審查機制；主觀成見深；極易隱藏廠商免費招待或商業置入（業配開箱）卻未主動揭露。",
+        tips: "可參考其作為『市民生活感受』之質性觀察，但絕不能將個人單次經驗或論壇留言視為通則事實。",
+        scores: [2, 2, 2, 4, 3]
+      },
+      farm: {
+        title: "⚠️ 5. 內容農場與點擊誘餌 (Clickbait)",
+        badge: "高風險・虛假垃圾訊息",
+        badgeClass: "bg-rose-100 text-rose-800",
+        examples: "奇趣爆笑網、每日頭條轉載站、標題出現『震驚了』『老爺爺含淚警告』之無名網站",
+        pros: "毫無參考價值與教學價值。純粹利用人類的好奇心與恐懼心理賺取流量廣告費。",
+        cons: "東拼西湊各地謠言、作者匿名、無日期時間戳、內容前後矛盾、機器簡轉繁錯別字連篇、滿版蓋版廣告。",
+        tips: "立即關閉！絕不按讚、絕不轉發。若涉及災害安全謠言，可至『台灣事實查核中心』或 MyGoPen 比對查證。",
+        scores: [1, 1, 1, 1, 1]
+      }
+    };
+
+    function switchSourceTab(key) {
+      document.querySelectorAll('.source-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-sm');
+        btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+      });
+      const activeBtn = document.querySelector(`.source-tab-btn[data-tab="${key}"]`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+        activeBtn.classList.add('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-sm');
+      }
+
+      const data = sourcesData[key];
+      const card = document.getElementById('source-detail-card');
+      card.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-slate-100 gap-2">
+          <h3 class="text-lg sm:text-xl font-serif font-black text-slate-900">${data.title}</h3>
+          <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${data.badgeClass} self-start sm:self-auto">${data.badge}</span>
+        </div>
+        <div class="space-y-4 text-xs sm:text-sm text-slate-600">
+          <div>
+            <strong class="text-slate-900">常見代表實例：</strong>
+            <p class="mt-0.5 text-slate-500">${data.examples}</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+            <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-100">
+              <strong class="text-emerald-900 flex items-center gap-1.5 mb-1">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> 優勢與可靠價值
+              </strong>
+              <p class="leading-relaxed text-emerald-800">${data.pros}</p>
+            </div>
+            <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-100">
+              <strong class="text-amber-900 flex items-center gap-1.5 mb-1">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i> 盲點與識讀陷阱
+              </strong>
+              <p class="leading-relaxed text-amber-800">${data.cons}</p>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-100">
+            <strong class="text-blue-900 flex items-center gap-1.5 mb-0.5">
+              <i data-lucide="shield-check" class="w-4 h-4 text-blue-600"></i> 學生查核防禦心法
+            </strong>
+            <p class="leading-relaxed text-blue-800">${data.tips}</p>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+    // 預設載入政府官方
+    switchSourceTab('gov');
+
+    // ------------------- 3. 五星評鑑雷達圖 (Chart.js) -------------------
+    let radarChart;
+    const radarPresets = {
+      gov: {
+        label: '🏛️ 官方觀傳局網站',
+        data: [5, 4, 3, 5, 5],
+        color: 'rgba(37, 99, 235, 0.7)',
+        bgColor: 'rgba(37, 99, 235, 0.2)',
+        caption: '目前展示：<strong>臺北市官方網站</strong>（權威度高、法規數據翔實，但多政績宣傳視角）'
+      },
+      news: {
+        label: '📰 專業調查報導專題',
+        data: [5, 5, 5, 4, 5],
+        color: 'rgba(5, 150, 105, 0.7)',
+        bgColor: 'rgba(5, 150, 105, 0.2)',
+        caption: '目前展示：<strong>專業深度調查報導</strong>（具名記者、平衡採訪、佐證豐富，最具思辨力）'
+      },
+      blog: {
+        label: '📱 網紅打卡部落格',
+        data: [2, 2, 2, 4, 3],
+        color: 'rgba(217, 119, 6, 0.7)',
+        bgColor: 'rgba(217, 119, 6, 0.2)',
+        caption: '目前展示：<strong>個人美食旅遊部落格</strong>（經驗生動，但缺乏客觀佐證，常隱含商業置入）'
+      },
+      farm: {
+        label: '⚠️ 內容農場點擊誘餌',
+        data: [1, 1, 1, 1, 1],
+        color: 'rgba(225, 29, 72, 0.7)',
+        bgColor: 'rgba(225, 29, 72, 0.2)',
+        caption: '目前展示：<strong>內容農場假訊息</strong>（匿名無日期、標題誇張、滿版廣告，零可靠度）'
+      }
+    };
+
+    function initRadarChart() {
+      const ctx = document.getElementById('radarChart')?.getContext('2d');
+      if (!ctx) return;
+
+      radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['權威歸屬', '佐證查核', '立場動機', '時效歷程', '格式避雷'],
+          datasets: [{
+            label: radarPresets.gov.label,
+            data: radarPresets.gov.data,
+            fill: true,
+            backgroundColor: radarPresets.gov.bgColor,
+            borderColor: radarPresets.gov.color,
+            pointBackgroundColor: radarPresets.gov.color,
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: radarPresets.gov.color
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: '#e2e8f0' },
+              grid: { color: '#e2e8f0' },
+              suggestedMin: 0,
+              suggestedMax: 5,
+              ticks: { stepSize: 1, backdropColor: 'transparent', font: { size: 10 } },
+              pointLabels: { font: { size: 11, weight: 'bold' }, color: '#334155' }
+            }
+          },
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    function updateRadarPreset(presetKey) {
+      const preset = radarPresets[presetKey];
+      if (!radarChart || !preset) return;
+
+      radarChart.data.datasets[0].label = preset.label;
+      radarChart.data.datasets[0].data = preset.data;
+      radarChart.data.datasets[0].borderColor = preset.color;
+      radarChart.data.datasets[0].backgroundColor = preset.bgColor;
+      radarChart.data.datasets[0].pointBackgroundColor = preset.color;
+      radarChart.data.datasets[0].pointHoverBorderColor = preset.color;
+      radarChart.update();
+
+      document.getElementById('radar-caption').innerHTML = preset.caption;
+
+      document.querySelectorAll('.radar-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-100', 'text-blue-800', 'border-blue-300');
+        btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+      });
+      event?.currentTarget?.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+      event?.currentTarget?.classList.add('bg-blue-100', 'text-blue-800', 'border-blue-300');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initRadarChart();
+    });
+
+    // ------------------- 4. 案例擂台診斷摺疊與放大鏡 -------------------
+    let cluesVisible = false;
+    function toggleClues() {
+      cluesVisible = !cluesVisible;
+      const tags = document.querySelectorAll('.clue-tag');
+      tags.forEach(tag => {
+        if (cluesVisible) {
+          tag.classList.remove('hidden');
+        } else {
+          tag.classList.add('hidden');
+        }
+      });
+      const btn = document.getElementById('clue-toggle-btn');
+      if (cluesVisible) {
+        btn.classList.add('bg-amber-500', 'text-white', 'border-amber-600');
+        btn.classList.remove('bg-amber-50', 'text-amber-800', 'border-amber-300');
+        btn.innerHTML = `<i data-lucide="eye-off" class="w-3.5 h-3.5"></i> 隱藏抓漏放大鏡線索`;
+      } else {
+        btn.classList.remove('bg-amber-500', 'text-white', 'border-amber-600');
+        btn.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-300');
+        btn.innerHTML = `<i data-lucide="search" class="w-3.5 h-3.5"></i> 開啟抓漏放大鏡（線索高亮）`;
+      }
+      lucide.createIcons();
+    }
+
+    function toggleDiagnosis(id) {
+      const content = document.getElementById(`diag-content-${id}`);
+      const icon = document.getElementById(`diag-icon-${id}`);
+      content.classList.toggle('hidden');
+      if (content.classList.contains('hidden')) {
+        icon.style.transform = 'rotate(0deg)';
+      } else {
+        icon.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    function revealAllAnalysis() {
+      [1, 2, 3].forEach(id => {
+        const content = document.getElementById(`diag-content-${id}`);
+        const icon = document.getElementById(`diag-icon-${id}`);
+        content.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+      });
+      if (!cluesVisible) toggleClues();
+    }
+
+    // ------------------- 5. 搜尋關鍵字複製 -------------------
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert(`已成功複製搜尋語法：\n${text}\n\n請開啟 Google 或搜尋引擎貼上進行搜尋！`);
+      });
+    }
+
+    // ------------------- 6. 探究任務單與成果產出 -------------------
+    function applyTopicPreset(topic) {
+      const kwInput = document.getElementById('ws-keywords');
+      if (topic.includes('大稻埕')) {
+        kwInput.value = '"大稻埕" 老屋活化 -美食 site:gov.tw';
+      } else if (topic.includes('捷運')) {
+        kwInput.value = '"臺北捷運" 都市變遷 發展史 filetype:pdf';
+      } else if (topic.includes('夜市')) {
+        kwInput.value = '"臺北夜市" 飲食文化 -推薦 -排隊 site:edu.tw';
+      } else if (topic.includes('大巨蛋')) {
+        kwInput.value = '"臺北大巨蛋" 避難疏散 審查報告 site:gov.tw';
+      } else if (topic.includes('陽明山')) {
+        kwInput.value = '"陽明山國家公園" 地熱 生態保育 filetype:pdf';
+      } else {
+        kwInput.value = '';
+      }
+    }
+
+    function generateReport() {
+      const cls = document.getElementById('ws-class').value || '未填寫班級';
+      const seat = document.getElementById('ws-seat').value || '未填寫座號';
+      const name = document.getElementById('ws-name').value || '未填寫姓名';
+      const topic = document.getElementById('ws-topic').value;
+      const kw = document.getElementById('ws-keywords').value;
+
+      const t1Source = document.getElementById('t1-source-type').value;
+      const t1Title = document.getElementById('t1-title').value;
+      const t1Url = document.getElementById('t1-url').value;
+      const t1S1 = document.getElementById('t1-s1').value;
+      const t1S2 = document.getElementById('t1-s2').value;
+      const t1S3 = document.getElementById('t1-s3').value;
+      const t1S4 = document.getElementById('t1-s4').value;
+      const t1S5 = document.getElementById('t1-s5').value;
+      const t1Notes = document.getElementById('t1-notes').value;
+
+      const t2Source = document.getElementById('t2-source-type').value;
+      const t2Title = document.getElementById('t2-title').value;
+      const t2Url = document.getElementById('t2-url').value;
+      const t2S1 = document.getElementById('t2-s1').value;
+      const t2S2 = document.getElementById('t2-s2').value;
+      const t2S3 = document.getElementById('t2-s3').value;
+      const t2S4 = document.getElementById('t2-s4').value;
+      const t2S5 = document.getElementById('t2-s5').value;
+      const t2Notes = document.getElementById('t2-notes').value;
+
+      const reflection = document.getElementById('ws-reflection').value;
+
+      const report = `=====================================================
+【八上閱思龍門】網羅臺北——數位媒體識讀・學習成果報告
+=====================================================
+● 學生基本資料：${cls}　座號：${seat}　姓名：${name}
+● 探究主題：${topic}
+● 使用進階關鍵字：${kw}
+
+-----------------------------------------------------
+一、數位文本 A 評鑑結果
+-----------------------------------------------------
+1. 文本標題：${t1Title}
+2. 來源出處：${t1Url}（出處類別：${t1Source}）
+3. 五星評鑑雷達得分：
+   - 權威歸屬：${t1S1} ★
+   - 佐證查核：${t1S2} ★
+   - 立場動機：${t1S3} ★
+   - 時效歷程：${t1S4} ★
+   - 格式避雷：${t1S5} ★
+4. 品質特徵短評：
+   ${t1Notes}
+
+-----------------------------------------------------
+二、數位文本 B 評鑑結果
+-----------------------------------------------------
+1. 文本標題：${t2Title}
+2. 來源出處：${t2Url}（出處類別：${t2Source}）
+3. 五星評鑑雷達得分：
+   - 權威歸屬：${t2S1} ★
+   - 佐證查核：${t2S2} ★
+   - 立場動機：${t2S3} ★
+   - 時效歷程：${t2S4} ★
+   - 格式避雷：${t2S5} ★
+4. 品質特徵短評：
+   ${t2Notes}
+
+-----------------------------------------------------
+三、跨文本綜合思辨與反思
+-----------------------------------------------------
+${reflection}
+
+=====================================================
+評鑑日期：2026年10月｜指導單位：學思軒・閱思龍門研發團隊
+=====================================================`;
+
+      document.getElementById('report-text-area').innerText = report;
+      document.getElementById('report-modal').classList.remove('hidden');
+    }
+
+    function closeReportModal() {
+      document.getElementById('report-modal').classList.add('hidden');
+    }
+
+    function copyReportText() {
+      const text = document.getElementById('report-text-area').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const hint = document.getElementById('copy-status-hint');
+        hint.innerText = "✅ 已成功複製到剪貼簿！可直接貼上繳交！";
+        hint.classList.add('text-emerald-600', 'font-bold');
+        setTimeout(() => {
+          hint.innerText = "點擊複製鈕可直接貼入作業或學習歷程檔案";
+          hint.classList.remove('text-emerald-600', 'font-bold');
+        }, 3000);
+      });
+    }
+
+    function resetWorksheet() {
+      if (confirm('確定要清空探究任務單中的自填內容嗎？')) {
+        document.getElementById('ws-class').value = '';
+        document.getElementById('ws-seat').value = '';
+        document.getElementById('ws-name').value = '';
+        document.getElementById('t1-title').value = '';
+        document.getElementById('t1-url').value = '';
+        document.getElementById('t1-notes').value = '';
+        document.getElementById('t2-title').value = '';
+        document.getElementById('t2-url').value = '';
+        document.getElementById('t2-notes').value = '';
+        document.getElementById('ws-reflection').value = '';
+      }
+    }
+  </script>
+</body>
+</html>

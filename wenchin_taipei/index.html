@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>臺北文青打卡趣 —— 穿梭行政區與文學地誌的文青漫遊</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fdf4ff',
+              100: '#fae8ff',
+              200: '#f5d0fe',
+              500: '#a855f7',
+              600: '#9333ea',
+              700: '#7e22ce',
+              800: '#6b21a8',
+              900: '#581c87',
+            },
+            taipei: {
+              blue: '#1e40af',
+              tea: '#15803d',
+              brick: '#b91c1c',
+              gold: '#b45309',
+              volcano: '#c2410c'
+            }
+          },
+          fontFamily: {
+            serif: ['"Noto Serif TC"', 'serif'],
+            sans: ['"Noto Sans TC"', 'sans-serif'],
+            calligraphy: ['"Ma Shan Zheng"', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti for celebrations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* District SVG map styling */
+    .district-polygon {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .district-polygon:hover {
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+      opacity: 0.95;
+    }
+
+    /* Active highlighted district glow */
+    .district-active-glow {
+      filter: drop-shadow(0 0 14px rgba(124, 58, 237, 0.85)) !important;
+      stroke-width: 4 !important;
+      stroke-dasharray: none !important;
+      animation: pulseDistrict 2s infinite ease-in-out;
+    }
+    @keyframes pulseDistrict {
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.7)); }
+      50% { filter: drop-shadow(0 0 18px rgba(124, 58, 237, 1)); }
+    }
+
+    /* Clue highlighter transition */
+    .clue-tag {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .clue-active {
+      background: linear-gradient(120deg, #fef08a 0%, #fde047 100%);
+      color: #854d0e !important;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(234, 179, 8, 0.3);
+    }
+
+    /* Draggable pin styling */
+    .draggable-pin {
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+    }
+    .draggable-pin:active {
+      cursor: grabbing;
+    }
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(147, 51, 234, 0); }
+    }
+
+    /* Mission dropzone polygon hover & transitions */
+    .mission-dropzone {
+      transition: all 0.25s ease;
+    }
+    .mission-dropzone:hover .target-poly {
+      fill: #f3e8ff !important;
+      stroke: #a855f7 !important;
+      stroke-width: 2.5 !important;
+      filter: drop-shadow(0 2px 8px rgba(168, 85, 247, 0.35));
+    }
+    .mission-dropzone:hover text {
+      fill: #6b21a8 !important;
+      font-weight: 900;
+    }
+
+    /* Toast animation */
+    .toast-slide {
+      animation: slideIn 0.3s ease-out forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-purple-200 selection:text-purple-900">
+
+  <!-- ==================== 1. STICKY HEADER ==================== -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Brand & Title -->
+      <div class="flex items-center space-x-3">
+        <a href="#hero" class="flex items-center space-x-2 group">
+          <img src="assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-10 h-10 object-contain rounded-full shadow-sm group-hover:rotate-12 transition-transform duration-300">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-serif font-bold text-lg sm:text-xl text-slate-900 tracking-wide">臺北文青打卡趣</span>
+              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">八上閱思龍門・地誌文學</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium hidden md:block">穿梭臺北十二行政區與文學地誌的文青漫遊</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden lg:flex items-center space-x-1 font-medium text-sm text-slate-600">
+        <a href="#districts" class="px-3 py-2 rounded-lg hover:text-purple-600 hover:bg-purple-50 transition-colors flex items-center gap-1.5">
+          <i data-lucide="map-pin" class="w-4 h-4 text-purple-500"></i>認識行政區
+        </a>
+        <a href="#literature" class="px-3 py-2 rounded-lg hover:text-purple-600 hover:bg-purple-50 transition-colors flex items-center gap-1.5">
+          <i data-lucide="book-open" class="w-4 h-4 text-blue-500"></i>文本賞析
+        </a>
+        <a href="#checkin-mission" class="px-3 py-2 rounded-lg text-purple-700 bg-purple-100/70 hover:bg-purple-200/80 transition-colors font-semibold flex items-center gap-1.5">
+          <i data-lucide="crosshair" class="w-4 h-4 text-purple-600"></i>打卡互動任務
+        </a>
+        <a href="#quiz-section" class="px-3 py-2 rounded-lg hover:text-purple-600 hover:bg-purple-50 transition-colors flex items-center gap-1.5">
+          <i data-lucide="award" class="w-4 h-4 text-amber-500"></i>素養挑戰
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==================== 2. HERO BANNER ==================== -->
+  <section id="hero" class="relative overflow-hidden bg-gradient-to-b from-purple-50/70 via-white to-slate-50 border-b border-slate-200 pt-2 sm:pt-3 lg:pt-3 pb-12 lg:pb-16">
+    <!-- Huge Calligraphy Watermark -->
+    <div class="absolute right-0 bottom-0 pointer-events-none select-none text-[8rem] sm:text-[14rem] lg:text-[18rem] font-calligraphy text-purple-900/[0.04] leading-none transform translate-x-12 translate-y-8 z-0">
+      臺北文青
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- Text Column -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-100 text-purple-800 text-xs sm:text-sm font-semibold shadow-sm">
+            <span class="flex h-2 w-2 rounded-full bg-purple-600 animate-ping"></span>
+            國中閱讀素養與地誌文學跨域專題
+          </div>
+
+          <div class="space-y-2">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-serif text-slate-900 tracking-tight leading-tight">
+              走進文學時空膠囊<br>
+              <span class="bg-gradient-to-r from-purple-600 via-pink-600 to-amber-600 bg-clip-text text-transparent">
+                解鎖臺北地誌記憶
+              </span>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 font-normal leading-relaxed pt-2">
+              跟隨五位臺灣當代文學名家，走入大稻埕的繁華浮世繪、中華商場的蒸籠西瓜記憶、37路公車的荒地蛻變、七星山小油坑的自然步道，與貓空茶山的感官詩篇。
+            </p>
+          </div>
+
+          <!-- Mission Bar Preview (Styled like FB checkin bar from original worksheet) -->
+          <div class="bg-white rounded-xl shadow-md border border-slate-200 p-4 max-w-xl mx-auto lg:mx-0">
+            <div class="flex items-center gap-2 pb-3 border-b border-slate-100 text-xs sm:text-sm font-bold text-blue-700">
+              <div class="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center font-black text-sm">f</div>
+              <span>【文青打卡大挑戰】任務指引</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-3 text-xs sm:text-sm text-slate-700">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">1</span>
+                <span>閱讀五篇精選文學作品</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">2</span>
+                <span>找出作品對應的臺北行政區</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">3</span>
+                <span>將文本代號(甲~戊)正確配對</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">4</span>
+                <span>將打卡 ICON 釘在行政地圖中</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Jump Buttons -->
+          <div class="flex flex-wrap gap-3 justify-center lg:justify-start pt-2">
+            <a href="#checkin-mission" class="inline-flex items-center justify-center px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5">
+              <i data-lucide="sparkles" class="w-5 h-5 mr-2"></i>開始打卡任務
+            </a>
+            <a href="#literature" class="inline-flex items-center justify-center px-5 py-3 rounded-xl font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 shadow-sm transition-all">
+              <i data-lucide="book-open" class="w-5 h-5 mr-2 text-blue-600"></i>閱讀文本賞析
+            </a>
+            <a href="#districts" class="inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-sm transition-all">
+              <i data-lucide="compass" class="w-5 h-5 mr-2 text-slate-500"></i>認識 12 行政區
+            </a>
+          </div>
+        </div>
+
+        <!-- Visual Image Column -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative w-full max-w-md">
+            <!-- Decorative Backdrop Glow -->
+            <div class="absolute -inset-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-3xl blur-xl opacity-30 transform -rotate-1"></div>
+            
+            <div class="relative bg-white p-4 rounded-2xl shadow-xl border border-slate-100">
+              <div class="relative rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+                <img src="assets/map-taipei-landmarks-color.jpg" alt="臺北市行政區景點圖" class="w-full h-80 object-cover object-center cursor-pointer hover:scale-105 transition-transform duration-500" onclick="openLightbox('assets/map-taipei-landmarks-color.jpg', '臺北市十二行政區文化景點全圖')">
+                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-transparent p-3 text-white flex justify-between items-center">
+                  <div>
+                    <p class="text-xs font-semibold">臺北市十二行政區文化景點地圖</p>
+                    <p class="text-[10px] text-slate-300">點擊可檢視高解析大圖</p>
+                  </div>
+                  <span class="px-2 py-1 rounded bg-white/20 backdrop-blur-sm text-[11px] font-mono"><i data-lucide="zoom-in" class="w-3.5 h-3.5 inline mr-1"></i>放大</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. MODULE 1: DISTRICT EXPLORER ==================== -->
+  <section id="districts" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
+          <i data-lucide="map" class="w-3.5 h-3.5"></i>教學模組一
+        </div>
+        <h2 class="text-3xl font-bold font-serif text-slate-900">認識臺北十二行政區・時空坐標</h2>
+        <p class="text-slate-600 text-sm sm:text-base">
+          臺北市坐落於盆地之中，基隆河、淡水河與新店溪滋養著這座城市。點選下方行政區或在地圖中點擊，探索各區的地理方位、歷史沿革與文化地標！
+        </p>
+      </div>
+
+      <!-- District Filter Tabs -->
+      <div class="flex flex-wrap justify-center gap-2 mb-8">
+        <button onclick="filterDistricts('all')" class="dist-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-purple-600 text-white shadow-sm" data-region="all">
+          全區總覽 (12區)
+        </button>
+        <button onclick="filterDistricts('north')" class="dist-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200" data-region="north">
+          北區・山巒溫泉 (北投、士林)
+        </button>
+        <button onclick="filterDistricts('west')" class="dist-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200" data-region="west">
+          西區・老城港埠 (大同、萬華、中正)
+        </button>
+        <button onclick="filterDistricts('central-east')" class="dist-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200" data-region="central-east">
+          中東區・現代政經 (中山、松山、大安、信義)
+        </button>
+        <button onclick="filterDistricts('south-east')" class="dist-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200" data-region="south-east">
+          南東區・茶鄉科技 (文山、內湖、南港)
+        </button>
+      </div>
+
+      <!-- Main Explorer Container (Map + Details) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Interactive Taipei Map Graphic (SVG) -->
+        <div class="lg:col-span-6 bg-slate-50/80 rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm relative flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                  <i data-lucide="compass" class="w-4 h-4 text-purple-600"></i>臺北市行政區位置互動圖
+                </span>
+                <span class="text-xs text-purple-700 font-semibold" id="map-active-hint">(已選取：大同區)</span>
+              </div>
+              <!-- View Mode Switch: SVG Map vs Original Scan Image -->
+              <div class="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-200 text-xs">
+                <button id="map-mode-svg" onclick="toggleMapMode('svg')" class="px-2.5 py-1 rounded-md font-medium bg-purple-600 text-white transition-all">向量圖</button>
+                <button id="map-mode-original" onclick="toggleMapMode('original')" class="px-2.5 py-1 rounded-md font-medium text-slate-600 hover:bg-slate-100 transition-all">教材原圖</button>
+              </div>
+            </div>
+
+            <!-- SVG District Map View -->
+            <div id="svg-map-container" class="relative w-full h-[400px] sm:h-[420px] flex items-center justify-center bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner p-2">
+              <!-- SVG Map representing Taipei 12 districts with accurate topological layout -->
+              <svg viewBox="0 0 500 620" class="h-full w-auto max-w-full select-none" id="taipei-svg-map">
+              <defs>
+                <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+                  <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+                </filter>
+                <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Water bodies (Danshui, Keelung, Xindian, Jingmei Rivers) -->
+              <path d="M 60,330 Q 110,310 130,300 T 200,280 T 360,250" fill="none" stroke="#93c5fd" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+              <text x="310" y="245" fill="#3b82f6" font-size="10" font-weight="bold" opacity="0.7">基隆河</text>
+              <path d="M 40,240 Q 90,260 110,320 T 115,440 T 170,490" fill="none" stroke="#60a5fa" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+              <text x="50" y="270" fill="#2563eb" font-size="10" font-weight="bold" opacity="0.7">淡水河</text>
+              <path d="M 170,490 Q 240,500 290,520 T 360,540" fill="none" stroke="#93c5fd" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+              <text x="240" y="535" fill="#3b82f6" font-size="10" font-weight="bold" opacity="0.7">景美溪</text>
+
+              <!-- Districts Polygons / Shapes -->
+              <!-- 1. 北投區 (Beitou) - North-West -->
+              <g class="district-group" data-id="beitou" onclick="selectDistrict('beitou')">
+                <path d="M 130,90 L 220,100 L 250,170 L 220,230 L 160,270 L 90,270 L 60,240 L 70,160 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-beitou"/>
+                <text x="145" y="180" font-size="14" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-beitou">北投區</text>
+                <text x="145" y="196" font-size="10" fill="#64748b" text-anchor="middle" pointer-events="none" id="sub-beitou">【文本丁】</text>
+              </g>
+
+              <!-- 2. 士林區 (Shilin) - North-East -->
+              <g class="district-group" data-id="shilin" onclick="selectDistrict('shilin')">
+                <path d="M 220,100 L 260,20 L 280,60 L 340,190 L 320,240 L 220,230 L 250,170 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-shilin"/>
+                <text x="280" y="140" font-size="14" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-shilin">士林區</text>
+              </g>
+
+              <!-- 3. 內湖區 (Neihu) - East-North -->
+              <g class="district-group" data-id="neihu" onclick="selectDistrict('neihu')">
+                <path d="M 320,240 L 340,190 L 410,260 L 380,350 L 320,330 L 270,300 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-neihu"/>
+                <text x="350" y="280" font-size="14" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-neihu">內湖區</text>
+              </g>
+
+              <!-- 4. 中山區 (Zhongshan) - Center-North -->
+              <g class="district-group" data-id="zhongshan" onclick="selectDistrict('zhongshan')">
+                <path d="M 160,270 L 220,230 L 270,300 L 240,360 L 180,360 L 160,330 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-zhongshan"/>
+                <text x="210" y="310" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-zhongshan">中山區</text>
+              </g>
+
+              <!-- 5. 大同區 (Datong) - West -->
+              <g class="district-group" data-id="datong" onclick="selectDistrict('datong')">
+                <path d="M 120,275 L 160,270 L 160,330 L 160,380 L 125,380 L 120,320 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-datong"/>
+                <text x="142" y="330" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-datong">大同區</text>
+                <text x="142" y="344" font-size="9" fill="#64748b" text-anchor="middle" pointer-events="none" id="sub-datong">【文本甲】</text>
+              </g>
+
+              <!-- 6. 松山區 (Songshan) - Center-East -->
+              <g class="district-group" data-id="songshan" onclick="selectDistrict('songshan')">
+                <path d="M 240,360 L 270,300 L 320,330 L 300,380 L 240,380 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-songshan"/>
+                <text x="270" y="350" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-songshan">松山區</text>
+              </g>
+
+              <!-- 7. 萬華區 (Wanhua) - South-West -->
+              <g class="district-group" data-id="wanhua" onclick="selectDistrict('wanhua')">
+                <path d="M 125,380 L 160,380 L 160,430 L 140,470 L 95,430 L 115,390 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-wanhua"/>
+                <text x="135" y="420" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-wanhua">萬華區</text>
+                <text x="135" y="434" font-size="9" fill="#64748b" text-anchor="middle" pointer-events="none" id="sub-wanhua">【文本乙】</text>
+              </g>
+
+              <!-- 8. 中正區 (Zhongzheng) - Center -->
+              <g class="district-group" data-id="zhongzheng" onclick="selectDistrict('zhongzheng')">
+                <path d="M 160,380 L 205,380 L 205,450 L 160,430 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-zhongzheng"/>
+                <text x="182" y="415" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-zhongzheng">中正區</text>
+              </g>
+
+              <!-- 9. 大安區 (Da'an) - Center-South (School location: Longmen Junior High) -->
+              <g class="district-group" data-id="daan" onclick="selectDistrict('daan')">
+                <path d="M 205,380 L 255,380 L 250,475 L 195,475 L 205,450 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-daan"/>
+                <text x="228" y="425" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-daan">大安區</text>
+                <text x="228" y="440" font-size="8.5" fill="#64748b" text-anchor="middle" pointer-events="none" id="sub-daan">🏫閱思龍門</text>
+              </g>
+
+              <!-- 10. 信義區 (Xinyi) - East -->
+              <g class="district-group" data-id="xinyi" onclick="selectDistrict('xinyi')">
+                <path d="M 255,380 L 305,380 L 320,440 L 290,475 L 250,475 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-xinyi"/>
+                <text x="282" y="425" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-xinyi">信義區</text>
+                <text x="282" y="440" font-size="9" fill="#64748b" text-anchor="middle" pointer-events="none" id="sub-xinyi">【文本丙】</text>
+              </g>
+
+              <!-- 11. 南港區 (Nangang) - Far East -->
+              <g class="district-group" data-id="nangang" onclick="selectDistrict('nangang')">
+                <path d="M 305,380 L 320,330 L 380,350 L 460,420 L 480,430 L 430,450 L 320,440 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-nangang"/>
+                <text x="385" y="405" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-nangang">南港區</text>
+              </g>
+
+              <!-- 12. 文山區 (Wenshan) - South -->
+              <g class="district-group" data-id="wenshan" onclick="selectDistrict('wenshan')">
+                <path d="M 195,475 L 290,475 L 320,530 L 360,550 L 340,600 L 230,590 L 190,540 L 170,490 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" class="district-polygon" id="poly-wenshan"/>
+                <text x="260" y="535" font-size="14" font-weight="bold" fill="#475569" text-anchor="middle" pointer-events="none" id="label-wenshan">文山區</text>
+                <text x="260" y="552" font-size="10" fill="#64748b" text-anchor="middle" pointer-events="none" id="sub-wenshan">【文本戊】</text>
+              </g>
+
+              <!-- Dynamic Spotlight Beacon Marker (Pulses directly on the active selected district) -->
+              <g id="map-spotlight-pin" transform="translate(142, 330)" class="transition-transform duration-500 pointer-events-none">
+                <circle cx="0" cy="0" r="16" fill="#a855f7" opacity="0.3" class="animate-ping"/>
+                <circle cx="0" cy="0" r="7" fill="#7e22ce" stroke="#ffffff" stroke-width="2.5" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"/>
+              </g>
+
+              <!-- Compass Rose -->
+              <g transform="translate(420, 50)">
+                <circle cx="20" cy="20" r="22" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <polygon points="20,2 25,18 20,15 15,18" fill="#ef4444"/>
+                <polygon points="20,38 25,22 20,25 15,22" fill="#64748b"/>
+                <text x="20" y="0" font-size="11" font-weight="bold" fill="#ef4444" text-anchor="middle">N</text>
+              </g>
+            </svg>
+          </div>
+
+            <!-- Original Scanned Worksheet Map View (Hidden by default) -->
+            <div id="original-map-container" class="hidden relative w-full h-[400px] sm:h-[420px] bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner p-2 flex items-center justify-center">
+              <img src="assets/map-taipei-districts-blank.png" alt="教材學習單原圖" class="h-full w-auto max-w-full object-contain cursor-zoom-in" onclick="openLightbox('assets/map-taipei-districts-blank.png', '學習單原圖：臺北市行政區空白底圖')">
+              <span class="absolute bottom-3 right-3 bg-black/60 text-white text-[11px] px-2 py-1 rounded backdrop-blur-sm">點擊放大檢視</span>
+            </div>
+          </div>
+
+          <div class="mt-3 flex items-center justify-between text-xs text-slate-500">
+            <span>💡 提示：點擊任何行政區，地圖將即刻大幅度亮起並定位</span>
+            <span class="text-purple-600 font-semibold cursor-pointer hover:underline" onclick="highlightAllTextDistricts()">高亮 5 大文本核心區</span>
+          </div>
+        </div>
+
+        <!-- Right: District Quick Selector (Top) & Detail Info Card (Bottom) -->
+        <div class="lg:col-span-6 space-y-4">
+          <!-- Quick Select Pills for 12 districts (Moved to Top) -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <span class="text-xs font-bold text-slate-600 block mb-2.5 flex items-center gap-1.5">
+              <i data-lucide="layout-grid" class="w-4 h-4 text-purple-600"></i>
+              <span>快速選擇行政區（點擊即刻顯著點亮）：</span>
+            </span>
+            <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+              <button onclick="selectDistrict('datong')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-white shadow-sm transition-all" data-id="datong">大同區 ★</button>
+              <button onclick="selectDistrict('wanhua')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="wanhua">萬華區 ★</button>
+              <button onclick="selectDistrict('xinyi')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="xinyi">信義區 ★</button>
+              <button onclick="selectDistrict('beitou')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="beitou">北投區 ★</button>
+              <button onclick="selectDistrict('wenshan')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="wenshan">文山區 ★</button>
+              <button onclick="selectDistrict('daan')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-purple-100 text-purple-800 hover:bg-purple-200 transition-all" data-id="daan">大安區 🏫</button>
+              <button onclick="selectDistrict('zhongzheng')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="zhongzheng">中正區</button>
+              <button onclick="selectDistrict('zhongshan')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="zhongshan">中山區</button>
+              <button onclick="selectDistrict('songshan')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="songshan">松山區</button>
+              <button onclick="selectDistrict('shilin')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="shilin">士林區</button>
+              <button onclick="selectDistrict('neihu')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="neihu">內湖區</button>
+              <button onclick="selectDistrict('nangang')" class="dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-id="nangang">南港區</button>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2">（標註 ★ 者為本學習單打卡核心行政區，🏫 為龍門國中所在大安區）</p>
+          </div>
+
+          <!-- District Info Card & Spotlight (Moved to Bottom) -->
+          <div id="district-info-card" class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm min-h-[380px] flex flex-col justify-between transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <span id="dist-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                    老城港埠・西區
+                  </span>
+                  <h3 id="dist-name" class="text-2xl font-black font-serif text-slate-900">大同區</h3>
+                </div>
+                <span id="dist-matched-text" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-purple-100 text-purple-700">
+                  對應文本：甲 (大稻埕點畫)
+                </span>
+              </div>
+
+              <!-- Geographical & Historical Summary -->
+              <p id="dist-desc" class="text-slate-600 text-sm leading-relaxed mb-4">
+                坐落於臺北市西部、淡水河東岸，是臺北市最早發展的商業聚落之一。清末劉銘傳開闢為商務中心，日治時期設有永樂町、日新町、太平町等，大稻埕茶葉與南北貨名揚四海，碼頭河運肩摩轂擊，為本島人與外來移民匯聚的繁盛市井。
+              </p>
+
+              <!-- Key Landmarks Chips -->
+              <div class="mb-4">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">重要文化地標 & 街區</span>
+                <div id="dist-landmarks" class="flex flex-wrap gap-1.5">
+                  <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium">大稻埕碼頭</span>
+                  <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium">迪化街南北貨</span>
+                  <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium">大橋頭 (台北大橋)</span>
+                  <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium">霞海城隍廟</span>
+                  <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium">大龍峒保安宮</span>
+                </div>
+              </div>
+
+              <!-- Literary Connection -->
+              <div class="p-3.5 bg-purple-50/70 rounded-xl border border-purple-100">
+                <div class="flex items-center gap-1.5 text-xs font-bold text-purple-800 mb-1">
+                  <i data-lucide="feather" class="w-3.5 h-3.5"></i>
+                  <span>地誌文學連結</span>
+                </div>
+                <p id="dist-literature" class="text-xs text-purple-900/80 leading-relaxed">
+                  作家劉捷在《大稻埕點畫》中以「垃圾箱之觀」比喻多元種族混成的大洪流，從日新町到大橋頭，生動記錄了日治時期臺北人口密度最高的市井浮世繪。
+                </p>
+              </div>
+            </div>
+
+            <!-- Card Bottom Action -->
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-xs text-slate-500">點擊地圖中其他行政區可切換檢視</span>
+              <a id="dist-jump-btn" href="#text-a" class="inline-flex items-center gap-1 text-xs font-bold text-purple-600 hover:text-purple-700">
+                閱讀對應文學文本 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. MODULE 2: LITERATURE CAFE (5 TEXTS) ==================== -->
+  <section id="literature" class="py-16 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-xs font-semibold">
+          <i data-lucide="book-marked" class="w-3.5 h-3.5"></i>教學模組二
+        </div>
+        <h2 class="text-3xl font-bold font-serif text-slate-900">以臺北為主題的文學作品・地誌精讀</h2>
+        <p class="text-slate-600 text-sm sm:text-base">
+          地誌文學是土地與心靈的共鳴。請細讀以下五篇選文，開啟「線索透視鏡」找出隱藏其中的地標、路名與自然景觀密碼，並聆聽全真語音朗讀！
+        </p>
+      </div>
+
+      <!-- Literature Toolbar: Clue Toggle & Audio Guide -->
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">閱讀工具列：</span>
+          <button id="btn-toggle-all-clues" onclick="toggleAllClues()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-300 flex items-center gap-1.5 transition-all">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-amber-700"></i>
+            <span id="clue-btn-text">開啟全部地誌線索高亮</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-3 text-xs text-slate-500">
+          <span class="flex items-center gap-1"><i data-lucide="volume-2" class="w-3.5 h-3.5 text-blue-500"></i>支援 Web Speech API 真人語音朗讀</span>
+          <span class="hidden sm:inline">|</span>
+          <span class="flex items-center gap-1"><i data-lucide="bookmark" class="w-3.5 h-3.5 text-purple-500"></i>點擊文章標籤快速跳轉</span>
+        </div>
+      </div>
+
+      <!-- 5 Literature Cards (甲 ~ 戊) -->
+      <div class="space-y-8">
+
+        <!-- ==================== TEXT 甲 ==================== -->
+        <article id="text-a" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+          <div class="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent p-4 sm:p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-amber-500 text-white font-serif font-black text-xl flex items-center justify-center shadow-sm">
+                甲
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-xl font-bold font-serif text-slate-900">《大稻埕點畫》</h3>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">散文・市井浮世繪</span>
+                </div>
+                <p class="text-xs text-slate-500">作者：劉捷（日治時期臺灣新文學作家、評論家）</p>
+              </div>
+            </div>
+            <!-- Audio & Clue Buttons -->
+            <div class="flex items-center gap-2">
+              <button onclick="readText('text-content-a', 'zh-TW')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1.5 transition-all">
+                <i data-lucide="volume-2" class="w-4 h-4 text-blue-600"></i>語音朗讀
+              </button>
+              <button onclick="toggleCardClues('text-a')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1.5 transition-all">
+                <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i>線索解碼
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Text Excerpt -->
+            <div class="lg:col-span-8 text-slate-700 leading-relaxed font-serif text-base sm:text-lg space-y-4" id="text-content-a">
+              <p>
+                <span class="clue-tag" data-clue="大同區重要聚落">大稻埕</span>是本島人、日本人、朝鮮人、中國人這些種族混成的大洪流，職業階級也各有不同，其雜然不整頓的樣子有如垃圾箱之觀。
+              </p>
+              <p>
+                陽光自早上投射這垃圾箱到沒入西邊屋頂下，<span class="clue-tag" data-clue="大同區核心">大稻埕</span>任何時都是喧嚷的地方，粗野的人群在街上嘈雜地流動。真的，<span class="clue-tag" data-clue="大稻埕繁榮市集">大稻埕</span>不失為人的市場。所謂<span class="clue-tag" data-clue="大同區">大稻埕</span>之有新興的活氣，之有脈搏的躍動，其實豈不是這悶熱的人的漩流嗎？
+              </p>
+              <p>
+                白天有白天的街景，是人車的來往頻繁；晚上是黃昏起，又是人潮的漂流。從<span class="clue-tag" data-clue="大同區主要幹道">延平北路</span>到<span class="clue-tag" data-clue="連接大同與三重的台北大橋頭">大橋頭</span>，陋巷的肩摩轂擊的鬧滾滾。
+              </p>
+              <p>
+                到底<span class="clue-tag" data-clue="大稻埕">大稻埕</span>不成人口過剩嗎？極最近的統計，<span class="clue-tag" data-clue="日治時期町名（現大同區日新國小周邊）">日新町</span>、<span class="clue-tag" data-clue="現大同區大橋頭一帶">大橋町</span>、<span class="clue-tag" data-clue="現大同區迪化街永樂市場周邊">永樂町</span>、<span class="clue-tag" data-clue="現大同區圓環重慶北路一帶">下奎府町</span>，每百坪有人口二百名以上；被以為是稠密的<span class="clue-tag" data-clue="現大同區延平北路一段周邊">太平町</span>、<span class="clue-tag" data-clue="現大同區建成圓環一帶">建成町</span>是百坪約一百五十名以上。<span class="clue-tag" data-clue="日新國小周圍">日新町</span>算是全臺北市密度最高的地方，一坪平均住三人，難怪令人聯想是人的氾濫。
+              </p>
+            </div>
+
+            <!-- Analysis Sidebar -->
+            <div class="lg:col-span-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-3">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800 pb-2 border-b border-slate-200">
+                <i data-lucide="compass" class="w-4 h-4 text-amber-600"></i>
+                <span>地誌關鍵解密</span>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block mb-1">打卡行政區：</span>
+                <button onclick="revealAnswer('ans-a', this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-dashed border-amber-300 text-amber-800 text-xs font-semibold cursor-pointer transition-all shadow-sm">
+                  <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-600"></i>
+                  <span>點選揭曉行政區</span>
+                </button>
+                <div id="ans-a" class="hidden mt-1 inline-flex items-center gap-2 px-2.5 py-1 rounded bg-amber-100 text-amber-900 font-bold text-sm">
+                  <span>臺北市【大同區】</span>
+                  <button onclick="hideAnswer('ans-a')" title="重新遮蓋" class="text-xs text-amber-700/60 hover:text-amber-900 ml-1">🙈</button>
+                </div>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">關鍵地標關鍵字：</span>
+                <p class="text-slate-600 mt-1">大稻埕、延平北路、大橋頭、日新町、永樂町、太平町、建成町。</p>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">文學修辭與寫作手法：</span>
+                <ul class="list-disc list-inside text-slate-600 space-y-1 mt-1">
+                  <li><span class="font-semibold text-slate-800">譬喻修辭：</span>將多族群混雜的市井比喻為「垃圾箱之觀」、「人的市場」、「人的漩流」，呈現旺盛粗礪的生命力。</li>
+                  <li><span class="font-semibold text-slate-800">白描與數據：</span>以日治町目每坪人數具體數據，佐證大稻埕人口過剩與繁華盛況。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== TEXT 乙 ==================== -->
+        <article id="text-b" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+          <div class="bg-gradient-to-r from-red-500/10 via-red-500/5 to-transparent p-4 sm:p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-red-600 text-white font-serif font-black text-xl flex items-center justify-center shadow-sm">
+                乙
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-xl font-bold font-serif text-slate-900">《西門町》</h3>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800">散文・庶民懷舊與感官記憶</span>
+                </div>
+                <p class="text-xs text-slate-500">作者：舒國治（當代作家、臺北晃蕩漫遊者）</p>
+              </div>
+            </div>
+            <!-- Audio & Clue Buttons -->
+            <div class="flex items-center gap-2">
+              <button onclick="readText('text-content-b', 'zh-TW')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1.5 transition-all">
+                <i data-lucide="volume-2" class="w-4 h-4 text-blue-600"></i>語音朗讀
+              </button>
+              <button onclick="toggleCardClues('text-b')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-800 border border-red-200 flex items-center gap-1.5 transition-all">
+                <i data-lucide="sparkles" class="w-4 h-4 text-red-600"></i>線索解碼
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Text Excerpt -->
+            <div class="lg:col-span-8 text-slate-700 leading-relaxed font-serif text-base sm:text-lg space-y-4" id="text-content-b">
+              <p>
+                <span class="clue-tag" data-clue="曾坐落於中華路上、跨越萬華與中正區的傳奇商場">中華商場</span>的「點心世界」，主要是麵食、蒸籠式的，一般家庭吃不到的點心。還有鍋貼、綠豆稀飯跟酸辣湯。店內的桌子都是四方桌，擺設和窗子至今不曾改變；夏天有「<span class="clue-tag" data-clue="西門町中華商場知名西瓜攤">西瓜大王</span>」，攤販們的西瓜堆得像山一樣高，切出來的西瓜片果肉通紅、沙沙亮亮的。
+              </p>
+              <p>
+                老闆高舉西瓜刀，趴地一聲刀落，一下子就切出幾百片，大家拿著吃，吃剩的皮就豪邁地丟地上，然後再用水沖一沖手，彷彿西瓜嘉年華。明明在家裡吃也一樣好吃啊，但在那邊吃特別有味。後來<span class="clue-tag" data-clue="萬華區代表性商圈">西門町</span>西瓜大王休業後，幾個西瓜攤移到郵政醫院附近的南昌街。
+              </p>
+              <p>
+                玩的部分，我挺喜歡逛<span class="clue-tag" data-clue="中華商場八棟連環建築">中華商場</span>的唱片行。沿著騎樓經過，一下子就可以聽見好多首不同的流行歌曲。我還記得，正對著錢櫃的<span class="clue-tag" data-clue="中華商場忠孝仁愛信義和平棟別">中華商場信棟</span>的樓下都是唱片行，以西洋歌曲最多。往南的<span class="clue-tag" data-clue="中華商場義棟">義棟</span>樓下有一家金門唱片行是賣戲曲類、國語老歌，以及一些禁歌。印象中，那間唱片行還販售專做平劇唱片的女王唱片公司的音樂。另外，最有印象的就是米高梅唱片行、哥倫比亞唱片行，再來就有一家新新唱片行，位置大約正對著<span class="clue-tag" data-clue="西門町知名歷史建築">中山堂</span>。
+              </p>
+            </div>
+
+            <!-- Analysis Sidebar -->
+            <div class="lg:col-span-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-3">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800 pb-2 border-b border-slate-200">
+                <i data-lucide="compass" class="w-4 h-4 text-red-600"></i>
+                <span>地誌關鍵解密</span>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block mb-1">打卡行政區：</span>
+                <button onclick="revealAnswer('ans-b', this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 border border-dashed border-red-300 text-red-800 text-xs font-semibold cursor-pointer transition-all shadow-sm">
+                  <i data-lucide="help-circle" class="w-3.5 h-3.5 text-red-600"></i>
+                  <span>點選揭曉行政區</span>
+                </button>
+                <div id="ans-b" class="hidden mt-1 inline-flex items-center gap-2 px-2.5 py-1 rounded bg-red-100 text-red-900 font-bold text-sm">
+                  <span>臺北市【萬華區】</span>
+                  <button onclick="hideAnswer('ans-b')" title="重新遮蓋" class="text-xs text-red-700/60 hover:text-red-900 ml-1">🙈</button>
+                </div>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">關鍵地標關鍵字：</span>
+                <p class="text-slate-600 mt-1">中華商場、點心世界、西瓜大王、西門町、信棟/義棟唱片行、中山堂。</p>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">文學修辭與感官描摹：</span>
+                <ul class="list-disc list-inside text-slate-600 space-y-1 mt-1">
+                  <li><span class="font-semibold text-slate-800">感官動態：</span>味覺（麵食鍋貼、酸辣湯）、視覺（果肉通紅、沙沙亮亮）、聽覺（趴地刀落、各家唱片行歌曲喧囂）。</li>
+                  <li><span class="font-semibold text-slate-800">空間記憶：</span>中華商場「忠孝仁愛信義和平」八棟長廊，串起五六零年代老臺北人的青春記憶。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== TEXT 丙 ==================== -->
+        <article id="text-c" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+          <div class="bg-gradient-to-r from-blue-500/10 via-blue-500/5 to-transparent p-4 sm:p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-blue-600 text-white font-serif font-black text-xl flex items-center justify-center shadow-sm">
+                丙
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-xl font-bold font-serif text-slate-900">《37路通往童年》</h3>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">散文・公車時空旅程與都市蛻變</span>
+                </div>
+                <p class="text-xs text-slate-500">作者：侯季然（當代臺灣電影導演、作家）</p>
+              </div>
+            </div>
+            <!-- Audio & Clue Buttons -->
+            <div class="flex items-center gap-2">
+              <button onclick="readText('text-content-c', 'zh-TW')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1.5 transition-all">
+                <i data-lucide="volume-2" class="w-4 h-4 text-blue-600"></i>語音朗讀
+              </button>
+              <button onclick="toggleCardClues('text-c')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1.5 transition-all">
+                <i data-lucide="sparkles" class="w-4 h-4 text-blue-600"></i>線索解碼
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Text Excerpt -->
+            <div class="lg:col-span-8 text-slate-700 leading-relaxed font-serif text-base sm:text-lg space-y-4" id="text-content-c">
+              <p>
+                我想像著自己還是坐在<span class="clue-tag" data-clue="穿梭臺北東西區的公車路線">37路上</span>，和八零年代的乘客們一起望著電影膠捲般的窗外城市，鬆懈而舒暢。那麼多年來，37路還是走著一樣的路線，二十年前經過<span class="clue-tag" data-clue="信義區主要幹道交會處">信義路四段和基隆路</span>時，車上的乘客們絕對想像不到那一整片據說是兵營，看起來長滿雜草與未完成建築物的大工地（大荒地）……
+              </p>
+              <p>
+                幾年後會長出了<span class="clue-tag" data-clue="信義計畫區核心市府建築">臺北市政府大樓</span>，<span class="clue-tag" data-clue="信義商圈影城代表">華納威秀</span>，<span class="clue-tag" data-clue="信義區地標摩天大樓">101</span>……我們只是傻傻看著車窗外奔跑著的電影城市，那裡有高高的藍天、瘦瘦的行道樹、裝飾著白鐵椅的馬路，或許還有一首鳳飛飛的「流水年華」。
+              </p>
+            </div>
+
+            <!-- Analysis Sidebar -->
+            <div class="lg:col-span-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-3">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800 pb-2 border-b border-slate-200">
+                <i data-lucide="compass" class="w-4 h-4 text-blue-600"></i>
+                <span>地誌關鍵解密</span>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block mb-1">打卡行政區：</span>
+                <button onclick="revealAnswer('ans-c', this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 border border-dashed border-blue-300 text-blue-800 text-xs font-semibold cursor-pointer transition-all shadow-sm">
+                  <i data-lucide="help-circle" class="w-3.5 h-3.5 text-blue-600"></i>
+                  <span>點選揭曉行政區</span>
+                </button>
+                <div id="ans-c" class="hidden mt-1 inline-flex items-center gap-2 px-2.5 py-1 rounded bg-blue-100 text-blue-900 font-bold text-sm">
+                  <span>臺北市【信義區】</span>
+                  <button onclick="hideAnswer('ans-c')" title="重新遮蓋" class="text-xs text-blue-700/60 hover:text-blue-900 ml-1">🙈</button>
+                </div>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">關鍵地標關鍵字：</span>
+                <p class="text-slate-600 mt-1">37路公車、信義路四段與基隆路口、臺北市政府大樓、華納威秀、台北101。</p>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">文學修辭與時空哲思：</span>
+                <ul class="list-disc list-inside text-slate-600 space-y-1 mt-1">
+                  <li><span class="font-semibold text-slate-800">映襯對比：</span>「兵營雜草大工地」與「市府大樓、華納威秀、101」強烈映襯信義計畫區由農荒兵營蛻變為金融摩天都心的滄海桑田。</li>
+                  <li><span class="font-semibold text-slate-800">動態比擬：</span>以「長出了101」的擬物生長意象，以及公車窗外「電影膠捲城市」比喻不可逆的時光推移。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== TEXT 丁 ==================== -->
+        <article id="text-d" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+          <div class="bg-gradient-to-r from-orange-500/10 via-orange-500/5 to-transparent p-4 sm:p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-orange-600 text-white font-serif font-black text-xl flex items-center justify-center shadow-sm">
+                丁
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-xl font-bold font-serif text-slate-900">《打開地誌文學的窗口》</h3>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-800">散文・自然生態與地質踏查</span>
+                </div>
+                <p class="text-xs text-slate-500">作者：劉克襄（知名自然生態作家、漫遊者）</p>
+              </div>
+            </div>
+            <!-- Audio & Clue Buttons -->
+            <div class="flex items-center gap-2">
+              <button onclick="readText('text-content-d', 'zh-TW')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1.5 transition-all">
+                <i data-lucide="volume-2" class="w-4 h-4 text-blue-600"></i>語音朗讀
+              </button>
+              <button onclick="toggleCardClues('text-d')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 flex items-center gap-1.5 transition-all">
+                <i data-lucide="sparkles" class="w-4 h-4 text-orange-600"></i>線索解碼
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Text Excerpt -->
+            <div class="lg:col-span-8 text-slate-700 leading-relaxed font-serif text-base sm:text-lg space-y-4" id="text-content-d">
+              <p>
+                從<span class="clue-tag" data-clue="北投區大屯火山群噴氣孔地熱景點">小油坑登山口</span>起腳，沿著<span class="clue-tag" data-clue="臺北市第一高峰(1120m)">七星山</span>的石階步道愜意健行，花了一個多小時，不知不覺便爬上了一千公尺的頂峰。站在這座<span class="clue-tag" data-clue="七星山主峰">臺北盆地最高的山岳</span>，四野望去，八方開闊，綠色山巒嵱嵷綿延，大塊而雄渾，間雜著蔥蘢之林木，充分地展現了北台灣一角之奇美。
+              </p>
+              <p>
+                風景看盡，我不免注意到頂峰，設有一座解說牌。趨近細讀，牌上介紹著周遭的山川景觀，以及遙望的雪山山脈。這個孤立的解說牌，適時地提醒了我，<span class="clue-tag" data-clue="橫跨北投與士林的國家公園">陽明山國家公園</span>因緊鄰著臺北市郊，早已變成台灣解說牌最多的地方。
+              </p>
+              <p>
+                一路上來，我就讀到四五座，或介紹<span class="clue-tag" data-clue="北投區知名海芋與溫泉聚落">竹子湖歷史</span>，或敘述<span class="clue-tag" data-clue="大屯火山地熱地質特色">硫磺和火山口</span>，或描繪<span class="clue-tag" data-clue="七星山特色冰河孑遺植物與矮箭竹林">昆欄樹、台灣箭竹</span>不等，牌子內的敘述充滿精準的自然生物知識內涵。
+              </p>
+            </div>
+
+            <!-- Analysis Sidebar -->
+            <div class="lg:col-span-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-3">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800 pb-2 border-b border-slate-200">
+                <i data-lucide="compass" class="w-4 h-4 text-orange-600"></i>
+                <span>地誌關鍵解密</span>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block mb-1">打卡行政區：</span>
+                <button onclick="revealAnswer('ans-d', this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 border border-dashed border-orange-300 text-orange-800 text-xs font-semibold cursor-pointer transition-all shadow-sm">
+                  <i data-lucide="help-circle" class="w-3.5 h-3.5 text-orange-600"></i>
+                  <span>點選揭曉行政區</span>
+                </button>
+                <div id="ans-d" class="hidden mt-1 inline-flex items-center gap-2 px-2.5 py-1 rounded bg-orange-100 text-orange-900 font-bold text-sm">
+                  <span>臺北市【北投區】</span>
+                  <button onclick="hideAnswer('ans-d')" title="重新遮蓋" class="text-xs text-orange-700/60 hover:text-orange-900 ml-1">🙈</button>
+                </div>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">關鍵地標關鍵字：</span>
+                <p class="text-slate-600 mt-1">小油坑、七星山、陽明山國家公園、竹子湖、硫磺火山口、昆欄樹、台灣箭竹。</p>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">自然地誌與生態觀察：</span>
+                <ul class="list-disc list-inside text-slate-600 space-y-1 mt-1">
+                  <li><span class="font-semibold text-slate-800">地理空間：</span>從小油坑步道登上七星山主峰，鳥瞰臺北盆地與遠眺雪山山脈。</li>
+                  <li><span class="font-semibold text-slate-800">解說牌人文意蘊：</span>解說牌不只是生物地質科普告示，更是人與土地相認、開啟地誌文學視窗的文化媒介。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== TEXT 戊 ==================== -->
+        <article id="text-e" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+          <div class="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent p-4 sm:p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-serif font-black text-xl flex items-center justify-center shadow-sm">
+                戊
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-xl font-bold font-serif text-slate-900">《貓空找茶》</h3>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">現代詩・通感修辭與綠色革命</span>
+                </div>
+                <p class="text-xs text-slate-500">作者：陳家帶（當代資深媒體人、詩人）</p>
+              </div>
+            </div>
+            <!-- Audio & Clue Buttons -->
+            <div class="flex items-center gap-2">
+              <button onclick="readText('text-content-e', 'zh-TW')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1.5 transition-all">
+                <i data-lucide="volume-2" class="w-4 h-4 text-blue-600"></i>語音朗讀
+              </button>
+              <button onclick="toggleCardClues('text-e')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5 transition-all">
+                <i data-lucide="sparkles" class="w-4 h-4 text-emerald-600"></i>線索解碼
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Text Excerpt -->
+            <div class="lg:col-span-8 text-slate-700 leading-relaxed font-serif text-base sm:text-lg space-y-4" id="text-content-e">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Stanza 1 -->
+                <div class="space-y-1.5 text-sm sm:text-base border-r-0 md:border-r border-slate-100 pr-0 md:pr-4">
+                  <p><span class="clue-tag" data-clue="文山區貓空空中纜車">觀光纜車</span>一夕通電</p>
+                  <p>繞行<span class="clue-tag" data-clue="隱喻木柵動物園">百獸的後花園</span></p>
+                  <p>漫山遍野上演著植物們的化裝舞會</p>
+                  <p class="text-emerald-800 font-bold">我　來找春天的碴</p>
+                  <p>白鷺嚮導　天空旋轉</p>
+                  <p>環山抱谷的<span class="clue-tag" data-clue="流經文山區的景美溪">景美溪</span></p>
+                  <p>流過<span class="clue-tag" data-clue="政大跨越景美溪之橋梁">道南橋</span>就不知去向</p>
+                  <p>我把春天攝入眼睛</p>
+                  <p>我把春天錄進耳朵</p>
+                  <p>我呼吸著春　我咀嚼著春</p>
+                  <p class="text-emerald-800 font-bold">我來找春天的碴</p>
+                  <p>葉色如鐵　觀音賜樹</p>
+                  <p>暗香浮動呼之欲出的茶茶茶茶茶茶</p>
+                  <p>掀起臺北既靜又靚的一場綠色革命</p>
+                  <p class="font-bold text-emerald-900"><span class="clue-tag" data-clue="文山木柵名茶">鐵觀音！鐵觀音！</span></p>
+                  <p>一朵朵蓮座開出<span class="clue-tag" data-clue="文山區觀光茶山">貓空</span></p>
+                </div>
+
+                <!-- Stanza 2 -->
+                <div class="space-y-1.5 text-sm sm:text-base">
+                  <p>雨來　風來　雲來　霧來　我來</p>
+                  <p>我來找春天的茶</p>
+                  <p>茶色不茉莉　茶香不烏龍　茶味不包種</p>
+                  <p>我來找春天的<span class="clue-tag" data-clue="木柵特產鐵觀音茶">絕版鐵觀音</span></p>
+                  <p>我用喉嚨吞嚥春天</p>
+                  <p>我用腸胃消化春天</p>
+                  <p>我痛飲著春　我排泄著春</p>
+                  <p class="text-emerald-800 font-bold">我來春天找碴為了找茶</p>
+                  <p>蒼鷺嚮導　落日成形</p>
+                  <p>坐擁<span class="clue-tag" data-clue="文山區貓空">貓空</span>俯看<span class="clue-tag" data-clue="文山區木柵地理環境">木柵盆地</span></p>
+                  <p>叮叮咚咚的燈火正等待黑夜收編</p>
+                  <p><span class="clue-tag" data-clue="貓空纜車">觀光纜車</span>下滑</p>
+                  <p>春天也跟著下滑</p>
+                  <p>茶找到了</p>
+                  <p>茶道卻在暮色中漸層消失</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Analysis Sidebar -->
+            <div class="lg:col-span-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-3">
+              <div class="flex items-center gap-1.5 font-bold text-slate-800 pb-2 border-b border-slate-200">
+                <i data-lucide="compass" class="w-4 h-4 text-emerald-600"></i>
+                <span>地誌關鍵解密</span>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block mb-1">打卡行政區：</span>
+                <button onclick="revealAnswer('ans-e', this)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-dashed border-emerald-300 text-emerald-800 text-xs font-semibold cursor-pointer transition-all shadow-sm">
+                  <i data-lucide="help-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+                  <span>點選揭曉行政區</span>
+                </button>
+                <div id="ans-e" class="hidden mt-1 inline-flex items-center gap-2 px-2.5 py-1 rounded bg-emerald-100 text-emerald-900 font-bold text-sm">
+                  <span>臺北市【文山區】</span>
+                  <button onclick="hideAnswer('ans-e')" title="重新遮蓋" class="text-xs text-emerald-700/60 hover:text-emerald-900 ml-1">🙈</button>
+                </div>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">關鍵地標關鍵字：</span>
+                <p class="text-slate-600 mt-1">觀光纜車、百獸的後花園（動物園）、景美溪、道南橋、貓空、木柵鐵觀音、木柵盆地。</p>
+              </div>
+              <div>
+                <span class="font-bold text-slate-700 block">現代詩修辭與通感藝術：</span>
+                <ul class="list-disc list-inside text-slate-600 space-y-1 mt-1">
+                  <li><span class="font-semibold text-slate-800">通感（移覺）修辭：</span>將春天具象化，用視覺（攝入眼睛）、聽覺（錄進耳朵）、嗅覺（呼吸/暗香）、味覺（咀嚼/吞嚥/痛飲）交織。</li>
+                  <li><span class="font-semibold text-slate-800">諧音雙關：</span>「找碴」與「找茶」音近雙關，富含生動童趣與哲思。</li>
+                  <li><span class="font-semibold text-slate-800">疊字連鎖：</span>「茶茶茶茶茶茶」展現漫山茶香撲鼻的奔放節奏。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. MODULE 3: INTERACTIVE CHECK-IN MISSION ==================== -->
+  <section id="checkin-mission" class="py-16 bg-gradient-to-b from-purple-50/50 via-white to-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-10 space-y-3">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-xs font-semibold">
+          <i data-lucide="target" class="w-3.5 h-3.5"></i>教學核心任務
+        </div>
+        <h2 class="text-3xl font-black font-serif text-slate-900">文青打卡大配對・地圖定位挑戰</h2>
+        <p class="text-slate-600 text-sm sm:text-base">
+          請依照閱讀五篇作品所獲得的地誌線索，將下方代表甲、乙、丙、丁、戊的【打卡 ICON】拖曳或點選，釘入地圖中對應的行政區！
+        </p>
+      </div>
+
+      <!-- Mission Progress & Status Bar -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 mb-8 max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg">
+            <span id="score-counter">0</span>/5
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-slate-800">打卡完成進度</h4>
+            <p id="mission-status-msg" class="text-xs text-slate-500">尚有 5 個行政區尚未打卡，請選取下方標籤開始！</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="resetMission()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center gap-1.5 transition-all">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>重新挑戰
+          </button>
+          <button onclick="showQuickHint()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1.5 transition-all">
+            <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-600"></i>線索提示
+          </button>
+        </div>
+      </div>
+
+      <!-- Interactive Game Board: Left Droppable Map, Right Draggable Pins -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
+
+        <!-- Droppable Map Board -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200 shadow-md flex flex-col justify-between">
+          <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-100">
+            <span class="text-xs font-bold text-slate-700 flex items-center gap-1">
+              <i data-lucide="map" class="w-4 h-4 text-purple-600"></i>臺北市打卡標靶地圖
+            </span>
+            <span class="text-[11px] text-purple-600 font-medium">支援滑鼠拖曳與觸控點選</span>
+          </div>
+
+          <!-- The SVG target map with dropzones for ALL 12 DISTRICTS -->
+          <div class="relative w-full h-[410px] sm:h-[440px] bg-slate-50/70 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center p-2">
+            
+            <svg viewBox="0 0 500 620" class="h-full w-auto max-w-full select-none" id="mission-drop-svg">
+              <!-- Water Bodies for Geographic Context -->
+              <path d="M 60,330 Q 110,310 130,300 T 200,280 T 360,250" fill="none" stroke="#bfdbfe" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+              <text x="310" y="245" fill="#60a5fa" font-size="9" font-weight="bold">基隆河</text>
+              <path d="M 40,240 Q 90,260 110,320 T 115,440 T 170,490" fill="none" stroke="#93c5fd" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+              <text x="50" y="270" fill="#3b82f6" font-size="9" font-weight="bold">淡水河</text>
+              <path d="M 170,490 Q 240,500 290,520 T 360,540" fill="none" stroke="#bfdbfe" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+              <text x="240" y="535" fill="#60a5fa" font-size="9" font-weight="bold">景美溪</text>
+
+              <!-- ================= ALL 12 INTERACTIVE TARGET DISTRICTS ================= -->
+              <!-- 1. 北投區 Target -->
+              <g id="drop-target-beitou" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('beitou')">
+                <path id="poly-target-beitou" d="M 130,90 L 220,100 L 250,170 L 220,230 L 160,270 L 90,270 L 60,240 L 70,160 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-beitou" x="145" y="165" font-size="14" font-weight="bold" fill="#475569" text-anchor="middle">北投區</text>
+                <g id="slot-beitou" transform="translate(130, 180) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 2. 士林區 Target -->
+              <g id="drop-target-shilin" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('shilin')">
+                <path id="poly-target-shilin" d="M 220,100 L 260,20 L 280,60 L 340,190 L 320,240 L 220,230 L 250,170 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-shilin" x="280" y="130" font-size="14" font-weight="bold" fill="#475569" text-anchor="middle">士林區</text>
+                <g id="slot-shilin" transform="translate(265, 145) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 3. 內湖區 Target -->
+              <g id="drop-target-neihu" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('neihu')">
+                <path id="poly-target-neihu" d="M 320,240 L 340,190 L 410,260 L 380,350 L 320,330 L 270,300 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-neihu" x="350" y="270" font-size="14" font-weight="bold" fill="#475569" text-anchor="middle">內湖區</text>
+                <g id="slot-neihu" transform="translate(335, 285) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 4. 中山區 Target -->
+              <g id="drop-target-zhongshan" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('zhongshan')">
+                <path id="poly-target-zhongshan" d="M 160,270 L 220,230 L 270,300 L 240,360 L 180,360 L 160,330 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-zhongshan" x="210" y="300" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle">中山區</text>
+                <g id="slot-zhongshan" transform="translate(195, 315) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 5. 大同區 Target -->
+              <g id="drop-target-datong" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('datong')">
+                <path id="poly-target-datong" d="M 120,275 L 160,270 L 160,330 L 160,380 L 125,380 L 120,320 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-datong" x="142" y="315" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle">大同區</text>
+                <g id="slot-datong" transform="translate(127, 330) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 6. 松山區 Target -->
+              <g id="drop-target-songshan" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('songshan')">
+                <path id="poly-target-songshan" d="M 240,360 L 270,300 L 320,330 L 300,380 L 240,380 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-songshan" x="270" y="340" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle">松山區</text>
+                <g id="slot-songshan" transform="translate(255, 355) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 7. 萬華區 Target -->
+              <g id="drop-target-wanhua" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('wanhua')">
+                <path id="poly-target-wanhua" d="M 125,380 L 160,380 L 160,430 L 140,470 L 95,430 L 115,390 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-wanhua" x="135" y="415" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle">萬華區</text>
+                <g id="slot-wanhua" transform="translate(120, 428) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 8. 中正區 Target -->
+              <g id="drop-target-zhongzheng" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('zhongzheng')">
+                <path id="poly-target-zhongzheng" d="M 160,380 L 205,380 L 205,450 L 160,430 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-zhongzheng" x="182" y="405" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">中正區</text>
+                <g id="slot-zhongzheng" transform="translate(167, 418) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 9. 大安區 Target -->
+              <g id="drop-target-daan" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('daan')">
+                <path id="poly-target-daan" d="M 205,380 L 255,380 L 250,475 L 195,475 L 205,450 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-daan" x="228" y="410" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle">大安區</text>
+                <text x="228" y="423" font-size="8.5" fill="#7e22ce" text-anchor="middle">🏫龍門國中</text>
+                <g id="slot-daan" transform="translate(213, 435) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 10. 信義區 Target -->
+              <g id="drop-target-xinyi" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('xinyi')">
+                <path id="poly-target-xinyi" d="M 255,380 L 305,380 L 320,440 L 290,475 L 250,475 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-xinyi" x="282" y="415" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle">信義區</text>
+                <g id="slot-xinyi" transform="translate(267, 430) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 11. 南港區 Target -->
+              <g id="drop-target-nangang" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('nangang')">
+                <path id="poly-target-nangang" d="M 305,380 L 320,330 L 380,350 L 460,420 L 480,430 L 430,450 L 320,440 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-nangang" x="385" y="395" font-size="13" font-weight="bold" fill="#475569" text-anchor="middle">南港區</text>
+                <g id="slot-nangang" transform="translate(370, 410) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+
+              <!-- 12. 文山區 Target -->
+              <g id="drop-target-wenshan" class="mission-dropzone cursor-pointer" onclick="handleZoneClick('wenshan')">
+                <path id="poly-target-wenshan" d="M 195,475 L 290,475 L 320,530 L 360,550 L 340,600 L 230,590 L 190,540 L 170,490 Z" 
+                      fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8" class="target-poly transition-all duration-300"/>
+                <text id="text-target-wenshan" x="260" y="525" font-size="14" font-weight="bold" fill="#475569" text-anchor="middle">文山區</text>
+                <g id="slot-wenshan" transform="translate(245, 540) scale(0.9)">
+                  <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+                </g>
+              </g>
+            </svg>
+
+          </div>
+        </div>
+
+        <!-- Draggable Check-in Pin Depot -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2 mb-1">
+              <i data-lucide="map-pin" class="w-5 h-5 text-purple-600"></i>
+              <span>待打卡文學標籤池</span>
+            </h3>
+            <p class="text-xs text-slate-500 mb-4">
+              直接「拖曳」標籤至地圖正確行政區，或「點選」標籤後再點擊地圖上的行政區！
+            </p>
+
+            <!-- Pin Items List -->
+            <div id="pins-depot" class="space-y-3">
+
+              <!-- Pin A -->
+              <div id="pin-card-a" draggable="true" ondragstart="handleDragStart(event, 'a')" onclick="handlePinSelect('a')"
+                   class="draggable-pin bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl p-3 flex items-center justify-between transition-all transform active:scale-95 shadow-sm">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center font-serif font-black text-lg shadow-sm">
+                    甲
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-sm text-slate-800">劉捷《大稻埕點畫》</h5>
+                    <p class="text-xs text-amber-800/80">線索：日新町、大橋頭、人的市場</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-amber-700 font-semibold bg-white/70 px-2.5 py-1 rounded-md">
+                  <i data-lucide="grab" class="w-3.5 h-3.5"></i>拖曳打卡
+                </div>
+              </div>
+
+              <!-- Pin B -->
+              <div id="pin-card-b" draggable="true" ondragstart="handleDragStart(event, 'b')" onclick="handlePinSelect('b')"
+                   class="draggable-pin bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl p-3 flex items-center justify-between transition-all transform active:scale-95 shadow-sm">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-red-600 text-white flex items-center justify-center font-serif font-black text-lg shadow-sm">
+                    乙
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-sm text-slate-800">舒國治《西門町》</h5>
+                    <p class="text-xs text-red-800/80">線索：中華商場、西瓜大王、唱片行</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-red-700 font-semibold bg-white/70 px-2.5 py-1 rounded-md">
+                  <i data-lucide="grab" class="w-3.5 h-3.5"></i>拖曳打卡
+                </div>
+              </div>
+
+              <!-- Pin C -->
+              <div id="pin-card-c" draggable="true" ondragstart="handleDragStart(event, 'c')" onclick="handlePinSelect('c')"
+                   class="draggable-pin bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl p-3 flex items-center justify-between transition-all transform active:scale-95 shadow-sm">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-serif font-black text-lg shadow-sm">
+                    丙
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-sm text-slate-800">侯季然《37路通往童年》</h5>
+                    <p class="text-xs text-blue-800/80">線索：信義路與基隆路、市府大樓、101</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-blue-700 font-semibold bg-white/70 px-2.5 py-1 rounded-md">
+                  <i data-lucide="grab" class="w-3.5 h-3.5"></i>拖曳打卡
+                </div>
+              </div>
+
+              <!-- Pin D -->
+              <div id="pin-card-d" draggable="true" ondragstart="handleDragStart(event, 'd')" onclick="handlePinSelect('d')"
+                   class="draggable-pin bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-xl p-3 flex items-center justify-between transition-all transform active:scale-95 shadow-sm">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-orange-600 text-white flex items-center justify-center font-serif font-black text-lg shadow-sm">
+                    丁
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-sm text-slate-800">劉克襄《打開地誌文學的窗口》</h5>
+                    <p class="text-xs text-orange-800/80">線索：小油坑、七星山步道、陽明山</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-orange-700 font-semibold bg-white/70 px-2.5 py-1 rounded-md">
+                  <i data-lucide="grab" class="w-3.5 h-3.5"></i>拖曳打卡
+                </div>
+              </div>
+
+              <!-- Pin E -->
+              <div id="pin-card-e" draggable="true" ondragstart="handleDragStart(event, 'e')" onclick="handlePinSelect('e')"
+                   class="draggable-pin bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl p-3 flex items-center justify-between transition-all transform active:scale-95 shadow-sm">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-serif font-black text-lg shadow-sm">
+                    戊
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-sm text-slate-800">陳家帶《貓空找茶》</h5>
+                    <p class="text-xs text-emerald-800/80">線索：觀光纜車、景美溪、木柵鐵觀音</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-emerald-700 font-semibold bg-white/70 px-2.5 py-1 rounded-md">
+                  <i data-lucide="grab" class="w-3.5 h-3.5"></i>拖曳打卡
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Selected Pin Feedback Bar -->
+            <div id="selected-pin-feedback" class="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-xl text-xs text-purple-900 hidden flex items-center justify-between">
+              <span id="selected-pin-msg">已選取標籤，請點選地圖上的目標行政區！</span>
+              <button onclick="clearSelectedPin()" class="text-purple-600 font-bold hover:underline">取消選取</button>
+            </div>
+          </div>
+
+          <!-- Successful Card Showcase (When all 5 matched) -->
+          <div id="mission-victory-card" class="hidden bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl p-6 shadow-xl text-center space-y-3 animate-bounce">
+            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto text-2xl">🎉</div>
+            <h4 class="text-xl font-black font-serif">賀！文青打卡大成功！</h4>
+            <p class="text-xs text-emerald-100 leading-relaxed">
+              太厲害了！你已成功辨析五大經典文學作品之地誌線索，並將打卡 ICON 精準釘入正確的臺北市行政區！
+            </p>
+            <div class="pt-2">
+              <a href="#quiz-section" class="inline-block px-4 py-2 bg-white text-emerald-800 rounded-lg text-xs font-bold shadow hover:bg-emerald-50 transition-colors">
+                前往「文青素養挑戰賽」檢驗實力 <i data-lucide="arrow-right" class="w-3.5 h-3.5 inline"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. MODULE 4: QUIZ SECTION ==================== -->
+  <section id="quiz-section" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center max-w-2xl mx-auto mb-10 space-y-3">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>教學模組四
+        </div>
+        <h2 class="text-3xl font-bold font-serif text-slate-900">文青素養挑戰賽</h2>
+        <p class="text-slate-600 text-sm">
+          結合閱讀素養，檢驗你對文本地誌線索推論、空間地理認知與修辭手法的理解！
+        </p>
+      </div>
+
+      <!-- Quiz Card Box -->
+      <div class="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm relative overflow-hidden">
+        <!-- Progress Bar -->
+        <div class="mb-6">
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-500 mb-2">
+            <span>題目進度：第 <span id="quiz-current-num">1</span> 題 / 共 6 題</span>
+            <span>當前得分：<span id="quiz-score" class="text-purple-600 font-bold">0</span> 分</span>
+          </div>
+          <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full transition-all duration-300" style="width: 16.6%;"></div>
+          </div>
+        </div>
+
+        <!-- Question Container -->
+        <div id="quiz-question-box" class="space-y-6">
+          <div class="space-y-2">
+            <span id="quiz-q-category" class="inline-block px-2.5 py-1 rounded bg-purple-100 text-purple-800 text-xs font-bold">
+              空間推論
+            </span>
+            <h3 id="quiz-q-title" class="text-lg sm:text-xl font-bold font-serif text-slate-900 leading-snug">
+              載入題目中...
+            </h3>
+          </div>
+
+          <!-- Options List -->
+          <div id="quiz-options-list" class="space-y-3">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <!-- Feedback Box -->
+          <div id="quiz-feedback-box" class="hidden p-4 rounded-xl text-xs sm:text-sm leading-relaxed border transition-all">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Navigation Button -->
+          <div class="flex justify-end pt-4 border-t border-slate-200">
+            <button id="btn-next-quiz" onclick="nextQuizQuestion()" class="px-5 py-2.5 rounded-xl font-bold text-sm text-white bg-purple-600 hover:bg-purple-700 shadow-sm transition-all hidden">
+              下一題 <i data-lucide="arrow-right" class="w-4 h-4 inline ml-1"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Result Screen (Hidden by default) -->
+        <div id="quiz-result-screen" class="hidden text-center py-8 space-y-4">
+          <div class="w-20 h-20 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mx-auto text-4xl shadow-inner">
+            🏆
+          </div>
+          <h3 class="text-2xl font-black font-serif text-slate-900">挑戰完成！</h3>
+          <p id="quiz-final-eval" class="text-slate-600 text-sm max-w-md mx-auto"></p>
+          <div class="text-3xl font-black text-purple-700" id="quiz-final-score">100 分</div>
+          <div class="pt-4 flex justify-center gap-3">
+            <button onclick="restartQuiz()" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300">
+              重新測驗
+            </button>
+            <a href="#checkin-mission" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-purple-600 hover:bg-purple-700 shadow-sm">
+              回顧打卡任務
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. FOOTER ==================== -->
+  <footer class="bg-slate-100 text-slate-600 py-6 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Left: Logo, Title & Tagline (Moved here following arrow) -->
+        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3 text-center sm:text-left">
+          <div class="flex items-center space-x-2">
+            <img src="assets/badge-yuesilongmen.png" alt="閱思龍門" class="w-8 h-8 rounded-full shadow-sm">
+            <span class="font-serif font-bold text-slate-800 text-base">八上閱思龍門・臺北文青打卡趣</span>
+          </div>
+          <span class="hidden sm:inline text-slate-300">|</span>
+          <span class="text-xs text-slate-500 font-medium">穿梭臺北十二行政區與文學地誌的文青漫遊</span>
+        </div>
+
+        <!-- Right: Copyright -->
+        <div class="text-xs text-slate-500 font-medium text-center sm:text-right space-y-1">
+          <div>© 2026 學思軒</div>
+          <div class="text-[11px] text-slate-400">&gt;&lt;&gt; &gt;&lt;&gt; &gt;&lt;&gt; ˙˙˙本網頁由黃于珊老師利用Google antigravity 2.0生成製作，僅供教學使用。˙˙˙&lt;&gt;&lt; &lt;&gt;&lt; &lt;&gt;&lt;</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== 6. MODALS ==================== -->
+
+  <!-- Modal 1: Lightbox Image Viewer -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="relative max-w-4xl w-full bg-slate-900 rounded-2xl overflow-hidden p-2 flex flex-col items-center">
+      <button onclick="closeLightbox()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center transition-all">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <img id="lightbox-img" src="" alt="放大檢視" class="max-h-[80vh] w-auto object-contain rounded-lg">
+      <p id="lightbox-caption" class="text-xs text-slate-300 py-2 font-medium"></p>
+    </div>
+  </div>
+
+  <!-- ==================== 11. JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    /* ================= 1. DISTRICTS DATA & HIGHLIGHT SYSTEM ================= */
+    const districtData = {
+      datong: {
+        name: "大同區",
+        badge: "老城港埠・西區",
+        textCode: "甲",
+        workTitle: "劉捷《大稻埕點畫》",
+        textAnchor: "#text-a",
+        theme: { fill: "#f59e0b", stroke: "#b45309", glow: "rgba(245, 158, 11, 0.8)", pinPos: { x: 142, y: 330 } },
+        desc: "坐落於臺北市西部、淡水河東岸，是臺北市最早發展的商業聚落之一。清末劉銘傳開闢為商務中心，日治時期設有永樂町、日新町、太平町等，大稻埕茶葉與南北貨名揚四海，碼頭河運肩摩轂擊，為本島人與外來移民匯聚的繁盛市井。",
+        landmarks: ["大稻埕碼頭", "迪化街南北貨", "大橋頭 (台北大橋)", "霞海城隍廟", "大龍峒保安宮", "孔廟"],
+        literature: "作家劉捷在《大稻埕點畫》中以「垃圾箱之觀」比喻多元種族混成的大洪流，從日新町到大橋頭，生動記錄了日治時期臺北人口密度最高的市井浮世繪。"
+      },
+      wanhua: {
+        name: "萬華區",
+        badge: "庶民老城・西區",
+        textCode: "乙",
+        workTitle: "舒國治《西門町》",
+        textAnchor: "#text-b",
+        theme: { fill: "#ef4444", stroke: "#b91c1c", glow: "rgba(239, 68, 68, 0.8)", pinPos: { x: 135, y: 420 } },
+        desc: "舊稱「艋舺」，為平埔族語「獨木舟」之音譯，是臺北發展的起點（一府二鹿三艋舺）。西門町自日治時期即為娛樂消費重鎮，昔日中華商場連綿八座樓宇，聚集全臺老饕與追流行音樂的年輕世代，中山堂更見證許多歷史關鍵時刻。",
+        landmarks: ["西門町商圈", "艋舺龍山寺", "剝皮寮歷史街區", "中山堂", "青山宮", "昔中華商場舊址"],
+        literature: "舒國治在《西門町》以遊逛漫遊者的眼光，將點心世界麵食、西瓜大王與信棟/義棟唱片行，化為難以忘懷的西門町市井青春記憶。"
+      },
+      xinyi: {
+        name: "信義區",
+        badge: "摩天經貿・東區",
+        textCode: "丙",
+        workTitle: "侯季然《37路通往童年》",
+        textAnchor: "#text-c",
+        theme: { fill: "#2563eb", stroke: "#1e3a8a", glow: "rgba(37, 99, 235, 0.9)", pinPos: { x: 282, y: 425 } },
+        desc: "原為松山區一部分，後獨立設區。1980年代前多為四四南村等眷村、聯勤兵工廠及荒蕪農地。經過「信義計畫區」大規模都市再造後，如今匯集臺北市政府、台北101、世界貿易中心及密集百貨影城，為臺灣最具指標性的國際金融商業樞紐。",
+        landmarks: ["台北 101", "臺北市政府大樓", "信義商圈 / 威秀影城", "四四南村眷村文物館", "象山步道", "世貿展覽館"],
+        literature: "侯季然《37路通往童年》藉由一輛公車的視角，對比二十年前信義路四段大荒地與長出市府大樓、101大樓的巨大都市蛻變，充滿抒情哲思。"
+      },
+      beitou: {
+        name: "北投區",
+        badge: "山巒地熱・北區",
+        textCode: "丁",
+        workTitle: "劉克襄《打開地誌文學的窗口》",
+        textAnchor: "#text-d",
+        theme: { fill: "#f97316", stroke: "#c2410c", glow: "rgba(249, 115, 22, 0.8)", pinPos: { x: 145, y: 180 } },
+        desc: "位居臺北市最北端，擁有全臺灣最具特色的大屯火山群地質景觀與溫泉資源。七星山（主峰高1120公尺）為臺北市第一高峰，小油坑終年噴發硫磺蒸氣，竹子湖更以海芋與繡球花聞名，為兼具自然生態與人文歷史的國家公園重鎮。",
+        landmarks: ["七星山主峰步道", "小油坑地質景觀區", "陽明山國家公園", "竹子湖", "北投溫泉博物館", "地熱谷"],
+        literature: "劉克襄《打開地誌文學的窗口》從小油坑石階登上七星山，細讀步道解說牌上的自然生物知識，將自然地質踏查昇華為深刻的人文地誌對話。"
+      },
+      wenshan: {
+        name: "文山區",
+        badge: "茶鄉水岸・南區",
+        textCode: "戊",
+        workTitle: "陳家帶《貓空找茶》",
+        textAnchor: "#text-e",
+        theme: { fill: "#16a34a", stroke: "#14532d", glow: "rgba(22, 163, 74, 0.8)", pinPos: { x: 260, y: 535 } },
+        desc: "坐落於臺北盆地東南方，由景美與木柵兩區合併而成。境內環山抱谷，景美溪穿流而過。木柵貓空山區為臺灣鐵觀音茶的重要產地，兼有全臺最大的臺北市立動物園與貓空觀光纜車，文教氣息濃厚，為親近山林的最佳去處。",
+        landmarks: ["貓空茶園與景觀茶坊", "貓空觀光纜車", "臺北市立動物園", "指南宮", "景美溪河濱公園", "道南橋 / 政治大學"],
+        literature: "陳家帶《貓空找茶》以現代詩特有的感官通感手法，將貓空纜車、動物園後花園、景美溪與絕版鐵觀音巧妙鎔鑄，掀起臺北既靜又靚的綠色革命。"
+      },
+      daan: {
+        name: "大安區",
+        badge: "文教綠蔭・中心區",
+        textCode: "🏫",
+        workTitle: "閱思龍門・校園生活圈",
+        textAnchor: "#hero",
+        theme: { fill: "#9333ea", stroke: "#581c87", glow: "rgba(147, 51, 234, 0.8)", pinPos: { x: 228, y: 425 } },
+        desc: "臺北市的教育文化與優質住宅核心，境內擁有國立臺灣大學、國立臺灣師範大學、國立臺北科技大學等頂尖學府。大安森林公園素有「臺北都市之肺」美譽，而龍門國中正坐落於和平東路二段旁，人文薈萃，書香洋溢。",
+        landmarks: ["大安森林公園", "龍門國中", "臺灣大學校園", "師大夜市 / 永康街商圈", "建國假日花市"],
+        literature: "本教材設計基地【閱思龍門】即位於大安區，串聯學生的生活經驗與閱讀探索視角。"
+      },
+      zhongzheng: {
+        name: "中正區",
+        badge: "政經歷史・中心區",
+        textCode: "—",
+        workTitle: "府城古蹟與文學森林",
+        textAnchor: "#districts",
+        theme: { fill: "#0ea5e9", stroke: "#0369a1", glow: "rgba(14, 165, 233, 0.8)", pinPos: { x: 182, y: 415 } },
+        desc: "臺北府城核心，擁有總統府、行政院、司法院等中央機關，以及臺北車站交通樞紐。二二八和平公園、植物園與紀州庵文學森林皆坐落於此。",
+        landmarks: ["中正紀念堂", "總統府", "臺北植物園", "紀州庵文學森林", "國立歷史博物館"],
+        literature: "紀州庵為日治料亭改建之文學場域，為臺北文學城的重要記憶核心。"
+      },
+      zhongshan: {
+        name: "中山區",
+        badge: "都會藝文・中北區",
+        textCode: "—",
+        workTitle: "水岸與現代美術館",
+        textAnchor: "#districts",
+        theme: { fill: "#f43f5e", stroke: "#9f1239", glow: "rgba(244, 63, 94, 0.8)", pinPos: { x: 210, y: 310 } },
+        desc: "基隆河橫貫其中，擁有全臺第一座現代美術館——臺北市立美術館，以及大佳河濱公園、行天宮與林森條通日式街區文化。",
+        landmarks: ["臺北市立美術館", "行天宮", "大佳河濱公園", "林森條通商圈", "花博公園"],
+        literature: "中山北路自日治敕使街道演變至今，記載了無數現代都市小說與異國文化碰撞。"
+      },
+      songshan: {
+        name: "松山區",
+        badge: "航空水陸・中東區",
+        textCode: "—",
+        workTitle: "錫口港運與夜市喧囂",
+        textAnchor: "#districts",
+        theme: { fill: "#d946ef", stroke: "#86198f", glow: "rgba(217, 70, 239, 0.8)", pinPos: { x: 270, y: 350 } },
+        desc: "舊稱「錫口」，早期為基隆河重要貨運轉運站。如今擁有臺北松山機場，以及聞名海內外的饒河街觀光夜市與慈祐宮媽祖信仰。",
+        landmarks: ["松山機場", "饒河街觀光夜市", "松山慈祐宮", "彩虹橋水岸", "民生社區"],
+        literature: "民生社區的林蔭大道與錫口渡船頭，是許多現代散文作家書寫安適生活之場域。"
+      },
+      shilin: {
+        name: "士林區",
+        badge: "文博古蹟・北區",
+        textCode: "—",
+        workTitle: "宮廷典藏與士子文風",
+        textAnchor: "#districts",
+        theme: { fill: "#84cc16", stroke: "#3f6212", glow: "rgba(132, 204, 22, 0.8)", pinPos: { x: 280, y: 140 } },
+        desc: "舊名「八芝蘭」，文風鼎盛因而得名「士林」。擁有舉世聞名的國立故宮博物院、士林官邸、芝山岩史前遺址及天母異國商圈。",
+        landmarks: ["國立故宮博物院", "士林官邸", "芝山岩文化史蹟", "士林夜市", "天母商圈"],
+        literature: "故宮翠玉白菜與歷史典藏，屢屢激發古典與現代文人的歷史詠懷。"
+      },
+      neihu: {
+        name: "內湖區",
+        badge: "湖泊科技・東區",
+        textCode: "—",
+        workTitle: "科技新貴與水漾山林",
+        textAnchor: "#districts",
+        theme: { fill: "#14b8a6", stroke: "#115e59", glow: "rgba(20, 184, 166, 0.8)", pinPos: { x: 350, y: 280 } },
+        desc: "地形多山多湖因而得名。內湖科技園區為臺灣重要高科技總部聚落，境內大湖公園、碧湖公園與碧山巖開漳聖王廟更是休憩健行名勝。",
+        landmarks: ["內湖科技園區", "大湖公園 (錦帶橋)", "碧湖公園", "碧山巖開漳聖王廟", "白石湖吊橋"],
+        literature: "山林湖光與現代玻璃帷幕科技廠辦相互對照，呈現臺北產業轉型的多重面貌。"
+      },
+      nangang: {
+        name: "南港區",
+        badge: "生技展覽・東區",
+        textCode: "—",
+        workTitle: "茶山發源與學術重鎮",
+        textAnchor: "#districts",
+        theme: { fill: "#64748b", stroke: "#1e293b", glow: "rgba(100, 116, 139, 0.8)", pinPos: { x: 385, y: 405 } },
+        desc: "早期為黑鄉工業區與包種茶發源地，現已華麗轉型為南港軟體園區、國家生技研究園區與南港展覽館，並有中央研究院坐鎮。",
+        landmarks: ["中央研究院", "南港軟體工業園區", "臺北流行音樂中心", "南港展覽館", "南港茶葉製造示範場"],
+        literature: "中央研究院為學術思想薈萃之地，胡適紀念館更長存自由主義與學人典範。"
+      }
+    };
+
+    function selectDistrict(id) {
+      const data = districtData[id];
+      if (!data) return;
+
+      // Update card content
+      document.getElementById('dist-name').innerText = data.name;
+      document.getElementById('dist-badge').innerText = data.badge;
+      document.getElementById('dist-desc').innerText = data.desc;
+      document.getElementById('dist-literature').innerText = data.literature;
+      document.getElementById('dist-jump-btn').href = data.textAnchor;
+      document.getElementById('map-active-hint').innerText = `(已選取：${data.name} 📍)`;
+
+      if (data.textCode !== "—") {
+        document.getElementById('dist-matched-text').innerText = `對應文本：${data.textCode} (${data.workTitle})`;
+        document.getElementById('dist-matched-text').className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-purple-100 text-purple-700";
+      } else {
+        document.getElementById('dist-matched-text').innerText = `文學主題：${data.workTitle}`;
+        document.getElementById('dist-matched-text').className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-600";
+      }
+
+      // Update landmarks
+      const lmarksContainer = document.getElementById('dist-landmarks');
+      lmarksContainer.innerHTML = '';
+      data.landmarks.forEach(lm => {
+        const span = document.createElement('span');
+        span.className = "px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-medium";
+        span.innerText = lm;
+        lmarksContainer.appendChild(span);
+      });
+
+      // 1. Reset ALL SVG polygons & labels to soft neutral style
+      document.querySelectorAll('.district-polygon').forEach(p => {
+        p.style.fill = '#f8fafc';
+        p.style.fillOpacity = '0.9';
+        p.style.stroke = '#cbd5e1';
+        p.style.strokeWidth = '1.5';
+        p.style.filter = 'none';
+        p.classList.remove('district-active-glow');
+      });
+
+      document.querySelectorAll('.district-group text').forEach(t => {
+        t.style.fill = '#64748b';
+        t.style.fontWeight = 'normal';
+      });
+
+      // 2. Conspicuously and brightly highlight the target polygon!
+      const targetPoly = document.getElementById(`poly-${id}`);
+      if (targetPoly) {
+        targetPoly.style.fill = data.theme.fill;
+        targetPoly.style.fillOpacity = '1';
+        targetPoly.style.stroke = data.theme.stroke;
+        targetPoly.style.strokeWidth = '4.5';
+        targetPoly.style.filter = `drop-shadow(0 0 14px ${data.theme.glow})`;
+        targetPoly.classList.add('district-active-glow');
+      }
+
+      // 3. Highlight target text labels in high contrast
+      const targetLabel = document.getElementById(`label-${id}`);
+      if (targetLabel) {
+        targetLabel.style.fill = '#ffffff';
+        targetLabel.style.fontWeight = '900';
+        targetLabel.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))';
+      }
+      const targetSub = document.getElementById(`sub-${id}`);
+      if (targetSub) {
+        targetSub.style.fill = '#ffffff';
+        targetSub.style.fontWeight = 'bold';
+        targetSub.style.filter = 'drop-shadow(0 1px 3px rgba(0,0,0,0.8))';
+      }
+
+      // 4. Move spotlight beacon marker pin directly to this district!
+      const spotlightPin = document.getElementById('map-spotlight-pin');
+      if (spotlightPin && data.theme.pinPos) {
+        spotlightPin.setAttribute('transform', `translate(${data.theme.pinPos.x}, ${data.theme.pinPos.y})`);
+        const innerCircle = spotlightPin.querySelectorAll('circle')[1];
+        if (innerCircle) innerCircle.setAttribute('fill', data.theme.stroke);
+        const pulseCircle = spotlightPin.querySelectorAll('circle')[0];
+        if (pulseCircle) pulseCircle.setAttribute('fill', data.theme.fill);
+      }
+
+      // 5. Highlight Pill
+      document.querySelectorAll('.dist-pill').forEach(pill => {
+        if (pill.getAttribute('data-id') === id) {
+          pill.className = "dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-purple-600 text-white shadow-md transition-all scale-105 ring-2 ring-purple-300";
+        } else {
+          pill.className = "dist-pill px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all";
+        }
+      });
+    }
+
+    function highlightAllTextDistricts() {
+      const targetIds = ['datong', 'wanhua', 'xinyi', 'beitou', 'wenshan'];
+      document.querySelectorAll('.district-polygon').forEach(p => {
+        p.style.fill = '#f8fafc';
+        p.style.fillOpacity = '0.35';
+        p.style.stroke = '#cbd5e1';
+      });
+      targetIds.forEach(id => {
+        const poly = document.getElementById(`poly-${id}`);
+        const data = districtData[id];
+        if (poly && data) {
+          poly.style.fill = data.theme.fill;
+          poly.style.fillOpacity = '0.85';
+          poly.style.stroke = data.theme.stroke;
+          poly.style.strokeWidth = '2.5';
+        }
+      });
+      selectDistrict('xinyi');
+    }
+
+    function filterDistricts(region) {
+      document.querySelectorAll('.dist-filter-btn').forEach(b => {
+        if (b.getAttribute('data-region') === region) {
+          b.className = "dist-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-purple-600 text-white shadow-sm";
+        } else {
+          b.className = "dist-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200";
+        }
+      });
+
+      const regionMap = {
+        'all': ['datong', 'wanhua', 'xinyi', 'beitou', 'wenshan', 'daan', 'zhongzheng', 'zhongshan', 'songshan', 'shilin', 'neihu', 'nangang'],
+        'north': ['beitou', 'shilin'],
+        'west': ['datong', 'wanhua', 'zhongzheng'],
+        'central-east': ['zhongshan', 'songshan', 'daan', 'xinyi'],
+        'south-east': ['wenshan', 'neihu', 'nangang']
+      };
+
+      const activeList = regionMap[region] || regionMap['all'];
+      document.querySelectorAll('.district-group').forEach(grp => {
+        const id = grp.getAttribute('data-id');
+        if (activeList.includes(id)) {
+          grp.style.opacity = '1';
+          grp.style.pointerEvents = 'auto';
+        } else {
+          grp.style.opacity = '0.25';
+          grp.style.pointerEvents = 'none';
+        }
+      });
+
+      if (activeList.length > 0) {
+        selectDistrict(activeList[0]);
+      }
+    }
+
+    function toggleMapMode(mode) {
+      const svgView = document.getElementById('svg-map-container');
+      const origView = document.getElementById('original-map-container');
+      const btnSvg = document.getElementById('map-mode-svg');
+      const btnOrig = document.getElementById('map-mode-original');
+
+      if (mode === 'original') {
+        svgView.classList.add('hidden');
+        origView.classList.remove('hidden');
+        btnOrig.className = "px-2.5 py-1 rounded-md font-medium bg-purple-600 text-white transition-all";
+        btnSvg.className = "px-2.5 py-1 rounded-md font-medium text-slate-600 hover:bg-slate-100 transition-all";
+      } else {
+        origView.classList.add('hidden');
+        svgView.classList.remove('hidden');
+        btnSvg.className = "px-2.5 py-1 rounded-md font-medium bg-purple-600 text-white transition-all";
+        btnOrig.className = "px-2.5 py-1 rounded-md font-medium text-slate-600 hover:bg-slate-100 transition-all";
+      }
+    }
+
+    /* ================= 2. LITERATURE CLUES & TTS AUDIO ================= */
+    let cluesVisible = false;
+
+    function toggleAllClues() {
+      cluesVisible = !cluesVisible;
+      const tags = document.querySelectorAll('.clue-tag');
+      const btnText = document.getElementById('clue-btn-text');
+
+      tags.forEach(tag => {
+        if (cluesVisible) {
+          tag.classList.add('clue-active');
+        } else {
+          tag.classList.remove('clue-active');
+        }
+      });
+
+      if (cluesVisible) {
+        btnText.innerText = "隱藏全部地誌線索高亮";
+      } else {
+        btnText.innerText = "開啟全部地誌線索高亮";
+      }
+    }
+
+    function toggleCardClues(articleId) {
+      const card = document.getElementById(articleId);
+      if (!card) return;
+      const tags = card.querySelectorAll('.clue-tag');
+      let currentlyActive = false;
+      tags.forEach(t => { if (t.classList.contains('clue-active')) currentlyActive = true; });
+
+      tags.forEach(t => {
+        if (currentlyActive) {
+          t.classList.remove('clue-active');
+        } else {
+          t.classList.add('clue-active');
+        }
+      });
+    }
+
+    // Web Speech API Voice synthesis
+    function readText(elementId, lang = 'zh-TW') {
+      if (!('speechSynthesis' in window)) {
+        alert("很抱歉，您的瀏覽器不支援 Web Speech 語音合成 API。建議使用 Chrome 或 Edge 瀏覽器！");
+        return;
+      }
+
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        return;
+      }
+
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.innerText;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      utterance.rate = 0.95;
+      utterance.pitch = 1.0;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Reveal & Hide district answers on clue sidebar
+    function revealAnswer(id, btn) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('hidden');
+        if (btn) btn.classList.add('hidden');
+      }
+    }
+
+    function hideAnswer(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('hidden');
+        const parent = el.parentElement;
+        if (parent) {
+          const btn = parent.querySelector('button');
+          if (btn) btn.classList.remove('hidden');
+        }
+      }
+    }
+
+    /* ================= 3. INTERACTIVE CHECK-IN DRAG & DROP MISSION (12 DISTRICTS) ================= */
+    const correctAnswers = {
+      'a': 'datong',   // 甲 -> 大同區
+      'b': 'wanhua',   // 乙 -> 萬華區
+      'c': 'xinyi',    // 丙 -> 信義區
+      'd': 'beitou',   // 丁 -> 北投區
+      'e': 'wenshan'   // 戊 -> 文山區
+    };
+
+    const districtNames = {
+      'beitou': '北投區',
+      'shilin': '士林區',
+      'neihu': '內湖區',
+      'zhongshan': '中山區',
+      'datong': '大同區',
+      'songshan': '松山區',
+      'wanhua': '萬華區',
+      'zhongzheng': '中正區',
+      'daan': '大安區',
+      'xinyi': '信義區',
+      'nangang': '南港區',
+      'wenshan': '文山區'
+    };
+
+    const allDistrictIds = ['beitou', 'shilin', 'neihu', 'zhongshan', 'datong', 'songshan', 'wanhua', 'zhongzheng', 'daan', 'xinyi', 'nangang', 'wenshan'];
+
+    let missionState = {
+      completed: {
+        'a': false,
+        'b': false,
+        'c': false,
+        'd': false,
+        'e': false
+      },
+      selectedPin: null
+    };
+
+    function handleDragStart(ev, pinCode) {
+      ev.dataTransfer.setData("text/plain", pinCode);
+    }
+
+    const missionSvg = document.getElementById('mission-drop-svg');
+    if (missionSvg) {
+      missionSvg.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      missionSvg.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const pinCode = e.dataTransfer.getData("text/plain");
+        const targetElem = document.elementFromPoint(e.clientX, e.clientY);
+        const dropzone = targetElem ? targetElem.closest('.mission-dropzone') : null;
+        if (dropzone) {
+          const zoneId = dropzone.id.replace('drop-target-', '');
+          checkDrop(pinCode, zoneId);
+        }
+      });
+    }
+
+    function handlePinSelect(pinCode) {
+      if (missionState.completed[pinCode]) return;
+      missionState.selectedPin = pinCode;
+      
+      const pinNames = {
+        'a': '甲（劉捷《大稻埕點畫》）',
+        'b': '乙（舒國治《西門町》）',
+        'c': '丙（侯季然《37路通往童年》）',
+        'd': '丁（劉克襄《打開地誌文學的窗口》）',
+        'e': '戊（陳家帶《貓空找茶》）'
+      };
+
+      document.querySelectorAll('.draggable-pin').forEach(p => p.classList.remove('ring-4', 'ring-purple-400', 'pulse-glow'));
+      const activeCard = document.getElementById(`pin-card-${pinCode}`);
+      if (activeCard) {
+        activeCard.classList.add('ring-4', 'ring-purple-400', 'pulse-glow');
+      }
+
+      const feedback = document.getElementById('selected-pin-feedback');
+      const msg = document.getElementById('selected-pin-msg');
+      feedback.classList.remove('hidden');
+      msg.innerText = `已選取標籤【${pinNames[pinCode]}】，請直接點擊地圖上的 12 個行政區中對應的目標！`;
+    }
+
+    function clearSelectedPin() {
+      missionState.selectedPin = null;
+      document.querySelectorAll('.draggable-pin').forEach(p => p.classList.remove('ring-4', 'ring-purple-400', 'pulse-glow'));
+      document.getElementById('selected-pin-feedback').classList.add('hidden');
+    }
+
+    function handleZoneClick(districtId) {
+      if (!missionState.selectedPin) {
+        const dName = districtNames[districtId] || districtId;
+        alert(`你點選了【${dName}】。\n請先從右側點選或拖曳一個待打卡的文學標籤（甲~戊），再來點選目標行政區喔！`);
+        return;
+      }
+      checkDrop(missionState.selectedPin, districtId);
+    }
+
+    function checkDrop(pinCode, districtId) {
+      if (!pinCode || !districtId) return;
+
+      const pinNames = {
+        'a': '甲（劉捷《大稻埕點畫》）',
+        'b': '乙（舒國治《西門町》）',
+        'c': '丙（侯季然《37路通往童年》）',
+        'd': '丁（劉克襄《打開地誌文學的窗口》）',
+        'e': '戊（陳家帶《貓空找茶》）'
+      };
+      const clues = {
+        'a': '日新町、大橋頭、人的市場',
+        'b': '中華商場、西瓜大王、唱片行',
+        'c': '信義路與基隆路、市府大樓、101',
+        'd': '小油坑、七星山步道、陽明山',
+        'e': '觀光纜車、景美溪、木柵鐵觀音'
+      };
+
+      if (correctAnswers[pinCode] === districtId) {
+        // Correct Match!
+        missionState.completed[pinCode] = true;
+        clearSelectedPin();
+        triggerConfetti(0.3);
+
+        const pinLetters = { 'a': '甲', 'b': '乙', 'c': '丙', 'd': '丁', 'e': '戊' };
+        const pinColors = { 'a': '#d97706', 'b': '#dc2626', 'c': '#2563eb', 'd': '#ea580c', 'e': '#16a34a' };
+        const targetFills = { 'a': '#fef3c7', 'b': '#fee2e2', 'c': '#dbeafe', 'd': '#ffedd5', 'e': '#dcfce7' };
+        const targetStrokes = { 'a': '#f59e0b', 'b': '#ef4444', 'c': '#3b82f6', 'd': '#ea580c', 'e': '#16a34a' };
+
+        // Highlight matched polygon
+        const poly = document.getElementById(`poly-target-${districtId}`);
+        if (poly) {
+          poly.style.fill = targetFills[pinCode];
+          poly.style.stroke = targetStrokes[pinCode];
+          poly.style.strokeWidth = "2.8";
+        }
+        const text = document.getElementById(`text-target-${districtId}`);
+        if (text) {
+          text.style.fill = targetStrokes[pinCode];
+          text.style.fontWeight = "900";
+        }
+
+        // Slot with badge
+        const slot = document.getElementById(`slot-${districtId}`);
+        if (slot) {
+          slot.innerHTML = `
+            <circle cx="15" cy="15" r="16" fill="${pinColors[pinCode]}" stroke="white" stroke-width="2.5" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.2))"/>
+            <text x="15" y="20" font-size="13" fill="white" text-anchor="middle" font-weight="black" font-family="'Noto Serif TC', serif">${pinLetters[pinCode]}</text>
+          `;
+        }
+
+        const card = document.getElementById(`pin-card-${pinCode}`);
+        if (card) {
+          card.classList.add('opacity-40', 'pointer-events-none');
+          card.innerHTML += `<span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">✓ 已打卡</span>`;
+        }
+
+        updateMissionProgress();
+      } else {
+        const chosenName = districtNames[districtId] || districtId;
+        alert(`哎呀！配對不對喔！\n你將【${pinNames[pinCode]}】釘在【${chosenName}】。\n線索中的「${clues[pinCode]}」並不是在【${chosenName}】喔！\n請再仔細閱讀作品並參照臺北市地理方位試試看！`);
+      }
+    }
+
+    function updateMissionProgress() {
+      let count = 0;
+      Object.keys(missionState.completed).forEach(k => {
+        if (missionState.completed[k]) count++;
+      });
+
+      document.getElementById('score-counter').innerText = count;
+      const statusMsg = document.getElementById('mission-status-msg');
+
+      if (count === 5) {
+        statusMsg.innerText = "太棒了！所有 5 個文學打卡行政區皆已精確定位！";
+        statusMsg.className = "text-xs font-bold text-emerald-600";
+        document.getElementById('mission-victory-card').classList.remove('hidden');
+        triggerConfetti(1.0);
+      } else {
+        statusMsg.innerText = `已完成 ${count} / 5 個打卡任務，還有 ${5 - count} 個待探索！`;
+      }
+    }
+
+    function resetMission() {
+      missionState.completed = { 'a': false, 'b': false, 'c': false, 'd': false, 'e': false };
+      clearSelectedPin();
+      document.getElementById('score-counter').innerText = '0';
+      document.getElementById('mission-status-msg').innerText = "尚有 5 個行政區尚未打卡，請選取下方標籤開始！";
+      document.getElementById('mission-status-msg').className = "text-xs text-slate-500";
+      document.getElementById('mission-victory-card').classList.add('hidden');
+
+      allDistrictIds.forEach(id => {
+        const poly = document.getElementById(`poly-target-${id}`);
+        if (poly) {
+          poly.style.fill = '#f8fafc';
+          poly.style.stroke = '#cbd5e1';
+          poly.style.strokeWidth = '1.8';
+        }
+        const text = document.getElementById(`text-target-${id}`);
+        if (text) {
+          text.style.fill = '#475569';
+          text.style.fontWeight = 'bold';
+        }
+        const slot = document.getElementById(`slot-${id}`);
+        if (slot) {
+          slot.innerHTML = `
+            <circle cx="15" cy="15" r="16" fill="white" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 2"/>
+            <text x="15" y="19" font-size="11" fill="#94a3b8" text-anchor="middle" font-weight="bold">?</text>
+          `;
+        }
+      });
+
+      ['a', 'b', 'c', 'd', 'e'].forEach(p => {
+        const card = document.getElementById(`pin-card-${p}`);
+        if (card) {
+          card.classList.remove('opacity-40', 'pointer-events-none');
+          const checkBadge = card.querySelector('span.text-emerald-700');
+          if (checkBadge) checkBadge.remove();
+        }
+      });
+    }
+
+    function showQuickHint() {
+      alert("💡 五大作品地誌線索提示：\n\n• 甲（大稻埕點畫）：日新町、大橋頭、人的市場 ➔ 大同區\n• 乙（西門町）：中華商場、西瓜大王、唱片行 ➔ 萬華區\n• 丙（37路通往童年）：信義路、基隆路、市府大樓、101 ➔ 信義區\n• 丁（打開地誌文學窗口）：七星山、小油坑、陽明山 ➔ 北投區\n• 戊（貓空找茶）：觀光纜車、景美溪、木柵鐵觀音 ➔ 文山區\n\n（提示：請在地圖上點選或拖曳至正確行政區！）");
+    }
+
+    function triggerConfetti(intensity = 0.5) {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: Math.floor(60 * intensity),
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    /* ================= 4. MODULE 4: QUIZ LOGIC ================= */
+    const quizQuestions = [
+      {
+        category: "空間方位與行政區",
+        question: "在文本甲《大稻埕點畫》中，作者提到「日新町、大橋町、永樂町、太平町」等人潮洶湧的街町。請問這些歷史街區位於今日臺北市的哪一個行政區？",
+        options: ["大同區", "萬華區", "中山區", "中正區"],
+        correct: 0,
+        explanation: "正解為【大同區】。日新町（今日新國小周遭）、永樂町（今迪化街永樂市場）、大橋町（今台北大橋頭）皆為日治時期大同區大稻埕一帶之行政町名。"
+      },
+      {
+        category: "生活記憶與地標",
+        question: "文本乙舒國治描寫「點心世界」的蒸籠麵食、「西瓜大王」刀起刀落以及信棟、義棟唱片行。這座連綿八棟樓宇、承載老臺北無數集體記憶的傳奇地標是？",
+        options: ["光華商場", "中華商場", "萬年商業大樓", "晴光市場"],
+        correct: 1,
+        explanation: "正解為【中華商場】。中華商場坐落於萬華與中正交界之中華路上，由「忠、孝、仁、愛、信、義、和、平」八連棟組成，建於1961年，1992年拆除。"
+      },
+      {
+        category: "都市變遷與修辭",
+        question: "在文本丙《37路通往童年》中，作者寫道：「二十年前經過信義路四段和基隆路時……長滿雜草與未完成建築物的大工地，幾年後會長出了臺北市政府大樓，華納威秀，101……」此段文字主要運用何種寫作手法？",
+        options: ["今昔映襯對比與生長擬物", "層遞修辭與誇飾法", "倒敘感傷與排比論證", "反詰質問與引經據典"],
+        correct: 0,
+        explanation: "正解為【今昔映襯對比與生長擬物】。作者以「兵營雜草大工地」與「市府大樓、華納威秀、101」強烈映襯，並用動詞「長出」賦予摩天建築如植物般的生長動態。"
+      },
+      {
+        category: "自然生態與地質",
+        question: "文本丁劉克襄提到從小油坑登山口攀登七星山石階步道，登上一千公尺頂峰。請問七星山地處臺灣哪一座國家公園境內？所在的行政區為何？",
+        options: ["雪霸國家公園 / 士林區", "陽明山國家公園 / 北投區", "太魯閣國家公園 / 文山區", "玉山國家公園 / 南港區"],
+        correct: 1,
+        explanation: "正解為【陽明山國家公園 / 北投區】。七星山主峰標高1120公尺，為大屯火山群最高峰，坐落於臺北市北投區陽明山國家公園境內。"
+      },
+      {
+        category: "感官修辭（通感）",
+        question: "文本戊陳家帶《貓空找茶》寫道：「我把春天攝入眼睛／我把春天錄進耳朵／我呼吸著春／我咀嚼著春／我用喉嚨吞嚥春天／我用腸胃消化春天」。這段詩句主要運用了何種修辭手法？",
+        options: ["互文修辭", "移覺（通感）修辭", "示現修辭", "借代修辭"],
+        correct: 1,
+        explanation: "正解為【移覺（通感）修辭】。詩人將抽象的「春天」季節感受，轉換為可看（眼睛攝入）、可聽（耳朵錄進）、可聞（呼吸）、可嘗可吞（咀嚼、吞嚥、消化）的多元感官相通體驗。"
+      },
+      {
+        category: "地誌雙關諧音",
+        question: "文本戊陳家帶在詩中反覆詠嘆：「我來找春天的碴／我來春天找碴為了找茶」，「找碴」與「找茶」在寫作上達成了何種美感效果？",
+        options: ["音近雙關諧趣，將挑剔自然之美轉化為上山品茗的幽默追尋", "嚴格押韻對仗，展現古典律詩格律", "反諷嘲弄社會現實與政局變遷", "借題發揮批評茶葉價格過於昂貴"],
+        correct: 0,
+        explanation: "正解為【音近雙關諧趣】。「找碴」原意為找麻煩、吹毛求疵，此處諧音文山木柵的「找茶」，傳達詩人懷抱細緻挑剔的敏銳感官，深入貓空品味春日好茶的文青雅興。"
+      }
+    ];
+
+    let currentQIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+
+    function loadQuizQuestion() {
+      quizAnswered = false;
+      const q = quizQuestions[currentQIndex];
+
+      document.getElementById('quiz-current-num').innerText = currentQIndex + 1;
+      document.getElementById('quiz-q-category').innerText = q.category;
+      document.getElementById('quiz-q-title').innerText = q.question;
+
+      const progressPercent = ((currentQIndex + 1) / quizQuestions.length) * 100;
+      document.getElementById('quiz-progress-bar').style.width = `${progressPercent}%`;
+
+      const optionsList = document.getElementById('quiz-options-list');
+      optionsList.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "quiz-opt-btn w-full text-left p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-xs sm:text-sm font-medium text-slate-800 transition-all flex items-center justify-between";
+        btn.innerHTML = `<span><span class="font-bold text-slate-400 mr-2">${String.fromCharCode(65 + idx)}.</span> ${opt}</span>`;
+        btn.onclick = () => selectQuizOption(idx);
+        optionsList.appendChild(btn);
+      });
+
+      document.getElementById('quiz-feedback-box').className = "hidden";
+      document.getElementById('btn-next-quiz').classList.add('hidden');
+    }
+
+    function selectQuizOption(choiceIdx) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const q = quizQuestions[currentQIndex];
+      const optButtons = document.querySelectorAll('.quiz-opt-btn');
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      const nextBtn = document.getElementById('btn-next-quiz');
+
+      if (choiceIdx === q.correct) {
+        quizScore += Math.round(100 / quizQuestions.length);
+        document.getElementById('quiz-score').innerText = quizScore;
+        optButtons[choiceIdx].className = "quiz-opt-btn w-full text-left p-3.5 sm:p-4 rounded-xl border border-emerald-500 bg-emerald-50 text-xs sm:text-sm font-bold text-emerald-900 transition-all flex items-center justify-between";
+        optButtons[choiceIdx].innerHTML += `<i data-lucide="check" class="w-5 h-5 text-emerald-600"></i>`;
+        
+        feedbackBox.className = "p-4 rounded-xl text-xs sm:text-sm leading-relaxed border bg-emerald-50/80 border-emerald-200 text-emerald-900 block";
+        feedbackBox.innerHTML = `<strong>🎉 答對了！</strong> ${q.explanation}`;
+        triggerConfetti(0.2);
+      } else {
+        optButtons[choiceIdx].className = "quiz-opt-btn w-full text-left p-3.5 sm:p-4 rounded-xl border border-red-500 bg-red-50 text-xs sm:text-sm font-bold text-red-900 transition-all flex items-center justify-between";
+        optButtons[choiceIdx].innerHTML += `<i data-lucide="x" class="w-5 h-5 text-red-600"></i>`;
+        
+        optButtons[q.correct].className = "quiz-opt-btn w-full text-left p-3.5 sm:p-4 rounded-xl border border-emerald-500 bg-emerald-50 text-xs sm:text-sm font-bold text-emerald-900 transition-all flex items-center justify-between";
+        
+        feedbackBox.className = "p-4 rounded-xl text-xs sm:text-sm leading-relaxed border bg-amber-50/80 border-amber-200 text-amber-900 block";
+        feedbackBox.innerHTML = `<strong>💡 解析說明：</strong> ${q.explanation}`;
+      }
+
+      lucide.createIcons();
+      nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuizQuestion() {
+      currentQIndex++;
+      if (currentQIndex < quizQuestions.length) {
+        loadQuizQuestion();
+      } else {
+        document.getElementById('quiz-question-box').classList.add('hidden');
+        const resScreen = document.getElementById('quiz-result-screen');
+        resScreen.classList.remove('hidden');
+        document.getElementById('quiz-final-score').innerText = `${quizScore} 分`;
+
+        const evalMsg = document.getElementById('quiz-final-eval');
+        if (quizScore >= 90) {
+          evalMsg.innerText = "榮獲【特級臺北文學地誌大師】徽章！你對行政區空間定位、作品線索推論與感官修辭瞭若指掌！";
+          triggerConfetti(0.8);
+        } else if (quizScore >= 60) {
+          evalMsg.innerText = "榮獲【資深文青漫遊者】稱號！表現相當優秀，已掌握大部分文學地標與修辭技巧！";
+        } else {
+          evalMsg.innerText = "榮獲【初級城市探索見習生】稱號！建議多翻閱五大作品解碼線索，再挑戰一次會更有收穫喔！";
+        }
+      }
+    }
+
+    function restartQuiz() {
+      currentQIndex = 0;
+      quizScore = 0;
+      document.getElementById('quiz-score').innerText = '0';
+      document.getElementById('quiz-result-screen').classList.add('hidden');
+      document.getElementById('quiz-question-box').classList.remove('hidden');
+      loadQuizQuestion();
+    }
+
+    loadQuizQuestion();
+
+    /* ================= 5. MODALS & LIGHTBOX ================= */
+    function openLightbox(src, caption) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox-caption').innerText = caption;
+      document.getElementById('lightbox-modal').classList.remove('hidden');
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox-modal').classList.add('hidden');
+    }
+
+    // Default select Datong on load
+    selectDistrict('datong');
+  </script>
+</body>
+</html>

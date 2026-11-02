@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>透析臺北——文本比較與觀點思辨教學平台</title>
+  <!-- Google Fonts: Noto Serif TC & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;600;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Noto Serif TC"', 'serif'],
+            sans: ['"Noto Sans TC"', 'sans-serif'],
+            calligraphy: ['"Ma Shan Zheng"', 'cursive']
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 客製平滑捲動與排版 */
+    html {
+      scroll-behavior: smooth;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #0f172a 0%, #334155 50%, #059669 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .watermark-bg {
+      position: absolute;
+      right: 2%;
+      bottom: -15px;
+      font-size: 9rem;
+      line-height: 1;
+      color: rgba(148, 163, 184, 0.12);
+      pointer-events: none;
+      user-select: none;
+      font-family: 'Ma Shan Zheng', cursive;
+    }
+
+    /* ================= 文本證據螢光筆與編號互動體系 ================= */
+    /* 預設：原文純淨無螢光筆、編號 ❶~❺ 隱藏不劇透 */
+    .ev-mark {
+      background-color: transparent;
+      color: inherit;
+      transition: all 0.25s ease;
+      border-radius: 4px;
+    }
+    .ev-badge {
+      display: none; /* 尚未點選前隱藏 */
+      margin-right: 2px;
+      font-weight: 700;
+      vertical-align: middle;
+      user-select: none;
+    }
+
+    /* 點選揭曉後：原文亮起專屬色彩螢光筆與編號標記 */
+    .ev-mark.ev-active-1 {
+      background-color: #fef08a !important;
+      color: #713f12 !important;
+      padding: 2px 4px;
+      border-bottom: 2px solid #eab308;
+    }
+    .ev-mark.ev-active-1 .ev-badge {
+      display: inline-block !important;
+      color: #854d0e;
+    }
+
+    .ev-mark.ev-active-2 {
+      background-color: #fed7aa !important;
+      color: #7c2d12 !important;
+      padding: 2px 4px;
+      border-bottom: 2px solid #f97316;
+    }
+    .ev-mark.ev-active-2 .ev-badge {
+      display: inline-block !important;
+      color: #9a3412;
+    }
+
+    .ev-mark.ev-active-3 {
+      background-color: #bbf7d0 !important;
+      color: #14532d !important;
+      padding: 2px 4px;
+      border-bottom: 2px solid #22c55e;
+    }
+    .ev-mark.ev-active-3 .ev-badge {
+      display: inline-block !important;
+      color: #166534;
+    }
+
+    .ev-mark.ev-active-4 {
+      background-color: #e9d5ff !important;
+      color: #581c87 !important;
+      padding: 2px 4px;
+      border-bottom: 2px solid #a855f7;
+    }
+    .ev-mark.ev-active-4 .ev-badge {
+      display: inline-block !important;
+      color: #6b21a8;
+    }
+
+    .ev-mark.ev-active-5 {
+      background-color: #bae6fd !important;
+      color: #0c4a6e !important;
+      padding: 2px 4px;
+      border-bottom: 2px solid #0284c7;
+    }
+    .ev-mark.ev-active-5 .ev-badge {
+      display: inline-block !important;
+      color: #0369a1;
+    }
+
+    /* 矩陣表格遮罩樣式 */
+    .matrix-mask-cell {
+      cursor: pointer;
+      min-height: 2.5rem;
+      transition: all 0.2s ease;
+    }
+    .matrix-mask-cell .mask-holder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.6rem 0.5rem;
+      color: #64748b;
+      font-size: 0.75rem;
+      user-select: none;
+    }
+    .matrix-mask-cell:hover .mask-holder {
+      background: #f1f5f9;
+      border-color: #3b82f6;
+      color: #1d4ed8;
+    }
+    .matrix-mask-cell.revealed .mask-holder {
+      display: none;
+    }
+    .matrix-mask-cell .real-content {
+      display: none;
+    }
+    .matrix-mask-cell.revealed .real-content {
+      display: block;
+    }
+
+    /* 列印樣式優化 */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-shadow-none {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+      }
+      .matrix-mask-cell .mask-holder {
+        display: none !important;
+      }
+      .matrix-mask-cell .real-content {
+        display: block !important;
+      }
+      .kp-mask {
+        display: none !important;
+      }
+      .kp-content {
+        display: block !important;
+      }
+      .ev-badge {
+        display: inline-block !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- ================= 頂部導覽列 (Sticky Header) ================= -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- 品牌與主題 -->
+      <div class="flex items-center space-x-3">
+        <img src="badge-yuesilongmen.png" alt="閱思龍門" class="w-10 h-10 object-contain rounded-full shadow-sm hover:rotate-12 transition-transform duration-300">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-serif font-black text-lg text-slate-900 tracking-wide">透析臺北</span>
+            <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">
+              八上閱思龍門・多元文本比較
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 hidden sm:block">閱讀理解 × 文本證據標註 × 圖表統整 × 價值思辨</p>
+        </div>
+      </div>
+
+      <!-- 快捷錨點導覽（全面防止折行、加寬間距） -->
+      <nav class="hidden md:flex items-center space-x-1 lg:space-x-3 text-sm font-medium text-slate-600 shrink-0">
+        <a href="#overview" class="px-3 py-1.5 rounded-lg hover:text-emerald-600 hover:bg-emerald-50/60 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+          <i data-lucide="book-open" class="w-4 h-4"></i> 四大文本
+        </a>
+        <a href="#charts" class="px-3 py-1.5 rounded-lg hover:text-emerald-600 hover:bg-emerald-50/60 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+          <i data-lucide="bar-chart-2" class="w-4 h-4"></i> 圖表統整
+        </a>
+        <a href="#debate" class="px-3 py-1.5 rounded-lg hover:text-emerald-600 hover:bg-emerald-50/60 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+          <i data-lucide="scale" class="w-4 h-4"></i> 觀點思辨
+        </a>
+        <a href="#my-view" class="px-3 py-1.5 rounded-lg hover:text-emerald-600 hover:bg-emerald-50/60 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+          <i data-lucide="pen-tool" class="w-4 h-4"></i> 個人見解
+        </a>
+      </nav>
+
+      <!-- 視角模式切換器 (雙膠囊開關：單行呈現不換行、更寬更清晰) -->
+      <div class="flex items-center shrink-0">
+        <div class="inline-flex p-1 rounded-xl bg-slate-100 border border-slate-300 shadow-inner">
+          <button id="modeBtnStudent" onclick="setAppMode('student')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-white text-emerald-800 shadow-sm transition-all flex items-center gap-1.5 ring-2 ring-emerald-500 whitespace-nowrap" title="學生視角：原文純淨無標記、要點遮罩防劇透、雷達圖空白">
+            <i data-lucide="user" class="w-4 h-4 text-emerald-600"></i>
+            <span>學生視角</span>
+          </button>
+          <button id="modeBtnTeacher" onclick="setAppMode('teacher')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1.5 whitespace-nowrap" title="教師視角：解答全開、原文標註、雷達圖載入">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-amber-600"></i>
+            <span>教師視角</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= Hero 橫幅區 ================= -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200/80 py-12 lg:py-16">
+    <div class="watermark-bg">城事浮生</div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-xs font-semibold uppercase tracking-wider mb-4 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          [閱思龍門]透析臺北
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-tight text-slate-900 mb-4 leading-tight">
+          透析臺北 <span class="text-gradient">——文本比較與觀點交鋒</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-sans mb-8">
+          同一座盆地，四重截然不同的城市靈魂。透過要點統整、文本證據標記、雷達圖與矩陣對照，進行深度價值辯論，找尋你與這座城市的共鳴！
+        </p>
+
+        <!-- 三大目標膠囊卡片 -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+          <div class="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-sm hover:border-emerald-300 transition group">
+            <div class="flex items-center gap-2 text-emerald-600 font-bold text-sm mb-1">
+              <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-xs">1</span>
+              依據要點・標註證據
+            </div>
+            <p class="text-xs text-slate-500">原文預設純淨無標記；點選解碼後，對應文句同步亮起螢光筆與證據編號！</p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-sm hover:border-blue-300 transition group">
+            <div class="flex items-center gap-2 text-blue-600 font-bold text-sm mb-1">
+              <span class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-xs">2</span>
+              清晰雷達・綜合矩陣
+            </div>
+            <p class="text-xs text-slate-500">五維度雷達圖標題清晰銳利不模糊；加寬版矩陣防雷表逐格點選揭曉。</p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-sm hover:border-amber-300 transition group">
+            <div class="flex items-center gap-2 text-amber-600 font-bold text-sm mb-1">
+              <span class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-xs">3</span>
+              思辨天平・發表個人見解
+            </div>
+            <p class="text-xs text-slate-500">評判作者觀點是否客觀認同，分享真實經驗並產出個人論述。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 主體內容區 ================= -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+    <!-- ----------------- 單元一：四大選篇文本精讀展覽室 ----------------- -->
+    <section id="overview" class="scroll-mt-20">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-slate-200">
+        <div>
+          <div class="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-1">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+            <span>MODULE 01・TEXT EXPLORATION & EVIDENCE</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900">四大文本精讀展覽室</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            原文文本在尚未點選之前<strong class="text-slate-900">保持乾淨無螢光筆、無編號</strong>。點選下方解碼後，答案揭曉且原文同步點亮螢光筆證據！
+          </p>
+        </div>
+
+        <div class="mt-4 md:mt-0 flex flex-wrap items-center gap-2">
+          <button onclick="revealAllCards(true)" class="px-3 py-1.5 text-xs font-semibold bg-emerald-50 border border-emerald-300 text-emerald-700 hover:bg-emerald-100 rounded-lg flex items-center gap-1.5 shadow-sm transition">
+            <i data-lucide="unlock" class="w-3.5 h-3.5"></i>
+            一鍵揭曉四大文本全部解答與證據
+          </button>
+          <button onclick="revealAllCards(false)" class="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-300 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center gap-1.5 shadow-sm transition">
+            <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+            一鍵全部隱藏（恢復純淨文本）
+          </button>
+        </div>
+      </div>
+
+      <!-- 四大文本精讀展覽室（單欄寬敞版面，不分兩欄；左側原文、右側解碼） -->
+      <div class="space-y-10">
+
+        <!-- 文本一：舒國治 -->
+        <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition overflow-hidden group">
+          <div class="p-6 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border-b border-amber-100 flex items-start justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500 text-white">文本一</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">漫遊閒散・歷史水城</span>
+              </div>
+              <h3 class="font-serif font-bold text-xl sm:text-2xl text-slate-900 group-hover:text-amber-700 transition">
+                〈水渠與老巷弄的浮生半日〉
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">選自 舒國治《水城臺北》/《理想的下午》</p>
+            </div>
+            
+            <button onclick="speakText('text-content-1', this)" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-amber-600 hover:border-amber-300 transition shadow-sm" title="語音朗讀此篇">
+              <i data-lucide="volume-2" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- 內容區塊：左邊是原文文本（單欄舒適閱讀），右邊是【文本核心要點解碼與證據】 -->
+          <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- 左側：原文文本區 (佔 7 欄，閱讀沉浸，不分兩欄) -->
+            <div class="lg:col-span-7 flex flex-col justify-between">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-500 flex items-center gap-1.5">
+                  <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-600"></i> 原文精讀（點選右側要點，此處同步標記證據）
+                </span>
+                <span class="text-[11px] text-slate-400">點選右側解答連動高亮</span>
+              </div>
+              <div id="text-content-1" class="font-serif text-slate-800 leading-relaxed text-base sm:text-lg space-y-4 bg-amber-50/25 p-5 sm:p-6 rounded-2xl border border-amber-100/70 shadow-sm">
+                <p>
+                  「台北的好，在於它有許多讓人可以隨意散步的小巷。早晨陽光斜照在灰撲撲的公寓陽台上，九重葛垂落下來。走進<span class="ev-mark ev-text-1-2"><span class="ev-badge">❷</span>永康街或溫州街的巷弄</span>裡，你甚至可以看見昔日<span class="ev-mark ev-text-1-2"><span class="ev-badge">❷</span>水圳留下來的彎曲路徑</span>……
+                </p>
+                <p>
+                  台北是個盆地，古早時候是水城。即便今日被柏油路封蓋，但那股濕潤、<span class="ev-mark ev-text-1-3"><span class="ev-badge">❸</span>隨興、容許人無所事事</span>吃一碗<span class="ev-mark ev-text-1-4"><span class="ev-badge">❹</span>牛肉麵</span>或在<span class="ev-mark ev-text-1-2"><span class="ev-badge">❷</span>樹蔭下</span><span class="ev-mark ev-text-1-3"><span class="ev-badge">❸</span>打盹</span>的氣質，<span class="ev-mark ev-text-1-5"><span class="ev-badge">❺</span>依舊是它最迷人的靈魂</span>。<span class="ev-mark ev-text-1-3"><span class="ev-badge">❸</span>不必趕著去哪裡</span>，在台北散步，<span class="ev-mark ev-text-1-1"><span class="ev-badge">❶</span>走迷路了也是一種風雅</span>。」
+                </p>
+              </div>
+            </div>
+
+            <!-- 右側：【文本核心要點解碼與證據】 (佔 5 欄) -->
+            <div class="lg:col-span-5 bg-slate-50/80 p-5 rounded-2xl border border-slate-200/80">
+              <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
+                <button onclick="toggleAnalysis('analysis-1')" class="flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+                  <span>【文本核心要點解碼與證據】</span>
+                  <i id="icon-analysis-1" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                </button>
+                <div class="flex items-center gap-1 text-[11px]">
+                  <button onclick="revealCard(1, true)" class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200 transition">揭曉本篇</button>
+                  <button onclick="revealCard(1, false)" class="px-2 py-0.5 rounded bg-white text-slate-600 hover:bg-slate-200 border border-slate-200 transition">隱藏</button>
+                </div>
+              </div>
+
+              <div id="analysis-1" class="space-y-2">
+                <!-- 要點 1 -->
+                <div class="kp-block" id="kp-1-1" onclick="toggleEvidenceItem(1, 1)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-amber-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">觀察視角</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-amber-500 text-white text-[10px]">❶ 觀察視角</span> 漫遊者、懷舊文人、生活哲學家</div>
+                    <div class="text-[11px] text-amber-900 bg-white/90 p-1.5 rounded border border-amber-200/70">📌 <strong>文本證據 ❶：</strong>「在台北散步，走迷路了也是一種風雅」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 2 -->
+                <div class="kp-block" id="kp-1-2" onclick="toggleEvidenceItem(1, 2)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-amber-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">空間焦點</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-amber-500 text-white text-[10px]">❷ 空間焦點</span> 永康溫州老巷弄、古水圳彎道、樹蔭小吃攤</div>
+                    <div class="text-[11px] text-amber-900 bg-white/90 p-1.5 rounded border border-amber-200/70">📌 <strong>文本證據 ❷：</strong>「永康街或溫州街的巷弄」、「水圳留下來的彎曲路徑」、「樹蔭下」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 3 -->
+                <div class="kp-block" id="kp-1-3" onclick="toggleEvidenceItem(1, 3)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-amber-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">生活節奏</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-amber-500 text-white text-[10px]">❸ 生活節奏</span> 極緩慢、隨興晃蕩、無所事事</div>
+                    <div class="text-[11px] text-amber-900 bg-white/90 p-1.5 rounded border border-amber-200/70">📌 <strong>文本證據 ❸：</strong>「隨興、容許人無所事事」、「打盹」、「不必趕著去哪裡」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 4 -->
+                <div class="kp-block" id="kp-1-4" onclick="toggleEvidenceItem(1, 4)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-amber-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">人際溫度</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-amber-500 text-white text-[10px]">❹ 人際溫度</span> 悠閒溫厚、常民人情味、鄰里默契</div>
+                    <div class="text-[11px] text-amber-900 bg-white/90 p-1.5 rounded border border-amber-200/70">📌 <strong>文本證據 ❹：</strong>「吃一碗牛肉麵」（街坊常民之間不言而喻的信任與溫度）</div>
+                  </div>
+                </div>
+
+                <!-- 要點 5 -->
+                <div class="kp-block" id="kp-1-5" onclick="toggleEvidenceItem(1, 5)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-amber-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-amber-700">核心觀點</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-amber-100/80 border border-amber-300 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-amber-600 text-white text-[10px]">❺ 核心觀點</span> 臺北的美在未經整飾的巷弄日常，慢活是治癒心靈的解方。</div>
+                    <div class="text-[11px] text-amber-900 bg-white/90 p-1.5 rounded border border-amber-200/70">📌 <strong>文本證據 ❺：</strong>「即便今日被柏油路封蓋……依舊是它最迷人的靈魂」</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 文本二：韓良露 -->
+        <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition overflow-hidden group">
+          <div class="p-6 bg-gradient-to-r from-rose-500/10 via-rose-500/5 to-transparent border-b border-rose-100 flex items-start justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500 text-white">文本二</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800">都會文化・理智剖析</span>
+              </div>
+              <h3 class="font-serif font-bold text-xl sm:text-2xl text-slate-900 group-hover:text-rose-700 transition">
+                〈這座城市的甜美與殘酷〉
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">選自 韓良露《台北的甜美與殘酷》/《台北生活風格》</p>
+            </div>
+            
+            <button onclick="speakText('text-content-2', this)" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-rose-600 hover:border-rose-300 transition shadow-sm" title="語音朗讀此篇">
+              <i data-lucide="volume-2" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- 內容區塊：左邊是原文文本（單欄舒適閱讀），右邊是【文本核心要點解碼與證據】 -->
+          <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- 左側：原文文本區 (佔 7 欄，閱讀沉浸，不分兩欄) -->
+            <div class="lg:col-span-7 flex flex-col justify-between">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-500 flex items-center gap-1.5">
+                  <i data-lucide="book-open" class="w-3.5 h-3.5 text-rose-600"></i> 原文精讀（點選右側要點，此處同步標記證據）
+                </span>
+                <span class="text-[11px] text-slate-400">點選右側解答連動高亮</span>
+              </div>
+              <div id="text-content-2" class="font-serif text-slate-800 leading-relaxed text-base sm:text-lg space-y-4 bg-rose-50/25 p-5 sm:p-6 rounded-2xl border border-rose-100/70 shadow-sm">
+                <p>
+                  「台北是甜美的。它有全世界最密集的<span class="ev-mark ev-text-2-2"><span class="ev-badge">❷</span>二十四小時書店與超商</span>、深夜不熄的<span class="ev-mark ev-text-2-2"><span class="ev-badge">❷</span>夜市小吃</span>、四通八達的捷運，以及一種<span class="ev-mark ev-text-2-1"><span class="ev-badge">❶</span>高度尊重個人隱私的文明疏離</span>。你在這裡可以做任何你想做的人，<span class="ev-mark ev-text-2-4"><span class="ev-badge">❹</span>沒有人會過度干涉你</span>。
+                </p>
+                <p>
+                  但台北同時也是殘酷的。高昂的房價、狹窄如火柴盒的<span class="ev-mark ev-text-2-2"><span class="ev-badge">❷</span>出租套房</span>、冷酷的職場競爭，以及人與人之間<span class="ev-mark ev-text-2-4"><span class="ev-badge">❹</span>客氣卻難以穿透的心牆</span>。它像一座<span class="ev-mark ev-text-2-3"><span class="ev-badge">❸</span>巨大的旋轉舞台，只獎勵跑得夠快的人</span>。這座城市<span class="ev-mark ev-text-2-5"><span class="ev-badge">❺</span>擁抱你的夢想，卻也隨時冷眼看著你被現實吞沒</span>。」
+                </p>
+              </div>
+            </div>
+
+            <!-- 右側：【文本核心要點解碼與證據】 (佔 5 欄) -->
+            <div class="lg:col-span-5 bg-slate-50/80 p-5 rounded-2xl border border-slate-200/80">
+              <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
+                <button onclick="toggleAnalysis('analysis-2')" class="flex items-center gap-1.5 text-xs font-bold text-rose-700 hover:text-rose-800">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-rose-500"></i>
+                  <span>【文本核心要點解碼與證據】</span>
+                  <i id="icon-analysis-2" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                </button>
+                <div class="flex items-center gap-1 text-[11px]">
+                  <button onclick="revealCard(2, true)" class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 transition">揭曉本篇</button>
+                  <button onclick="revealCard(2, false)" class="px-2 py-0.5 rounded bg-white text-slate-600 hover:bg-slate-200 border border-slate-200 transition">隱藏</button>
+                </div>
+              </div>
+
+              <div id="analysis-2" class="space-y-2">
+                <!-- 要點 1 -->
+                <div class="kp-block" id="kp-2-1" onclick="toggleEvidenceItem(2, 1)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-rose-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">觀察視角</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-rose-500 text-white text-[10px]">❶ 觀察視角</span> 都會觀察家、文化評論家、深刻反思者</div>
+                    <div class="text-[11px] text-rose-900 bg-white/90 p-1.5 rounded border border-rose-200/70">📌 <strong>文本證據 ❶：</strong>「高度尊重個人隱私的文明疏離」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 2 -->
+                <div class="kp-block" id="kp-2-2" onclick="toggleEvidenceItem(2, 2)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-rose-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">空間焦點</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-rose-500 text-white text-[10px]">❷ 空間焦點</span> 24hr書店超商、夜市商圈、摩天大樓、窄小套房</div>
+                    <div class="text-[11px] text-rose-900 bg-white/90 p-1.5 rounded border border-rose-200/70">📌 <strong>文本證據 ❷：</strong>「二十四小時書店與超商」、「夜市小吃」、「出租套房」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 3 -->
+                <div class="kp-block" id="kp-2-3" onclick="toggleEvidenceItem(2, 3)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-rose-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">生活節奏</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-rose-500 text-white text-[10px]">❸ 生活節奏</span> 高速運轉、日夜不歇、競爭焦灼</div>
+                    <div class="text-[11px] text-rose-900 bg-white/90 p-1.5 rounded border border-rose-200/70">📌 <strong>文本證據 ❸：</strong>「像一座巨大的旋轉舞台，只獎勵跑得夠快的人」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 4 -->
+                <div class="kp-block" id="kp-2-4" onclick="toggleEvidenceItem(2, 4)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-rose-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">人際溫度</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-rose-500 text-white text-[10px]">❹ 人際溫度</span> 文明禮貌但築起心牆、既自由亦孤寂</div>
+                    <div class="text-[11px] text-rose-900 bg-white/90 p-1.5 rounded border border-rose-200/70">📌 <strong>文本證據 ❹：</strong>「客氣卻難以穿透的心牆」、「沒有人會過度干涉你」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 5 -->
+                <div class="kp-block" id="kp-2-5" onclick="toggleEvidenceItem(2, 5)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-rose-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-rose-700">核心觀點</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-rose-100/80 border border-rose-300 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-rose-600 text-white text-[10px]">❺ 核心觀點</span> 臺北是極具便利與冷酷競爭的雙面獸，自由的代價是承受孤獨。</div>
+                    <div class="text-[11px] text-rose-900 bg-white/90 p-1.5 rounded border border-rose-200/70">📌 <strong>文本證據 ❺：</strong>「擁抱你的夢想，卻也隨時冷眼看著你被現實吞沒」</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 文本三：劉克襄 -->
+        <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition overflow-hidden group">
+          <div class="p-6 bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border-b border-emerald-100 flex items-start justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">文本三</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">生態地景・綠色行腳</span>
+              </div>
+              <h3 class="font-serif font-bold text-xl sm:text-2xl text-slate-900 group-hover:text-emerald-700 transition">
+                〈群山環抱的綠意秘密〉
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">選自 劉克襄《安靜的台北》/《台北盆地的綠意邊界》</p>
+            </div>
+            
+            <button onclick="speakText('text-content-3', this)" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-emerald-600 hover:border-emerald-300 transition shadow-sm" title="語音朗讀此篇">
+              <i data-lucide="volume-2" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- 內容區塊：左邊是原文文本（單欄舒適閱讀），右邊是【文本核心要點解碼與證據】 -->
+          <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- 左側：原文文本區 (佔 7 欄，閱讀沉浸，不分兩欄) -->
+            <div class="lg:col-span-7 flex flex-col justify-between">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-500 flex items-center gap-1.5">
+                  <i data-lucide="book-open" class="w-3.5 h-3.5 text-emerald-600"></i> 原文精讀（點選右側要點，此處同步標記證據）
+                </span>
+                <span class="text-[11px] text-slate-400">點選右側解答連動高亮</span>
+              </div>
+              <div id="text-content-3" class="font-serif text-slate-800 leading-relaxed text-base sm:text-lg space-y-4 bg-emerald-50/25 p-5 sm:p-6 rounded-2xl border border-emerald-100/70 shadow-sm">
+                <p>
+                  「許多人以為台北只是一座被混凝土包覆的冷漠巨獸，但只要你搭上一班捷運或公車，<span class="ev-mark ev-text-3-3"><span class="ev-badge">❸</span>不到半小時</span>，你就能從最喧囂的信義商圈鑽進<span class="ev-mark ev-text-3-2"><span class="ev-badge">❷</span>象山、四獸山的林蔭深處</span>。台北最得天獨厚之處，在於它是一座<span class="ev-mark ev-text-3-5"><span class="ev-badge">❺</span>被群山與雙河擁抱的盆地</span>。
+                </p>
+                <p>
+                  當<span class="ev-mark ev-text-3-2"><span class="ev-badge">❷</span>大安森林公園的黑冠麻鷺</span>在草坪上<span class="ev-mark ev-text-3-3"><span class="ev-badge">❸</span>悠閒漫步</span>，當<span class="ev-mark ev-text-3-2"><span class="ev-badge">❷</span>基隆河岸的紅樹林</span>迎來冬候鳥，你才會猛然發覺：<span class="ev-mark ev-text-3-5"><span class="ev-badge">❺</span>自然從未離開台北</span>，它始終在城市的屋簷下與水泥縫隙中<span class="ev-mark ev-text-3-4"><span class="ev-badge">❹</span>頑強呼吸</span>。學會走出商場、<span class="ev-mark ev-text-3-1"><span class="ev-badge">❶</span>抬頭看山，你才算真正認識了台北</span>。」
+                </p>
+              </div>
+            </div>
+
+            <!-- 右側：【文本核心要點解碼與證據】 (佔 5 欄) -->
+            <div class="lg:col-span-5 bg-slate-50/80 p-5 rounded-2xl border border-slate-200/80">
+              <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
+                <button onclick="toggleAnalysis('analysis-3')" class="flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-emerald-500"></i>
+                  <span>【文本核心要點解碼與證據】</span>
+                  <i id="icon-analysis-3" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                </button>
+                <div class="flex items-center gap-1 text-[11px]">
+                  <button onclick="revealCard(3, true)" class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition">揭曉本篇</button>
+                  <button onclick="revealCard(3, false)" class="px-2 py-0.5 rounded bg-white text-slate-600 hover:bg-slate-200 border border-slate-200 transition">隱藏</button>
+                </div>
+              </div>
+
+              <div id="analysis-3" class="space-y-2">
+                <!-- 要點 1 -->
+                <div class="kp-block" id="kp-3-1" onclick="toggleEvidenceItem(3, 1)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-emerald-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">觀察視角</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-emerald-600 text-white text-[10px]">❶ 觀察視角</span> 自然觀察家、山林行腳者、生態作家</div>
+                    <div class="text-[11px] text-emerald-900 bg-white/90 p-1.5 rounded border border-emerald-200/70">📌 <strong>文本證據 ❶：</strong>「學會走出商場、抬頭看山，你才算真正認識了台北」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 2 -->
+                <div class="kp-block" id="kp-3-2" onclick="toggleEvidenceItem(3, 2)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-emerald-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">空間焦點</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-emerald-600 text-white text-[10px]">❷ 空間焦點</span> 象山四獸山、大安森林公園草坪、基隆河紅樹林</div>
+                    <div class="text-[11px] text-emerald-900 bg-white/90 p-1.5 rounded border border-emerald-200/70">📌 <strong>文本證據 ❷：</strong>「象山、四獸山的林蔭深處」、「大安森林公園」、「基隆河岸紅樹林」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 3 -->
+                <div class="kp-block" id="kp-3-3" onclick="toggleEvidenceItem(3, 3)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-emerald-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">生活節奏</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-emerald-600 text-white text-[10px]">❸ 生活節奏</span> 靜謐深著、順應四時、從容踏查</div>
+                    <div class="text-[11px] text-emerald-900 bg-white/90 p-1.5 rounded border border-emerald-200/70">📌 <strong>文本證據 ❸：</strong>「不到半小時鑽進林蔭深處」、「悠閒漫步」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 4 -->
+                <div class="kp-block" id="kp-3-4" onclick="toggleEvidenceItem(3, 4)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-emerald-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">人際溫度</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-emerald-600 text-white text-[10px]">❹ 人際溫度</span> 物我相融、敬畏生命、生命頑強共生</div>
+                    <div class="text-[11px] text-emerald-900 bg-white/90 p-1.5 rounded border border-emerald-200/70">📌 <strong>文本證據 ❹：</strong>「在城市的屋簷下與水泥縫隙中頑強呼吸」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 5 -->
+                <div class="kp-block" id="kp-3-5" onclick="toggleEvidenceItem(3, 5)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-emerald-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-emerald-700">核心觀點</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-emerald-100/80 border border-emerald-300 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-emerald-700 text-white text-[10px]">❺ 核心觀點</span> 臺北的真正魅力在「離自然極近」，永續關鍵在感知自然生機。</div>
+                    <div class="text-[11px] text-emerald-900 bg-white/90 p-1.5 rounded border border-emerald-200/70">📌 <strong>文本證據 ❺：</strong>「被群山與雙河擁抱的盆地」、「自然從未離開台北」</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 文本四：李維 -->
+        <article class="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition overflow-hidden group">
+          <div class="p-6 bg-gradient-to-r from-sky-500/10 via-sky-500/5 to-transparent border-b border-sky-100 flex items-start justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-600 text-white">文本四</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-800">北漂拼搏・生存焦慮</span>
+              </div>
+              <h3 class="font-serif font-bold text-xl sm:text-2xl text-slate-900 group-hover:text-sky-700 transition">
+                〈在捷運尖峰時刻，我找不到自己的影子〉
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">選自 李維（當代青年作家）《北漂青年生存記事》</p>
+            </div>
+            
+            <button onclick="speakText('text-content-4', this)" class="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-sky-600 hover:border-sky-300 transition shadow-sm" title="語音朗讀此篇">
+              <i data-lucide="volume-2" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- 內容區塊：左邊是原文文本（單欄舒適閱讀），右邊是【文本核心要點解碼與證據】 -->
+          <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- 左側：原文文本區 (佔 7 欄，閱讀沉浸，不分兩欄) -->
+            <div class="lg:col-span-7 flex flex-col justify-between">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-500 flex items-center gap-1.5">
+                  <i data-lucide="book-open" class="w-3.5 h-3.5 text-sky-600"></i> 原文精讀（點選右側要點，此處同步標記證據）
+                </span>
+                <span class="text-[11px] text-slate-400">點選右側解答連動高亮</span>
+              </div>
+              <div id="text-content-4" class="font-serif text-slate-800 leading-relaxed text-base sm:text-lg space-y-4 bg-sky-50/25 p-5 sm:p-6 rounded-2xl border border-sky-100/70 shadow-sm">
+                <p>
+                  「<span class="ev-mark ev-text-4-2"><span class="ev-badge">❷</span>捷運忠孝復興站</span>的手扶梯像一條<span class="ev-mark ev-text-4-3"><span class="ev-badge">❸</span>永不停歇的輸送帶</span>，所有人<span class="ev-mark ev-text-4-4"><span class="ev-badge">❹</span>面無表情地盯著手機螢幕</span>，以<span class="ev-mark ev-text-4-3"><span class="ev-badge">❸</span>精密計算過的步伐快速穿梭</span>。每個月五號薪水入帳，轉身就有一半付給了<span class="ev-mark ev-text-4-2"><span class="ev-badge">❷</span>頂樓加蓋、沒有對外窗的小套房</span>。
+                </p>
+                <p>
+                  在文青咖啡館的落地窗外，<span class="ev-mark ev-text-4-2"><span class="ev-badge">❷</span>信義區的霓虹燈</span>璀璨得像一場不真實的夢境。台北給了我們最豐富的藝文展覽、最多元的人生可能，但它也每天都在質問我們：你配得上這座城市的繁華嗎？<span class="ev-mark ev-text-4-1"><span class="ev-badge">❶</span>對於北漂族而言</span>，台北是造夢的天堂，也是讓人<span class="ev-mark ev-text-4-5"><span class="ev-badge">❺</span>精疲力竭的修煉場</span>。」
+                </p>
+              </div>
+            </div>
+
+            <!-- 右側：【文本核心要點解碼與證據】 (佔 5 欄) -->
+            <div class="lg:col-span-5 bg-slate-50/80 p-5 rounded-2xl border border-slate-200/80">
+              <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
+                <button onclick="toggleAnalysis('analysis-4')" class="flex items-center gap-1.5 text-xs font-bold text-sky-700 hover:text-sky-800">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-sky-500"></i>
+                  <span>【文本核心要點解碼與證據】</span>
+                  <i id="icon-analysis-4" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                </button>
+                <div class="flex items-center gap-1 text-[11px]">
+                  <button onclick="revealCard(4, true)" class="px-2 py-0.5 rounded bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 transition">揭曉本篇</button>
+                  <button onclick="revealCard(4, false)" class="px-2 py-0.5 rounded bg-white text-slate-600 hover:bg-slate-200 border border-slate-200 transition">隱藏</button>
+                </div>
+              </div>
+
+              <div id="analysis-4" class="space-y-2">
+                <!-- 要點 1 -->
+                <div class="kp-block" id="kp-4-1" onclick="toggleEvidenceItem(4, 1)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-sky-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">觀察視角</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-sky-50 border border-sky-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-sky-600 text-white text-[10px]">❶ 觀察視角</span> 打拼青年、北漂租屋族、基層勞動者</div>
+                    <div class="text-[11px] text-sky-900 bg-white/90 p-1.5 rounded border border-sky-200/70">📌 <strong>文本證據 ❶：</strong>「在捷運尖峰時刻，我找不到自己的影子」、「對於北漂族而言」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 2 -->
+                <div class="kp-block" id="kp-4-2" onclick="toggleEvidenceItem(4, 2)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-sky-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">空間焦點</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-sky-50 border border-sky-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-sky-600 text-white text-[10px]">❷ 空間焦點</span> 捷運轉乘站輸送帶、頂樓加蓋無窗房、信義商圈</div>
+                    <div class="text-[11px] text-sky-900 bg-white/90 p-1.5 rounded border border-sky-200/70">📌 <strong>文本證據 ❷：</strong>「捷運忠孝復興站」、「頂樓加蓋沒有對外窗的小套房」、「信義區霓虹燈」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 3 -->
+                <div class="kp-block" id="kp-4-3" onclick="toggleEvidenceItem(4, 3)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-sky-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">生活節奏</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-sky-50 border border-sky-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-sky-600 text-white text-[10px]">❸ 生活節奏</span> 緊繃窒息、分秒必爭、身心俱疲</div>
+                    <div class="text-[11px] text-sky-900 bg-white/90 p-1.5 rounded border border-sky-200/70">📌 <strong>文本證據 ❸：</strong>「永不停歇的輸送帶」、「精密計算過的步伐快速穿梭」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 4 -->
+                <div class="kp-block" id="kp-4-4" onclick="toggleEvidenceItem(4, 4)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-sky-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-slate-700">人際溫度</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-sky-50 border border-sky-200 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-sky-600 text-white text-[10px]">❹ 人際溫度</span> 面無表情、隔絕疏離、巨大的自我渺小感</div>
+                    <div class="text-[11px] text-sky-900 bg-white/90 p-1.5 rounded border border-sky-200/70">📌 <strong>文本證據 ❹：</strong>「面無表情地盯著手機螢幕」、「每天都在質問我們」</div>
+                  </div>
+                </div>
+
+                <!-- 要點 5 -->
+                <div class="kp-block" id="kp-4-5" onclick="toggleEvidenceItem(4, 5)">
+                  <div class="kp-mask flex items-center justify-between p-2 rounded-lg bg-slate-100/90 hover:bg-sky-50/80 cursor-pointer border border-dashed border-slate-300 transition">
+                    <span class="text-xs font-bold text-sky-700">核心觀點</span>
+                    <span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i data-lucide="eye" class="w-3 h-3 text-emerald-600"></i>點選揭曉解答與證據</span>
+                  </div>
+                  <div class="kp-content hidden p-2.5 rounded-lg bg-sky-100/80 border border-sky-300 text-xs space-y-1">
+                    <div class="font-bold text-slate-900 flex items-center gap-1.5"><span class="px-1.5 py-0.2 rounded bg-sky-700 text-white text-[10px]">❺ 核心觀點</span> 繁華是資本打造的門檻，對普通青年是極度嚴苛的生存競技場。</div>
+                    <div class="text-[11px] text-sky-900 bg-white/90 p-1.5 rounded border border-sky-200/70">📌 <strong>文本證據 ❺：</strong>「造夢的天堂，也是讓人精疲力竭的修煉場」</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ----------------- 單元二：動態圖表統整中心 ----------------- -->
+    <section id="charts" class="scroll-mt-20">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-slate-200">
+        <div>
+          <div class="flex items-center gap-2 text-blue-700 font-bold text-sm mb-1">
+            <i data-lucide="radar" class="w-4 h-4"></i>
+            <span>MODULE 02・VISUAL MATRIX & CHARTS</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900">圖表統整與多維對比</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            雷達圖標題與網格清楚清晰！初始保持空白，點選下方按鈕即可繪入各篇感知折線。
+          </p>
+        </div>
+
+        <div class="mt-4 md:mt-0 flex items-center gap-2">
+          <button onclick="clearRadarChart()" class="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-300 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center gap-1 shadow-sm transition">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            重設空白圖表
+          </button>
+        </div>
+      </div>
+
+      <!-- 圖表控制區：分類按鈕 -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 mb-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        
+        <!-- 組合對比組 -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-bold text-slate-500 uppercase flex items-center gap-1 mr-1">
+            <i data-lucide="git-merge" class="w-3.5 h-3.5 text-blue-500"></i> 多篇交叉比對：
+          </span>
+          <button id="btn-chart-all" onclick="selectChartMode('all')" class="chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition">
+            全文本重疊對照 (4篇)
+          </button>
+          <button id="btn-chart-contrast" onclick="selectChartMode('contrast')" class="chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition">
+            極端對比：舒國治 vs 李維
+          </button>
+          <button id="btn-chart-urban" onclick="selectChartMode('urban')" class="chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition">
+            都會生態：韓良露 vs 劉克襄
+          </button>
+        </div>
+
+        <!-- 個別單篇呈現組 -->
+        <div class="flex flex-wrap items-center gap-2 border-t md:border-t-0 md:border-l border-slate-200 pt-3 md:pt-0 md:pl-4">
+          <span class="text-xs font-bold text-emerald-600 uppercase flex items-center gap-1 mr-1">
+            <i data-lucide="user" class="w-3.5 h-3.5"></i> 單篇個別呈現：
+          </span>
+          <button id="btn-chart-shu" onclick="selectChartMode('single-shu')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100 transition">
+            舒國治
+          </button>
+          <button id="btn-chart-han" onclick="selectChartMode('single-han')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 border border-rose-200 text-rose-800 hover:bg-rose-100 transition">
+            韓良露
+          </button>
+          <button id="btn-chart-liu" onclick="selectChartMode('single-liu')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 transition">
+            劉克襄
+          </button>
+          <button id="btn-chart-lee" onclick="selectChartMode('single-lee')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-sky-50 border border-sky-200 text-sky-800 hover:bg-sky-100 transition">
+            李維
+          </button>
+        </div>
+
+      </div>
+
+      <!-- 圖表與解讀雙欄 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-10">
+        
+        <!-- 左側：Chart.js 雷達圖 (移除模糊遮罩，保證標題清晰銳利！) -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center">
+          <div class="w-full flex items-center justify-between mb-3">
+            <h4 class="font-serif font-bold text-base text-slate-800 flex items-center gap-2">
+              <i data-lucide="activity" class="w-4 h-4 text-emerald-600"></i>
+              臺北城市感知五維度雷達圖
+            </h4>
+            <span id="currentChartModeBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">
+              ⚡ 圖表初始空白・待點選探索
+            </span>
+          </div>
+
+          <!-- 雷達圖容器：徹底無覆蓋模糊層，標籤 100% 清晰 -->
+          <div class="w-full max-w-[480px] aspect-square relative my-1">
+            <canvas id="taipeiRadarChart"></canvas>
+          </div>
+
+          <!-- 空白狀態時的清晰底部引導徽章 -->
+          <div id="chartPromptBadge" class="mt-1 text-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-medium text-emerald-800">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-600"></i>
+              五面向刻度網格已就緒，請點選上方按鈕繪製雷達折線
+            </span>
+          </div>
+
+          <!-- 圖例標籤 -->
+          <div id="chartLegendContainer" class="mt-3 flex flex-wrap justify-center gap-4 text-xs font-medium">
+            <span class="flex items-center gap-1.5 text-amber-700"><span class="w-3 h-3 rounded-full bg-amber-500"></span>舒國治 (慢活)</span>
+            <span class="flex items-center gap-1.5 text-rose-700"><span class="w-3 h-3 rounded-full bg-rose-500"></span>韓良露 (都會)</span>
+            <span class="flex items-center gap-1.5 text-emerald-700"><span class="w-3 h-3 rounded-full bg-emerald-600"></span>劉克襄 (自然)</span>
+            <span class="flex items-center gap-1.5 text-sky-700"><span class="w-3 h-3 rounded-full bg-sky-600"></span>李維 (青年)</span>
+          </div>
+        </div>
+
+        <!-- 右側：動態圖表解讀與探究提示 -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-sm">
+            <h4 class="font-serif font-bold text-lg text-emerald-400 mb-2 flex items-center gap-2">
+              <i data-lucide="compass" class="w-5 h-5"></i>
+              <span id="analysisTitle">圖表解密：向度差異深究</span>
+            </h4>
+            
+            <div id="analysisContent">
+              <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                雷達圖目前為空白狀態。請點選上方按鈕選擇「全對照」、「極端對比」或「單篇呈現」，系統將即時載入數據與深入解讀分析！
+              </p>
+              <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700 text-xs text-slate-300 space-y-1.5">
+                <p>👉 <strong>建議探索路徑：</strong></p>
+                <p>1. 先點「舒國治」與「李維」單篇，感受兩者的幾何極端位移。</p>
+                <p>2. 再點「極端對比」看雙層重疊的鏡像反差。</p>
+                <p>3. 最後點「全文本重疊對照 (4篇)」綜合全貌。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-xs text-emerald-900 space-y-1.5">
+            <div class="font-bold flex items-center gap-1.5 text-emerald-800">
+              <i data-lucide="help-circle" class="w-4 h-4 text-emerald-600"></i>
+              課堂探究問題引導：
+            </div>
+            <p>1. 點選單篇文本觀察：每一位作者的五邊形幾何重心落在何處？</p>
+            <p>2. 如果把你的日常生活畫成一條雷達線，它的形狀會最接近哪一位作者？</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 跨文本綜合比較矩陣表 (第一欄加寬至 160px，禁止折行) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 sm:p-6 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h4 class="font-serif font-bold text-base text-slate-900 flex items-center gap-2">
+              <i data-lucide="table" class="w-4 h-4 text-blue-600"></i>
+              跨文本綜合比較矩陣表
+            </h4>
+            <p class="text-xs text-slate-500 mt-0.5">欄位寬敞工整！格內答案預設隱藏，點擊單格即可揭曉</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="revealAllMatrixCells(true)" class="px-3 py-1.5 text-xs font-semibold bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 rounded-lg flex items-center gap-1.5 transition">
+              <i data-lucide="unlock" class="w-3.5 h-3.5"></i>
+              一鍵揭曉表格全部答案
+            </button>
+            <button onclick="revealAllMatrixCells(false)" class="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-300 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center gap-1.5 transition">
+              <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+              一鍵全部隱藏
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs sm:text-sm text-slate-700 min-w-[760px]">
+            <thead class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">
+              <tr>
+                <th class="py-3.5 px-4 w-48 min-w-[160px] whitespace-nowrap bg-slate-200/80 text-slate-900 font-bold">比較要點</th>
+                <th class="py-3.5 px-4 text-amber-800 bg-amber-50/70 w-1/4">文本一・舒國治</th>
+                <th class="py-3.5 px-4 text-rose-800 bg-rose-50/70 w-1/4">文本二・韓良露</th>
+                <th class="py-3.5 px-4 text-emerald-800 bg-emerald-50/70 w-1/4">文本三・劉克襄</th>
+                <th class="py-3.5 px-4 text-sky-800 bg-sky-50/70 w-1/4">文本四・李維</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              
+              <!-- 列 1：作者身分與視角 -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3.5 px-4 font-bold text-slate-900 bg-slate-100/90 whitespace-nowrap">作者身分與視角</td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">悠閒漫遊者、常民文人</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">都會生活策展人、文化觀察家</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">自然踏查作家、生態鳥人</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">北漂求職青年、租屋打拼族</div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 列 2：空間焦點 -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3.5 px-4 font-bold text-slate-900 bg-slate-100/90 whitespace-nowrap">空間焦點</td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">老公寓九重葛、舊水圳彎道、樹蔭小吃</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">24hr書店超商、夜市、火柴盒出租房</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">象山四獸山、大安公園草坪、基隆河紅樹林</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">捷運忠孝復興站、無窗頂加、信義商圈霓虹</div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 列 3：生活步調 -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3.5 px-4 font-bold text-slate-900 bg-slate-100/90 whitespace-nowrap">生活步調</td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content">
+                      <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold text-xs">極慢・閒散隨興無所事事</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content">
+                      <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-semibold text-xs">快慢交織・高速運轉日夜不歇</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content">
+                      <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold text-xs">沉靜安詳・順應自然節律</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content">
+                      <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-semibold text-xs">極快・緊繃匆忙分秒必爭</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 列 4：人際關係與氛圍 -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3.5 px-4 font-bold text-slate-900 bg-slate-100/90 whitespace-nowrap">人際關係與氛圍</td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">親切和善、常民人情、鄰里默契</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">文明客氣、注重隱私、心牆高築</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">物我相融、敬畏生命、無語相會</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">面無表情、冷漠疏離、競爭廝殺</div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 列 5：情感基調 -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3.5 px-4 font-bold text-slate-900 bg-slate-100/90 whitespace-nowrap">情感基調</td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">眷戀懷舊、溫厚自在、悠然</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">理性犀利、愛恨兼具、清醒反思</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">驚奇敬畏、平靜安詳、期盼</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-medium text-slate-800">迷惘焦慮、壓抑疲憊、倔強</div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 列 6：一言以蔽之 -->
+              <tr class="hover:bg-slate-50/80">
+                <td class="py-3.5 px-4 font-bold text-slate-900 bg-slate-100/90 whitespace-nowrap">一言以蔽之</td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-bold text-amber-900">「臺北是座從容包容的水城」</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-bold text-rose-900">「臺北是甜美與殘酷的雙面獸」</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-bold text-emerald-900">「臺北是與自然為鄰的綠意盆地」</div>
+                  </div>
+                </td>
+                <td class="py-2.5 px-3">
+                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
+                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
+                    <div class="real-content font-bold text-sky-900">「臺北是讓人精疲力竭的修煉場」</div>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------- 單元三：觀點思辨天平與論壇 ----------------- -->
+    <section id="debate" class="scroll-mt-20">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-slate-200">
+        <div>
+          <div class="flex items-center gap-2 text-amber-700 font-bold text-sm mb-1">
+            <i data-lucide="scale" class="w-4 h-4"></i>
+            <span>MODULE 03・CRITICAL THINKING & DEBATE</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900">觀點思辨天平：你認同誰的臺北？</h2>
+          <p class="text-sm text-slate-600 mt-1">閱讀不只是吸收，更是質疑與對話。請針對各作者的核心主張表達你的立場並給出理由。</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- 爭鳴題 1：舒國治的慢活是真諦還是文人濾鏡？ -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">思辨議題 01</span>
+              <span class="text-xs text-slate-400">聚焦：文本一 舒國治</span>
+            </div>
+            <h4 class="font-serif font-bold text-base text-slate-900 mb-2">
+              「在臺北晃蕩漫步、無所事事，是生活最迷人的靈魂。」你認同嗎？
+            </h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+              有評論認為：舒國治的「慢活」只屬於有閒階級或特定文人的浪漫特權；真實台北市民每天背負房貸、通勤塞車，根本無從奢談在巷弄樹蔭下打盹。
+            </p>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <button onclick="voteOpinion(1, 'agree')" class="vote-btn-1 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-700 transition">
+                👍 非常認同
+              </button>
+              <button onclick="voteOpinion(1, 'partial')" class="vote-btn-1 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-amber-500 hover:text-amber-700 transition">
+                🤔 部分認同
+              </button>
+              <button onclick="voteOpinion(1, 'disagree')" class="vote-btn-1 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-rose-500 hover:text-rose-700 transition">
+                👎 不認同(文人濾鏡)
+              </button>
+            </div>
+            <div id="vote-feedback-1" class="text-xs p-3 bg-slate-50 rounded-xl text-slate-600 border border-slate-100 hidden">
+              <!-- JS 動態插入回饋 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 爭鳴題 2：韓良露的都會冷漠是自由還是寂寞？ -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800">思辨議題 02</span>
+              <span class="text-xs text-slate-400">聚焦：文本二 韓良露</span>
+            </div>
+            <h4 class="font-serif font-bold text-base text-slate-900 mb-2">
+              「都市中客氣卻難以穿透的心牆，是一種高度尊重隱私的文明疏離。」你認同嗎？
+            </h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+              有人讚許這種距離感讓人擺脫傳統熟人社會的人情包袱與八卦管束；但也有人認為這正是現代都會人心理孤立、憂鬱與冷漠的元凶。
+            </p>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <button onclick="voteOpinion(2, 'agree')" class="vote-btn-2 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-700 transition">
+                👍 認同是自由
+              </button>
+              <button onclick="voteOpinion(2, 'partial')" class="vote-btn-2 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-amber-500 hover:text-amber-700 transition">
+                🤔 矛盾共存
+              </button>
+              <button onclick="voteOpinion(2, 'disagree')" class="vote-btn-2 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-rose-500 hover:text-rose-700 transition">
+                👎 實為冷漠孤立
+              </button>
+            </div>
+            <div id="vote-feedback-2" class="text-xs p-3 bg-slate-50 rounded-xl text-slate-600 border border-slate-100 hidden">
+              <!-- JS 動態插入回饋 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 爭鳴題 3：劉克襄的「自然未曾離開台北」真實嗎？ -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">思辨議題 03</span>
+              <span class="text-xs text-slate-400">聚焦：文本三 劉克襄</span>
+            </div>
+            <h4 class="font-serif font-bold text-base text-slate-900 mb-2">
+              「台北最得天獨厚之處，在於只要半小時就能從喧囂鑽入山林。」你認同嗎？
+            </h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+              相較於許多歐美內陸大城，台北盆地被四面群山包圍，捷運直通象山、貓空、陽明山。但也有學生指出：平時根本都在補習班與冷氣房，山林再近若無閒情也是擺設。
+            </p>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <button onclick="voteOpinion(3, 'agree')" class="vote-btn-3 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-700 transition">
+                👍 非常有感
+              </button>
+              <button onclick="voteOpinion(3, 'partial')" class="vote-btn-3 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-amber-500 hover:text-amber-700 transition">
+                🤔 偶爾感受
+              </button>
+              <button onclick="voteOpinion(3, 'disagree')" class="vote-btn-3 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-rose-500 hover:text-rose-700 transition">
+                👎 無感・水泥牢籠
+              </button>
+            </div>
+            <div id="vote-feedback-3" class="text-xs p-3 bg-slate-50 rounded-xl text-slate-600 border border-slate-100 hidden">
+              <!-- JS 動態插入回饋 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 爭鳴題 4：李維的「繁華讓人精疲力竭」是否過度悲觀？ -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800">思辨議題 04</span>
+              <span class="text-xs text-slate-400">聚焦：文本四 李維</span>
+            </div>
+            <h4 class="font-serif font-bold text-base text-slate-900 mb-2">
+              「台北是造夢的天堂，也是讓人精疲力竭的修煉場。」你認同這份焦慮嗎？
+            </h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+              年輕人前仆後繼來到首都，究竟是因為這裡有不可替代的機會與眼界，還是陷入了被資本裹挾、高房租低回報的虛幻「繁華執念」？
+            </p>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <button onclick="voteOpinion(4, 'agree')" class="vote-btn-4 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-emerald-500 hover:text-emerald-700 transition">
+                👍 深有同感
+              </button>
+              <button onclick="voteOpinion(4, 'partial')" class="vote-btn-4 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-amber-500 hover:text-amber-700 transition">
+                🤔 雖辛苦但值得
+              </button>
+              <button onclick="voteOpinion(4, 'disagree')" class="vote-btn-4 flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-200 hover:border-rose-500 hover:text-rose-700 transition">
+                👎 過度悲觀放大
+              </button>
+            </div>
+            <div id="vote-feedback-4" class="text-xs p-3 bg-slate-50 rounded-xl text-slate-600 border border-slate-100 hidden">
+              <!-- JS 動態插入回饋 -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ----------------- 單元四：個人臺北見解輸出與學習單生成器 ----------------- -->
+    <section id="my-view" class="scroll-mt-20">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-slate-200">
+        <div>
+          <div class="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-1">
+            <i data-lucide="pen-tool" class="w-4 h-4"></i>
+            <span>MODULE 04・MY PERSPECTIVE & WORKSHEET</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900">個人見解發表・臺北微書寫</h2>
+          <p class="text-sm text-slate-600 mt-1">綜合四篇文本比較，融合你的生活體驗，生成專屬於你的「臺北城市觀察報告單」。</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <form id="studentWorksheetForm" onsubmit="event.preventDefault(); generateWorksheet();" class="space-y-6">
+          
+          <!-- 基本資料 -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">班級</label>
+              <input type="text" id="stuClass" required placeholder="如：817" class="w-full text-sm px-3.5 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">座號</label>
+              <input type="number" id="stuNo" required placeholder="如：23" class="w-full text-sm px-3.5 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">姓名</label>
+              <input type="text" id="stuName" required placeholder="如：郭宇文" class="w-full text-sm px-3.5 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+          </div>
+
+          <!-- 文本比較抉擇 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">1. 我「最認同」的文本與理由：</label>
+              <select id="mostAgreeText" class="w-full text-sm px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <option value="舒國治〈水渠與老巷弄的浮生半日〉">文本一：舒國治〈水渠與老巷弄的浮生半日〉（漫活漫遊）</option>
+                <option value="韓良露〈這座城市的甜美與殘酷〉">文本二：韓良露〈這座城市的甜美與殘酷〉（都會愛憎）</option>
+                <option value="劉克襄〈群山環抱的綠意秘密〉">文本三：劉克襄〈群山環抱的綠意秘密〉（生態山林）</option>
+                <option value="李維〈在捷運尖峰時刻，我找不到自己的影子〉">文本四：李維〈在捷運尖峰時刻〉（北漂青年）</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">2. 我「最質疑／持保留態度」的文本：</label>
+              <select id="leastAgreeText" class="w-full text-sm px-3.5 py-2 rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <option value="李維〈在捷運尖峰時刻，我找不到自己的影子〉">文本四：李維〈在捷運尖峰時刻〉（過度焦慮？）</option>
+                <option value="舒國治〈水渠與老巷弄的浮生半日〉">文本一：舒國治〈水渠與老巷弄的浮生半日〉（過於浪漫？）</option>
+                <option value="韓良露〈這座城市的甜美與殘酷〉">文本二：韓良露〈這座城市的甜美與殘酷〉（冷漠心牆？）</option>
+                <option value="劉克襄〈群山環抱的綠意秘密〉">文本三：劉克襄〈群山環抱的綠意秘密〉（不易感知？）</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 思辨申論 -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">
+              3. 觀點思辨論述（請說明你認同或反對該作者觀點的具體依據，並結合生活觀察舉例，100-200字）：
+            </label>
+            <textarea id="myCritique" required rows="3" placeholder="例如：我最認同韓良露的觀點，因為搭乘捷運時大家確實互不干擾，這給了我很大的自在感；但同時走在信義區高樓下，也常感受到被進度追趕的孤獨……" class="w-full text-sm p-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed"></textarea>
+          </div>
+
+          <!-- 我的臺北微書寫 -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">
+              4. 「我的臺北微書寫」（如果換你寫一篇臺北，你最想描寫哪一個角落？你的核心意象與情感是什麼？）：
+            </label>
+            <textarea id="myTaipeiStory" required rows="3" placeholder="例如：我眼中的臺北是傍晚河濱公園的微風。夕陽把河面染成橘金色，一邊是呼嘯而過的高架橋，一邊是騎著腳踏車的悠閒市民。這座城市在快與慢的交界處，收容了所有人的疲憊……" class="w-full text-sm p-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed"></textarea>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-2">
+            <button type="button" onclick="fillSampleData()" class="px-4 py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+              載入範例參考
+            </button>
+            <button type="submit" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md shadow-emerald-600/20 flex items-center gap-2 transition">
+              <i data-lucide="file-check" class="w-4 h-4"></i>
+              產出個人學習報告單
+            </button>
+          </div>
+        </form>
+
+        <!-- 產出的報告單預覽區 -->
+        <div id="resultPreviewContainer" class="hidden mt-8 pt-8 border-t-2 border-dashed border-slate-200">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <h4 class="font-serif font-bold text-lg text-slate-900 flex items-center gap-2">
+              <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i>
+              學習單成果預覽（已可直接列印）
+            </h4>
+            <div class="flex flex-wrap items-center gap-2">
+              <button onclick="copyReportCardContent()" id="copyReportBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-md shadow-emerald-600/20 hover:scale-[1.02] active:scale-95 transition">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+                <span id="copyReportBtnText">一鍵複製《透析臺北——文本比較與思辨》個人學習成果報告單的所有內容</span>
+              </button>
+              <button onclick="window.print()" class="px-3 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition" title="列印或另存為 PDF">
+                <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                <span>列印/PDF</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="printableReportCard" class="bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-300 print-shadow-none font-serif text-slate-900">
+            <!-- JS 動態填入 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= 頁尾識別 (Light Theme) ================= -->
+  <footer class="bg-slate-100 text-slate-600 py-8 mt-16 border-t border-slate-200 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <!-- Logo & Title -->
+      <div class="flex items-center space-x-2.5">
+        <img src="badge-yuesilongmen.png" alt="閱思龍門" class="w-8 h-8 rounded-full shadow-sm">
+        <span class="font-serif font-bold text-slate-800 text-sm sm:text-base">八上閱思龍門・透析臺北──文本比較與觀點思辨教學平台</span>
+      </div>
+
+      <!-- Copyright -->
+      <div class="text-xs text-slate-500 font-medium text-center sm:text-right leading-relaxed">
+        <div>© 2026 學思軒</div>
+        <div class="text-slate-400 text-[11px] mt-0.5">&gt;&lt;&gt; &gt;&lt;&gt; &gt;&lt;&gt; ˙˙˙本網頁由黃于珊老師利用Google antigravity 2.0生成製作，僅供教學使用。˙˙˙&lt;&gt;&lt; &lt;&gt;&lt; &lt;&gt;&lt;</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= JavaScript 邏輯交互 ================= -->
+  <script>
+    // 初始化
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      initRadarChart();
+    });
+
+    // ---------------- 語音朗讀 (Web Speech API) ----------------
+    let currentUtterance = null;
+    let isSpeaking = false;
+
+    function speakText(elementId, btn) {
+      if (!('speechSynthesis' in window)) {
+        alert('抱歉，您的瀏覽器不支援語音合成朗讀功能。');
+        return;
+      }
+
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        btn.innerHTML = '<i data-lucide="volume-2" class="w-5 h-5"></i>';
+        lucide.createIcons();
+        return;
+      }
+
+      const text = document.getElementById(elementId).innerText;
+      currentUtterance = new SpeechSynthesisUtterance(text);
+      currentUtterance.lang = 'zh-TW';
+      currentUtterance.rate = 0.95;
+
+      currentUtterance.onend = () => {
+        isSpeaking = false;
+        btn.innerHTML = '<i data-lucide="volume-2" class="w-5 h-5"></i>';
+        lucide.createIcons();
+      };
+
+      currentUtterance.onerror = () => {
+        isSpeaking = false;
+        btn.innerHTML = '<i data-lucide="volume-2" class="w-5 h-5"></i>';
+        lucide.createIcons();
+      };
+
+      window.speechSynthesis.speak(currentUtterance);
+      isSpeaking = true;
+      btn.innerHTML = '<i data-lucide="volume-x" class="w-5 h-5 text-rose-500"></i>';
+      lucide.createIcons();
+    }
+
+    // ---------------- 手風琴折疊要點 ----------------
+    function toggleAnalysis(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById('icon-' + id);
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        if (icon) icon.style.transform = 'rotate(180deg)';
+      } else {
+        el.classList.add('hidden');
+        if (icon) icon.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // ---------------- 核心互動：點選要點，連動原文螢光筆與編號 (圖二 & 圖三修復) ----------------
+    // textIdx: 1..4 (文章), itemIdx: 1..5 (要點項目)
+    function toggleEvidenceItem(textIdx, itemIdx) {
+      const block = document.getElementById(`kp-${textIdx}-${itemIdx}`);
+      if (!block) return;
+      const mask = block.querySelector('.kp-mask');
+      const content = block.querySelector('.kp-content');
+
+      const isCurrentlyRevealed = !content.classList.contains('hidden');
+      const shouldReveal = !isCurrentlyRevealed;
+
+      // 1. 切換卡片自身顯示
+      if (shouldReveal) {
+        mask.classList.add('hidden');
+        content.classList.remove('hidden');
+      } else {
+        mask.classList.remove('hidden');
+        content.classList.add('hidden');
+      }
+
+      // 2. 連動原文文本中的對應證據標記
+      const marks = document.querySelectorAll(`.ev-text-${textIdx}-${itemIdx}`);
+      marks.forEach(mark => {
+        if (shouldReveal) {
+          mark.classList.add(`ev-active-${itemIdx}`);
+        } else {
+          mark.classList.remove(`ev-active-${itemIdx}`);
+        }
+      });
+    }
+
+    // 揭曉單篇全部要點與證據
+    function revealCard(textIdx, shouldReveal) {
+      // 確保手風琴展開
+      const analysisEl = document.getElementById(`analysis-${textIdx}`);
+      if (analysisEl && analysisEl.classList.contains('hidden')) {
+        analysisEl.classList.remove('hidden');
+        const icon = document.getElementById(`icon-analysis-${textIdx}`);
+        if (icon) icon.style.transform = 'rotate(180deg)';
+      }
+
+      for (let itemIdx = 1; itemIdx <= 5; itemIdx++) {
+        const block = document.getElementById(`kp-${textIdx}-${itemIdx}`);
+        if (!block) continue;
+        const mask = block.querySelector('.kp-mask');
+        const content = block.querySelector('.kp-content');
+
+        if (shouldReveal) {
+          mask.classList.add('hidden');
+          content.classList.remove('hidden');
+        } else {
+          mask.classList.remove('hidden');
+          content.classList.add('hidden');
+        }
+
+        const marks = document.querySelectorAll(`.ev-text-${textIdx}-${itemIdx}`);
+        marks.forEach(mark => {
+          if (shouldReveal) {
+            mark.classList.add(`ev-active-${itemIdx}`);
+          } else {
+            mark.classList.remove(`ev-active-${itemIdx}`);
+          }
+        });
+      }
+    }
+
+    // 一鍵揭曉或隱藏全部 4 篇
+    function revealAllCards(shouldReveal) {
+      for (let textIdx = 1; textIdx <= 4; textIdx++) {
+        revealCard(textIdx, shouldReveal);
+      }
+    }
+
+    // ---------------- 矩陣表格單元格遮罩切換 ----------------
+    function toggleMatrixCell(cell) {
+      cell.classList.toggle('revealed');
+    }
+
+    function revealAllMatrixCells(shouldReveal) {
+      const cells = document.querySelectorAll('.matrix-mask-cell');
+      cells.forEach(cell => {
+        if (shouldReveal) {
+          cell.classList.add('revealed');
+        } else {
+          cell.classList.remove('revealed');
+        }
+      });
+    }
+
+    // ---------------- Chart.js 雷達圖 (清晰銳利不模糊配置) ----------------
+    let radarChartInstance = null;
+
+    const radarDatasets = {
+      shu: {
+        label: '舒國治（漫活）',
+        data: [9.5, 4.0, 7.5, 2.0, 8.5],
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245, 158, 11, 0.25)',
+        pointBackgroundColor: '#f59e0b',
+        pointBorderColor: '#fff',
+        pointHoverRadius: 6,
+        borderWidth: 2.5
+      },
+      han: {
+        label: '韓良露（都會）',
+        data: [5.0, 9.5, 4.0, 7.5, 4.5],
+        borderColor: '#f43f5e',
+        backgroundColor: 'rgba(244, 63, 94, 0.25)',
+        pointBackgroundColor: '#f43f5e',
+        pointBorderColor: '#fff',
+        pointHoverRadius: 6,
+        borderWidth: 2.5
+      },
+      liu: {
+        label: '劉克襄（自然）',
+        data: [8.0, 5.0, 9.5, 3.0, 7.0],
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.25)',
+        pointBackgroundColor: '#10b981',
+        pointBorderColor: '#fff',
+        pointHoverRadius: 6,
+        borderWidth: 2.5
+      },
+      lee: {
+        label: '李維（青年）',
+        data: [2.0, 9.0, 2.5, 9.5, 3.0],
+        borderColor: '#0284c7',
+        backgroundColor: 'rgba(2, 132, 199, 0.25)',
+        pointBackgroundColor: '#0284c7',
+        pointBorderColor: '#fff',
+        pointHoverRadius: 6,
+        borderWidth: 2.5
+      }
+    };
+
+    const analysisDetails = {
+      empty: {
+        badge: '⚡ 圖表初始空白・待點選探索',
+        title: '圖表解密：向度差異深究',
+        html: `
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            雷達圖目前為空白狀態。請點選上方按鈕選擇「全對照」、「極端對比」或「單篇呈現」，系統將即時載入數據與深入解讀分析！
+          </p>
+          <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700 text-xs text-slate-300 space-y-1.5">
+            <p>👉 <strong>建議探索路徑：</strong></p>
+            <p>1. 先點「舒國治」與「李維」單篇，感受兩者的幾何極端位移。</p>
+            <p>2. 再點「極端對比」看雙層重疊的鏡像反差。</p>
+            <p>3. 最後點「全文本重疊對照 (4篇)」綜合全貌。</p>
+          </div>
+        `
+      },
+      all: {
+        badge: '全文本重疊對照 (4篇)',
+        title: '圖表解密：全景向度差異深究',
+        html: `
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            雷達圖清楚呈現出不同主體在相同城市中的巨大感知裂縫。同一座城市，因身份、年齡與觀察切角不同，呈現截然相反的幾何張力：
+          </p>
+          <ul class="text-xs space-y-2.5 text-slate-200">
+            <li class="flex items-start gap-2">
+              <span class="font-bold text-amber-400">◆ 悠活 vs 壓力：</span>
+              舒國治的「悠活指數」達 9.5 分，而李維的「生存壓力」同樣飆升至 9.5 分，形成完美鏡像對照。
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="font-bold text-rose-400">◆ 便利與代價：</span>
+              韓良露筆下的「便利繁華度」高達 9.5 分，但「親密度」大幅驟降，揭露都市便利背後的冷漠代價。
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="font-bold text-emerald-400">◆ 綠意隱匿性：</span>
+              劉克襄在「生態自然」獨樹一幟（9.5 分），點出多數都市人視而不見的第三重維度。
+            </li>
+          </ul>
+        `
+      },
+      contrast: {
+        badge: '極端對比：舒國治 vs 李維',
+        title: '圖表解密：悠遊文人 vs 焦慮青年',
+        html: `
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            這是反差最鮮明的兩條折線！舒國治在「悠活度」與「人際親密」極高，生存壓力趨近於零；李維則在「生存壓力」與「都會便利繁華」極高，生活步調被壓縮殆盡。
+          </p>
+          <div class="p-3 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-200 space-y-1.5">
+            <p><strong>🎯 核心觀察點：</strong></p>
+            <p>• <strong>階級與人生階段：</strong>資深文化人有時間資本漫遊，初出茅廬的北漂青年則面臨租屋與通勤生存戰。</p>
+            <p>• <strong>空間位移：</strong>舒國治聚焦在巷弄水圳與小吃，李維則困在捷運轉乘站與頂加套房。</p>
+          </div>
+        `
+      },
+      urban: {
+        badge: '都會生態：韓良露 vs 劉克襄',
+        title: '圖表解密：人工都會 vs 生態荒野',
+        html: `
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            兩位作家展現了臺北「人工繁華」與「自然綠意」的雙軌平行世界：
+          </p>
+          <div class="p-3 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-200 space-y-1.5">
+            <p>• <strong>韓良露的稜角：</strong>尖端強烈偏向「便利繁華度」(9.5) 與「生存壓力」(7.5)，展示 24 小時不夜城的冷靜思辨。</p>
+            <p>• <strong>劉克襄的伸展：</strong>尖端強烈偏向「生態自然感」(9.5) 與「悠活度」(8.0)，提醒市民走出商場抬頭看山。</p>
+          </div>
+        `
+      },
+      'single-shu': {
+        badge: '單篇個別呈現：舒國治',
+        title: '舒國治：悠活水城之眼 (慢調 9.5)',
+        html: `
+          <div class="text-xs space-y-3 text-slate-200">
+            <p class="leading-relaxed">舒國治的幾何形狀強烈偏向<strong>左上方（悠活慢調度 9.5）</strong>與<strong>右下方（人際親密感 8.5）</strong>，生存壓力僅 2.0 分。</p>
+            <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-800/90 p-3 rounded-xl border border-amber-500/30">
+              <div>悠活慢調度：<strong class="text-amber-400">9.5 分</strong></div>
+              <div>便利繁華度：<strong class="text-slate-300">4.0 分</strong></div>
+              <div>生態自然感：<strong class="text-slate-300">7.5 分</strong></div>
+              <div>生存壓力感：<strong class="text-emerald-400">2.0 分 (極低)</strong></div>
+              <div class="col-span-2">人際親密感：<strong class="text-amber-400">8.5 分</strong></div>
+            </div>
+            <p class="text-slate-300">💡 <strong>思辨提問：</strong>這是一座城市普遍的生活常態，還是一種高段的生活哲學濾鏡？</p>
+          </div>
+        `
+      },
+      'single-han': {
+        badge: '單篇個別呈現：韓良露',
+        title: '韓良露：文明愛憎之眼 (便利 9.5)',
+        html: `
+          <div class="text-xs space-y-3 text-slate-200">
+            <p class="leading-relaxed">韓良露的幾何重心強烈落在<strong>右上方（便利繁華度 9.5）</strong>，但伴隨較高的<strong>生存壓力感 (7.5)</strong>與偏低的<strong>人際親密感 (4.5)</strong>。</p>
+            <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-800/90 p-3 rounded-xl border border-rose-500/30">
+              <div>悠活慢調度：<strong class="text-slate-300">5.0 分</strong></div>
+              <div>便利繁華度：<strong class="text-rose-400">9.5 分 (極高)</strong></div>
+              <div>生態自然感：<strong class="text-slate-300">4.0 分</strong></div>
+              <div>生存壓力感：<strong class="text-rose-400">7.5 分</strong></div>
+              <div class="col-span-2">人際親密感：<strong class="text-slate-400">4.5 分 (文明心牆)</strong></div>
+            </div>
+            <p class="text-slate-300">💡 <strong>思辨提問：</strong>我們是否願意用冷漠與競爭的代價，去換取極致的便利與自由？</p>
+          </div>
+        `
+      },
+      'single-liu': {
+        badge: '單篇個別呈現：劉克襄',
+        title: '劉克襄：群山綠意之眼 (生態 9.5)',
+        html: `
+          <div class="text-xs space-y-3 text-slate-200">
+            <p class="leading-relaxed">劉克襄的雷達圖展現了獨特的<strong>正上方（生態自然感 9.5）</strong>高突峰值，悠活度亦高達 8.0 分，生存壓力僅 3.0 分。</p>
+            <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-800/90 p-3 rounded-xl border border-emerald-500/30">
+              <div>悠活慢調度：<strong class="text-emerald-400">8.0 分</strong></div>
+              <div>便利繁華度：<strong class="text-slate-300">5.0 分</strong></div>
+              <div>生態自然感：<strong class="text-emerald-400">9.5 分 (極高)</strong></div>
+              <div>生存壓力感：<strong class="text-emerald-400">3.0 分</strong></div>
+              <div class="col-span-2">人際親密感：<strong class="text-emerald-400">7.0 分 (物我相親)</strong></div>
+            </div>
+            <p class="text-slate-300">💡 <strong>思辨提問：</strong>為什麼身在同一盆地，多數人卻對這些綠意無動於衷？</p>
+          </div>
+        `
+      },
+      'single-lee': {
+        badge: '單篇個別呈現：李維',
+        title: '李維：北漂生存之眼 (壓力 9.5)',
+        html: `
+          <div class="text-xs space-y-3 text-slate-200">
+            <p class="leading-relaxed">李維的幾何形狀極端偏向<strong>右下方（生存壓力感 9.5）</strong>與<strong>右上方（便利繁華度 9.0）</strong>，悠活度僅 2.0 分，呈現緊繃窒息的幾何張力。</p>
+            <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-800/90 p-3 rounded-xl border border-sky-500/30">
+              <div>悠活慢調度：<strong class="text-rose-400">2.0 分 (極低)</strong></div>
+              <div>便利繁華度：<strong class="text-sky-400">9.0 分</strong></div>
+              <div>生態自然感：<strong class="text-slate-400">2.5 分</strong></div>
+              <div>生存壓力感：<strong class="text-rose-500">9.5 分 (爆表)</strong></div>
+              <div class="col-span-2">人際親密感：<strong class="text-slate-400">3.0 分 (疏離渺小)</strong></div>
+            </div>
+            <p class="text-slate-300">💡 <strong>思辨提問：</strong>繁華是這座城市的禮物，還是青年肩頭不可承受的重擔？</p>
+          </div>
+        `
+      }
+    };
+
+    // 一開始雷達圖先保持空白，面向標題設定為深黑粗體 (圖四修復)
+    function initRadarChart() {
+      const ctx = document.getElementById('taipeiRadarChart').getContext('2d');
+      radarChartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['悠活慢調度', '便利繁華度', '生態自然感', '生存壓力感', '人際親密感'],
+          datasets: [] // 一開始先保持空白！
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+            r: {
+              angleLines: { color: 'rgba(203, 213, 225, 0.8)' },
+              grid: { color: 'rgba(203, 213, 225, 0.8)' },
+              suggestedMin: 0,
+              suggestedMax: 10,
+              ticks: {
+                stepSize: 2,
+                backdropColor: 'transparent',
+                font: { size: 10, weight: '600' },
+                color: '#64748b'
+              },
+              pointLabels: {
+                // 面向標題絕對清晰、深黑、不透明！
+                font: {
+                  family: '"Noto Sans TC", sans-serif',
+                  size: 13,
+                  weight: '700'
+                },
+                color: '#0f172a'
+              }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+
+    // 清空雷達圖回初始空白
+    function clearRadarChart() {
+      if (!radarChartInstance) return;
+      radarChartInstance.data.datasets = [];
+      radarChartInstance.update();
+      
+      const promptBadge = document.getElementById('chartPromptBadge');
+      if (promptBadge) promptBadge.style.display = 'block';
+      
+      resetAllButtonStyles();
+
+      const detail = analysisDetails['empty'];
+      document.getElementById('currentChartModeBadge').innerText = detail.badge;
+      document.getElementById('analysisTitle').innerText = detail.title;
+      document.getElementById('analysisContent').innerHTML = detail.html;
+    }
+
+    function resetAllButtonStyles() {
+      const baseBtnClasses = 'chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition';
+      document.getElementById('btn-chart-all').className = baseBtnClasses;
+      document.getElementById('btn-chart-contrast').className = baseBtnClasses;
+      document.getElementById('btn-chart-urban').className = baseBtnClasses;
+
+      document.getElementById('btn-chart-shu').className = 'chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100 transition';
+      document.getElementById('btn-chart-han').className = 'chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 border border-rose-200 text-rose-800 hover:bg-rose-100 transition';
+      document.getElementById('btn-chart-liu').className = 'chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 transition';
+      document.getElementById('btn-chart-lee').className = 'chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-sky-50 border border-sky-200 text-sky-800 hover:bg-sky-100 transition';
+    }
+
+    function selectChartMode(mode) {
+      if (!radarChartInstance) return;
+
+      const promptBadge = document.getElementById('chartPromptBadge');
+      if (promptBadge) promptBadge.style.display = 'none';
+
+      // 1. 重設所有按鈕
+      resetAllButtonStyles();
+
+      // 2. 突顯選中按鈕 (深底白字 + 翡翠綠光圈)
+      let activeBtnId = '';
+      if (mode === 'all') activeBtnId = 'btn-chart-all';
+      else if (mode === 'contrast') activeBtnId = 'btn-chart-contrast';
+      else if (mode === 'urban') activeBtnId = 'btn-chart-urban';
+      else if (mode === 'single-shu') activeBtnId = 'btn-chart-shu';
+      else if (mode === 'single-han') activeBtnId = 'btn-chart-han';
+      else if (mode === 'single-liu') activeBtnId = 'btn-chart-liu';
+      else if (mode === 'single-lee') activeBtnId = 'btn-chart-lee';
+
+      const activeBtn = document.getElementById(activeBtnId);
+      if (activeBtn) {
+        activeBtn.className = 'chart-mode-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white shadow-md ring-2 ring-emerald-500 transition scale-105';
+      }
+
+      // 3. 更新雷達圖數據
+      if (mode === 'all') {
+        radarChartInstance.data.datasets = [radarDatasets.shu, radarDatasets.han, radarDatasets.liu, radarDatasets.lee];
+      } else if (mode === 'contrast') {
+        radarChartInstance.data.datasets = [radarDatasets.shu, radarDatasets.lee];
+      } else if (mode === 'urban') {
+        radarChartInstance.data.datasets = [radarDatasets.han, radarDatasets.liu];
+      } else if (mode === 'single-shu') {
+        radarChartInstance.data.datasets = [radarDatasets.shu];
+      } else if (mode === 'single-han') {
+        radarChartInstance.data.datasets = [radarDatasets.han];
+      } else if (mode === 'single-liu') {
+        radarChartInstance.data.datasets = [radarDatasets.liu];
+      } else if (mode === 'single-lee') {
+        radarChartInstance.data.datasets = [radarDatasets.lee];
+      }
+      radarChartInstance.update();
+
+      // 4. 更新右側解讀內容
+      const detail = analysisDetails[mode] || analysisDetails['all'];
+      document.getElementById('currentChartModeBadge').innerText = detail.badge;
+      document.getElementById('analysisTitle').innerText = detail.title;
+      document.getElementById('analysisContent').innerHTML = detail.html;
+    }
+
+    // ---------------- 投票與思辨反思反饋 ----------------
+    const opinionFeedbacks = {
+      1: {
+        agree: '【認同反思】：你肯定了常民生活的韌性。舒國治看見的是老巷深處的人情溫度，這說明了城市再繁忙，人們依舊需要能安頓身心的慢活角落。',
+        partial: '【部分認同反思】：你兼顧了理想與現實。漫活是心靈追求，但如果沒有足夠的經濟底氣，在台北要完全無所事事確實需要付出昂貴的代價。',
+        disagree: '【質疑反思】：你擊中了現實痛點！很多時候「悠閒」是優渥者或老台北原住民的視角；對大多數通勤打拼者而言，生存才是最真實的課題。'
+      },
+      2: {
+        agree: '【認同反思】：你珍惜現代文明的個人邊界！互不過度干涉，讓每個人都能保有自己的獨特性與生活方式，這是大都會最珍貴的自由。',
+        partial: '【矛盾反思】：自由與寂寞是一體兩面。我們享受無人管轄的自在，卻也難免在某些生病或受挫的深夜渴望那堵心牆能被溫暖穿透。',
+        disagree: '【質疑反思】：你渴望真實的人際連結！客氣與禮貌如果成了冷冰冰的防護罩，城市就會淪為孤獨的靈魂收容所，失去人與人相挺的力量。'
+      },
+      3: {
+        agree: '【認同反思】：你擁有敏銳的生態之眼！台北的盆地丘陵環境確實讓自然近在咫尺，只要願意搭上捷運，就能立刻投入山林的懷抱。',
+        partial: '【部分認同反思】：空間上的近，不等於心理上的近。生活被課業工作填滿的人，哪怕山就在窗外，也往往難以真正感知那份綠意。',
+        disagree: '【質疑反思】：你反映了現代人的困境。都市鋼筋水泥的隔絕感太強，若缺乏對自然的好奇心與踏查習慣，山林只是地圖上無感的等高線。'
+      },
+      4: {
+        agree: '【認同反思】：你深具社會同理心！高房價與高生活成本確實給青年帶來沉重負擔，霓虹燈越璀璨，照映出的身影有時越顯孤單。',
+        partial: '【部分認同反思】：痛並快樂著。雖然壓力極大，但台北提供的舞台、多元可能與視野開拓，依然是其他城市難以完全取代的資產。',
+        disagree: '【質疑反思】：你抱持著樂觀進取的視角！你認為挑戰即是磨練，只要找對策略與節奏，高壓環境正是激發青年潛能的最佳修煉場。'
+      }
+    };
+
+    function voteOpinion(issueNo, choice) {
+      const box = document.getElementById(`vote-feedback-${issueNo}`);
+      const text = opinionFeedbacks[issueNo][choice];
+      box.innerHTML = `<span class="font-bold text-slate-800">思辨點評：</span>${text}`;
+      box.classList.remove('hidden');
+
+      const buttons = document.querySelectorAll(`.vote-btn-${issueNo}`);
+      buttons.forEach(b => b.classList.remove('bg-emerald-50', 'border-emerald-500', 'font-bold'));
+      event.target.classList.add('bg-emerald-50', 'border-emerald-500', 'font-bold');
+    }
+
+    // ---------------- 範例資料載入 ----------------
+    function fillSampleData() {
+      document.getElementById('stuClass').value = '817';
+      document.getElementById('stuNo').value = '23';
+      document.getElementById('stuName').value = '郭宇文';
+      document.getElementById('mostAgreeText').value = '韓良露〈這座城市的甜美與殘酷〉';
+      document.getElementById('leastAgreeText').value = '舒國治〈水渠與老巷弄的浮生半日〉';
+      document.getElementById('myCritique').value = '我最認同韓良露所說「文明疏離帶來自由，但也伴隨殘酷」。平時在台北搭捷運，大家戴著耳機互不打擾，給了我很多放鬆的個人空間；但看著身邊長輩為了買房辛勤加班，我也深深感受到這座城市殘酷的一面。相較之下，舒國治的「隨興無所事事」對現在的我來說太像遙遠的童話，日常課業根本不容許我這般閒散。';
+      document.getElementById('myTaipeiStory').value = '我眼中的台北，是下雨天公車站牌下那把透明雨傘。雨水沿著傘骨滑落，路面上倒映著公車紅色尾燈的流光。大家撐著傘沉默排隊上車，司機用平靜的聲音說「刷卡請上車」。台北的溫度不在於熱情喧鬧，而是在每個素昧平生的人，都在安靜地守護著彼此的秩序與空間。';
+    }
+
+    // ---------------- 產出學習成果報告單 ----------------
+    function generateWorksheet() {
+      const stuClass = document.getElementById('stuClass').value;
+      const stuNo = document.getElementById('stuNo').value;
+      const stuName = document.getElementById('stuName').value;
+      const mostAgree = document.getElementById('mostAgreeText').value;
+      const leastAgree = document.getElementById('leastAgreeText').value;
+      const critique = document.getElementById('myCritique').value;
+      const myStory = document.getElementById('myTaipeiStory').value;
+
+      const reportHtml = `
+        <div class="border-b-2 border-slate-800 pb-4 mb-6">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold tracking-widest text-slate-500 uppercase">COURSE WORKSHEET REPORT</span>
+            <span class="text-xs text-slate-500">${new Date().toLocaleDateString('zh-TW')}</span>
+          </div>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">《透析臺北——文本比較與思辨》個人學習成果報告單</h2>
+          <div class="mt-3 flex flex-wrap gap-6 text-sm font-sans font-medium text-slate-700 bg-white p-3 rounded-lg border border-slate-200">
+            <span><strong>班級：</strong>${stuClass}</span>
+            <span><strong>座號：</strong>${stuNo} 號</span>
+            <span><strong>姓名：</strong>${stuName}</span>
+          </div>
+        </div>
+
+        <div class="space-y-6 text-sm leading-relaxed">
+          <div class="bg-white p-4 rounded-xl border border-slate-200">
+            <h5 class="font-bold text-slate-900 mb-2 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">一</span>
+              文本認同與立場抉擇
+            </h5>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200">
+                <span class="font-bold text-emerald-800">最認同之文本：</span><br>
+                <span class="text-slate-800 font-semibold">${mostAgree}</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-rose-50 border border-rose-200">
+                <span class="font-bold text-rose-800">最質疑／持保留之文本：</span><br>
+                <span class="text-slate-800 font-semibold">${leastAgree}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white p-4 rounded-xl border border-slate-200">
+            <h5 class="font-bold text-slate-900 mb-2 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">二</span>
+              文本觀點思辨論述（認同與質疑的理由依據）
+            </h5>
+            <p class="text-slate-800 whitespace-pre-line text-sm pl-2 border-l-2 border-blue-500">${critique}</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-xl border border-slate-200">
+            <h5 class="font-bold text-slate-900 mb-2 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs">三</span>
+              我的臺北微書寫（自訂視角與生活觀察）
+            </h5>
+            <p class="text-slate-800 whitespace-pre-line text-sm pl-2 border-l-2 border-amber-500">${myStory}</p>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('printableReportCard').innerHTML = reportHtml;
+      const container = document.getElementById('resultPreviewContainer');
+      container.classList.remove('hidden');
+      container.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ---------------- 一鍵複製個人學習成果報告單所有內容 ----------------
+    function copyReportCardContent() {
+      const stuClass = document.getElementById('stuClass').value || '未填寫';
+      const stuNo = document.getElementById('stuNo').value || '未填寫';
+      const stuName = document.getElementById('stuName').value || '未填寫';
+      const mostAgree = document.getElementById('mostAgreeText').value || '未選擇';
+      const leastAgree = document.getElementById('leastAgreeText').value || '未選擇';
+      const critique = document.getElementById('myCritique').value || '未填寫';
+      const myStory = document.getElementById('myTaipeiStory').value || '未填寫';
+      const reportDate = new Date().toLocaleDateString('zh-TW');
+
+      const textToCopy = `《透析臺北——文本比較與思辨》個人學習成果報告單
+===================================================
+班級：${stuClass}  |  座號：${stuNo}  |  姓名：${stuName}
+產出日期：${reportDate}
+---------------------------------------------------
+【一、文本認同與立場抉擇】
+・最認同之文本：${mostAgree}
+・最質疑／持保留之文本：${leastAgree}
+
+【二、文本觀點思辨論述（認同與質疑的理由依據）】
+${critique}
+
+【三、我的臺北微書寫（自訂視角與生活觀察）】
+${myStory}
+===================================================`;
+
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const btnText = document.getElementById('copyReportBtnText');
+        const originalText = btnText.innerText;
+        btnText.innerText = '✅ 已成功複製《透析臺北》個人學習成果報告單的所有內容！';
+        const copyBtn = document.getElementById('copyReportBtn');
+        copyBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+        copyBtn.classList.add('bg-slate-900');
+
+        setTimeout(() => {
+          btnText.innerText = originalText;
+          copyBtn.classList.remove('bg-slate-900');
+          copyBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+        }, 3000);
+      }).catch(err => {
+        // Fallback for older browsers
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = textToCopy;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        try {
+          document.execCommand('copy');
+          alert('已成功複製個人學習成果報告單內容！');
+        } catch (e) {
+          alert('複製失敗，請手動複製：' + e);
+        }
+        document.body.removeChild(tempTextArea);
+      });
+    }
+
+    // ---------------- 視角模式切換 (學生視角 vs 教師視角) ----------------
+    let currentAppMode = 'student';
+
+    function setAppMode(mode) {
+      currentAppMode = mode;
+      const btnStudent = document.getElementById('modeBtnStudent');
+      const btnTeacher = document.getElementById('modeBtnTeacher');
+
+      if (mode === 'teacher') {
+        // 【切換至教師視角】：高亮教師按鈕、解答全開、雷達圖載入、回到頁首開始授課
+        if (btnTeacher) {
+          btnTeacher.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-slate-900 text-white shadow-sm transition-all flex items-center gap-1.5 ring-2 ring-amber-400 whitespace-nowrap';
+        }
+        if (btnStudent) {
+          btnStudent.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1.5 whitespace-nowrap';
+        }
+        
+        // 1. 全部展開四大文本答案與證據（原文高亮＋編號）
+        revealAllCards(true);
+        // 2. 全部揭曉矩陣表格全部向度
+        revealAllMatrixCells(true);
+        // 3. 雷達圖載入全重疊對照折線
+        selectChartMode('all');
+        // 4. 從頁首開始，方便教師從第一篇文本順暢向下瀏覽授課
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        // 【切換至學生視角】：高亮學生按鈕、純淨文本、遮罩答案、空白雷達圖
+        if (btnStudent) {
+          btnStudent.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-white text-emerald-800 shadow-sm transition-all flex items-center gap-1.5 ring-2 ring-emerald-500 whitespace-nowrap';
+        }
+        if (btnTeacher) {
+          btnTeacher.className = 'px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1.5 whitespace-nowrap';
+        }
+        
+        // 1. 隱藏所有答案與證據（原文恢復乾淨無螢光筆、無編號）
+        revealAllCards(false);
+        // 2. 矩陣表格全部遮罩
+        revealAllMatrixCells(false);
+        // 3. 雷達圖恢復初始空白網格
+        clearRadarChart();
+        // 4. 回到頁面頂部
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function toggleTeacherMode() {
+      setAppMode(currentAppMode === 'student' ? 'teacher' : 'student');
+    }
+  </script>
+</body>
+</html>
