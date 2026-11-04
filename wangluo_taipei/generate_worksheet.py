@@ -421,7 +421,7 @@ def create_worksheet():
     footer_p = doc.add_paragraph()
     footer_p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     footer_p.paragraph_format.space_before = Pt(4)
-    r_foot = footer_p.add_run("【學思軒・閱思龍門教學平台】數位媒體識讀系列教材 © 2026 學思軒\n><> ><> ><> ˙˙˙本網頁由黃于珊老師利用Google antigravity 2.0生成製作，僅供教學使用。˙˙˙<>< <>< <><")
+    r_foot = footer_p.add_run("【學思軒・閱思龍門教學平台】數位媒體識讀系列教材 © 2026 學思軒\n><> ><> ><> ˙˙˙本網頁由黃于珊老師與AI協作生成，僅供教學使用。˙˙˙<>< <>< <><")
     r_foot.font.size = Pt(7.5)
     r_foot.font.color.rgb = RGBColor(148, 163, 184)
 
