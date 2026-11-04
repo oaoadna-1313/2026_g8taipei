@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -11,6 +11,9 @@
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -250,8 +253,12 @@
         </a>
       </nav>
 
-      <!-- 視角模式切換器 (雙膠囊開關：單行呈現不換行、更寬更清晰) -->
-      <div class="flex items-center shrink-0">
+      <!-- 視角模式切換器 與 學習單按鈕 -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" onclick="openWorksheetModal()" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-600 text-white shadow-sm hover:shadow transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-95" title="查看或下載學用學習單PDF">
+          <i class="fa-solid fa-file-pen text-amber-200"></i>
+          <span>學用學習單</span>
+        </button>
         <div class="inline-flex p-1 rounded-xl bg-slate-100 border border-slate-300 shadow-inner">
           <button id="modeBtnStudent" onclick="setAppMode('student')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-white text-emerald-800 shadow-sm transition-all flex items-center gap-1.5 ring-2 ring-emerald-500 whitespace-nowrap" title="學生視角：原文純淨無標記、要點遮罩防劇透、雷達圖空白">
             <i data-lucide="user" class="w-4 h-4 text-emerald-600"></i>
@@ -825,137 +832,9 @@
 
     <!-- ----------------- 單元二：動態圖表統整中心 ----------------- -->
     <section id="charts" class="scroll-mt-20">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-slate-200">
-        <div>
-          <div class="flex items-center gap-2 text-blue-700 font-bold text-sm mb-1">
-            <i data-lucide="radar" class="w-4 h-4"></i>
-            <span>MODULE 02・VISUAL MATRIX & CHARTS</span>
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900">圖表統整與多維對比</h2>
-          <p class="text-sm text-slate-600 mt-1">
-            雷達圖標題與網格清楚清晰！初始保持空白，點選下方按鈕即可繪入各篇感知折線。
-          </p>
-        </div>
-
-        <div class="mt-4 md:mt-0 flex items-center gap-2">
-          <button onclick="clearRadarChart()" class="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-300 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center gap-1 shadow-sm transition">
-            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-            重設空白圖表
-          </button>
-        </div>
-      </div>
-
-      <!-- 圖表控制區：分類按鈕 -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 mb-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        
-        <!-- 組合對比組 -->
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="text-xs font-bold text-slate-500 uppercase flex items-center gap-1 mr-1">
-            <i data-lucide="git-merge" class="w-3.5 h-3.5 text-blue-500"></i> 多篇交叉比對：
-          </span>
-          <button id="btn-chart-all" onclick="selectChartMode('all')" class="chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition">
-            全文本重疊對照 (4篇)
-          </button>
-          <button id="btn-chart-contrast" onclick="selectChartMode('contrast')" class="chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition">
-            極端對比：舒國治 vs 李維
-          </button>
-          <button id="btn-chart-urban" onclick="selectChartMode('urban')" class="chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition">
-            都會生態：韓良露 vs 劉克襄
-          </button>
-        </div>
-
-        <!-- 個別單篇呈現組 -->
-        <div class="flex flex-wrap items-center gap-2 border-t md:border-t-0 md:border-l border-slate-200 pt-3 md:pt-0 md:pl-4">
-          <span class="text-xs font-bold text-emerald-600 uppercase flex items-center gap-1 mr-1">
-            <i data-lucide="user" class="w-3.5 h-3.5"></i> 單篇個別呈現：
-          </span>
-          <button id="btn-chart-shu" onclick="selectChartMode('single-shu')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100 transition">
-            舒國治
-          </button>
-          <button id="btn-chart-han" onclick="selectChartMode('single-han')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 border border-rose-200 text-rose-800 hover:bg-rose-100 transition">
-            韓良露
-          </button>
-          <button id="btn-chart-liu" onclick="selectChartMode('single-liu')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 transition">
-            劉克襄
-          </button>
-          <button id="btn-chart-lee" onclick="selectChartMode('single-lee')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-sky-50 border border-sky-200 text-sky-800 hover:bg-sky-100 transition">
-            李維
-          </button>
-        </div>
-
-      </div>
-
-      <!-- 圖表與解讀雙欄 -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-10">
-        
-        <!-- 左側：Chart.js 雷達圖 (移除模糊遮罩，保證標題清晰銳利！) -->
-        <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center">
-          <div class="w-full flex items-center justify-between mb-3">
-            <h4 class="font-serif font-bold text-base text-slate-800 flex items-center gap-2">
-              <i data-lucide="activity" class="w-4 h-4 text-emerald-600"></i>
-              臺北城市感知五維度雷達圖
-            </h4>
-            <span id="currentChartModeBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">
-              ⚡ 圖表初始空白・待點選探索
-            </span>
-          </div>
-
-          <!-- 雷達圖容器：徹底無覆蓋模糊層，標籤 100% 清晰 -->
-          <div class="w-full max-w-[480px] aspect-square relative my-1">
-            <canvas id="taipeiRadarChart"></canvas>
-          </div>
-
-          <!-- 空白狀態時的清晰底部引導徽章 -->
-          <div id="chartPromptBadge" class="mt-1 text-center">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-medium text-emerald-800">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-600"></i>
-              五面向刻度網格已就緒，請點選上方按鈕繪製雷達折線
-            </span>
-          </div>
-
-          <!-- 圖例標籤 -->
-          <div id="chartLegendContainer" class="mt-3 flex flex-wrap justify-center gap-4 text-xs font-medium">
-            <span class="flex items-center gap-1.5 text-amber-700"><span class="w-3 h-3 rounded-full bg-amber-500"></span>舒國治 (慢活)</span>
-            <span class="flex items-center gap-1.5 text-rose-700"><span class="w-3 h-3 rounded-full bg-rose-500"></span>韓良露 (都會)</span>
-            <span class="flex items-center gap-1.5 text-emerald-700"><span class="w-3 h-3 rounded-full bg-emerald-600"></span>劉克襄 (自然)</span>
-            <span class="flex items-center gap-1.5 text-sky-700"><span class="w-3 h-3 rounded-full bg-sky-600"></span>李維 (青年)</span>
-          </div>
-        </div>
-
-        <!-- 右側：動態圖表解讀與探究提示 -->
-        <div class="lg:col-span-5 space-y-4">
-          <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-sm">
-            <h4 class="font-serif font-bold text-lg text-emerald-400 mb-2 flex items-center gap-2">
-              <i data-lucide="compass" class="w-5 h-5"></i>
-              <span id="analysisTitle">圖表解密：向度差異深究</span>
-            </h4>
-            
-            <div id="analysisContent">
-              <p class="text-xs text-slate-300 leading-relaxed mb-4">
-                雷達圖目前為空白狀態。請點選上方按鈕選擇「全對照」、「極端對比」或「單篇呈現」，系統將即時載入數據與深入解讀分析！
-              </p>
-              <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700 text-xs text-slate-300 space-y-1.5">
-                <p>👉 <strong>建議探索路徑：</strong></p>
-                <p>1. 先點「舒國治」與「李維」單篇，感受兩者的幾何極端位移。</p>
-                <p>2. 再點「極端對比」看雙層重疊的鏡像反差。</p>
-                <p>3. 最後點「全文本重疊對照 (4篇)」綜合全貌。</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-xs text-emerald-900 space-y-1.5">
-            <div class="font-bold flex items-center gap-1.5 text-emerald-800">
-              <i data-lucide="help-circle" class="w-4 h-4 text-emerald-600"></i>
-              課堂探究問題引導：
-            </div>
-            <p>1. 點選單篇文本觀察：每一位作者的五邊形幾何重心落在何處？</p>
-            <p>2. 如果把你的日常生活畫成一條雷達線，它的形狀會最接近哪一位作者？</p>
-          </div>
-        </div>
-      </div>
 
       <!-- 跨文本綜合比較矩陣表 (第一欄加寬至 160px，禁止折行) -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
         <div class="p-4 sm:p-6 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h4 class="font-serif font-bold text-base text-slate-900 flex items-center gap-2">
@@ -1114,36 +993,7 @@
                 </td>
               </tr>
 
-              <!-- 列 5：情感基調 -->
-              <tr class="hover:bg-slate-50/80">
-                <td class="py-3.5 px-4 font-bold text-slate-900 bg-slate-100/90 whitespace-nowrap">情感基調</td>
-                <td class="py-2.5 px-3">
-                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
-                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
-                    <div class="real-content font-medium text-slate-800">眷戀懷舊、溫厚自在、悠然</div>
-                  </div>
-                </td>
-                <td class="py-2.5 px-3">
-                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
-                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
-                    <div class="real-content font-medium text-slate-800">理性犀利、愛恨兼具、清醒反思</div>
-                  </div>
-                </td>
-                <td class="py-2.5 px-3">
-                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
-                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
-                    <div class="real-content font-medium text-slate-800">驚奇敬畏、平靜安詳、期盼</div>
-                  </div>
-                </td>
-                <td class="py-2.5 px-3">
-                  <div class="matrix-mask-cell" onclick="toggleMatrixCell(this)">
-                    <div class="mask-holder"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 點選揭曉</div>
-                    <div class="real-content font-medium text-slate-800">迷惘焦慮、壓抑疲憊、倔強</div>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- 列 6：一言以蔽之 -->
+              <!-- 列 5：一言以蔽之 -->
               <tr class="hover:bg-slate-50/80">
                 <td class="py-3.5 px-4 font-bold text-slate-900 bg-slate-100/90 whitespace-nowrap">一言以蔽之</td>
                 <td class="py-2.5 px-3">
@@ -1174,6 +1024,135 @@
 
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-slate-200">
+        <div>
+          <div class="flex items-center gap-2 text-blue-700 font-bold text-sm mb-1">
+            <i data-lucide="radar" class="w-4 h-4"></i>
+            <span>MODULE 02・VISUAL MATRIX & CHARTS</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-serif font-black text-slate-900">圖表統整與多維對比</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            雷達圖標題與網格清楚清晰！初始保持空白，點選下方按鈕即可繪入各篇感知折線。
+          </p>
+        </div>
+
+        <div class="mt-4 md:mt-0 flex items-center gap-2">
+          <button onclick="clearRadarChart()" class="px-3 py-1.5 text-xs font-semibold bg-white border border-slate-300 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center gap-1 shadow-sm transition">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            重設空白圖表
+          </button>
+        </div>
+      </div>
+
+      <!-- 圖表控制區：分類按鈕 -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 mb-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        
+        <!-- 組合對比組 -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-bold text-slate-500 uppercase flex items-center gap-1 mr-1">
+            <i data-lucide="git-merge" class="w-3.5 h-3.5 text-blue-500"></i> 多篇交叉比對：
+          </span>
+          <button id="btn-chart-all" onclick="selectChartMode('all')" class="chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition">
+            全文本重疊對照 (4篇)
+          </button>
+          <button id="btn-chart-contrast" onclick="selectChartMode('contrast')" class="chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition">
+            極端對比：舒國治 vs 李維
+          </button>
+          <button id="btn-chart-urban" onclick="selectChartMode('urban')" class="chart-mode-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-sm transition">
+            都會生態：韓良露 vs 劉克襄
+          </button>
+        </div>
+
+        <!-- 個別單篇呈現組 -->
+        <div class="flex flex-wrap items-center gap-2 border-t md:border-t-0 md:border-l border-slate-200 pt-3 md:pt-0 md:pl-4">
+          <span class="text-xs font-bold text-emerald-600 uppercase flex items-center gap-1 mr-1">
+            <i data-lucide="user" class="w-3.5 h-3.5"></i> 單篇個別呈現：
+          </span>
+          <button id="btn-chart-shu" onclick="selectChartMode('single-shu')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100 transition">
+            舒國治
+          </button>
+          <button id="btn-chart-han" onclick="selectChartMode('single-han')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 border border-rose-200 text-rose-800 hover:bg-rose-100 transition">
+            韓良露
+          </button>
+          <button id="btn-chart-liu" onclick="selectChartMode('single-liu')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 transition">
+            劉克襄
+          </button>
+          <button id="btn-chart-lee" onclick="selectChartMode('single-lee')" class="chart-mode-btn px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-sky-50 border border-sky-200 text-sky-800 hover:bg-sky-100 transition">
+            李維
+          </button>
+        </div>
+
+      </div>
+
+      <!-- 圖表與解讀雙欄 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-10">
+        
+        <!-- 左側：Chart.js 雷達圖 (移除模糊遮罩，保證標題清晰銳利！) -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center">
+          <div class="w-full flex items-center justify-between mb-3">
+            <h4 class="font-serif font-bold text-base text-slate-800 flex items-center gap-2">
+              <i data-lucide="activity" class="w-4 h-4 text-emerald-600"></i>
+              臺北城市感知五維度雷達圖
+            </h4>
+            <span id="currentChartModeBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">
+              ⚡ 圖表初始空白・待點選探索
+            </span>
+          </div>
+
+          <!-- 雷達圖容器：徹底無覆蓋模糊層，標籤 100% 清晰 -->
+          <div class="w-full max-w-[480px] aspect-square relative my-1">
+            <canvas id="taipeiRadarChart"></canvas>
+          </div>
+
+          <!-- 空白狀態時的清晰底部引導徽章 -->
+          <div id="chartPromptBadge" class="mt-1 text-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-medium text-emerald-800">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-600"></i>
+              五面向刻度網格已就緒，請點選上方按鈕繪製雷達折線
+            </span>
+          </div>
+
+          <!-- 圖例標籤 -->
+          <div id="chartLegendContainer" class="mt-3 flex flex-wrap justify-center gap-4 text-xs font-medium">
+            <span class="flex items-center gap-1.5 text-amber-700"><span class="w-3 h-3 rounded-full bg-amber-500"></span>舒國治 (慢活)</span>
+            <span class="flex items-center gap-1.5 text-rose-700"><span class="w-3 h-3 rounded-full bg-rose-500"></span>韓良露 (都會)</span>
+            <span class="flex items-center gap-1.5 text-emerald-700"><span class="w-3 h-3 rounded-full bg-emerald-600"></span>劉克襄 (自然)</span>
+            <span class="flex items-center gap-1.5 text-sky-700"><span class="w-3 h-3 rounded-full bg-sky-600"></span>李維 (青年)</span>
+          </div>
+        </div>
+
+        <!-- 右側：動態圖表解讀與探究提示 -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-sm">
+            <h4 class="font-serif font-bold text-lg text-emerald-400 mb-2 flex items-center gap-2">
+              <i data-lucide="compass" class="w-5 h-5"></i>
+              <span id="analysisTitle">圖表解密：向度差異深究</span>
+            </h4>
+            
+            <div id="analysisContent">
+              <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                雷達圖目前為空白狀態。請點選上方按鈕選擇「全對照」、「極端對比」或「單篇呈現」，系統將即時載入數據與深入解讀分析！
+              </p>
+              <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700 text-xs text-slate-300 space-y-1.5">
+                <p>👉 <strong>建議探索路徑：</strong></p>
+                <p>1. 先點「舒國治」與「李維」單篇，感受兩者的幾何極端位移。</p>
+                <p>2. 再點「極端對比」看雙層重疊的鏡像反差。</p>
+                <p>3. 最後點「全文本重疊對照 (4篇)」綜合全貌。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-xs text-emerald-900 space-y-1.5">
+            <div class="font-bold flex items-center gap-1.5 text-emerald-800">
+              <i data-lucide="help-circle" class="w-4 h-4 text-emerald-600"></i>
+              課堂探究問題引導：
+            </div>
+            <p>1. 點選單篇文本觀察：每一位作者的五邊形幾何重心落在何處？</p>
+            <p>2. 如果把你的日常生活畫成一條雷達線，它的形狀會最接近哪一位作者？</p>
+          </div>
         </div>
       </div>
     </section>
@@ -2124,6 +2103,97 @@ ${myStory}
     function toggleTeacherMode() {
       setAppMode(currentAppMode === 'student' ? 'teacher' : 'student');
     }
+
+    // ================= 學習單 Modal 系統 =================
+    function openWorksheetModal() {
+      const modal = document.getElementById('worksheetModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeWorksheetModal() {
+      const modal = document.getElementById('worksheetModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeWorksheetModal();
+      }
+    });
   </script>
+
+  <!-- ==================== 學習單 Modal (完全符合使用者圖片樣式) ==================== -->
+  <div id="worksheetModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-100 relative space-y-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      
+      <!-- Close button -->
+      <button onclick="closeWorksheetModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer" aria-label="關閉">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 pr-8">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-xs bg-amber-100 text-amber-800">
+          <i class="fa-solid fa-file-pen"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800">八上・透析臺北</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white">學用學習單</span>
+          </div>
+          <h3 class="text-lg sm:text-xl font-serif font-bold text-slate-900 mt-1 truncate">八上・透析臺北・學用學習單</h3>
+        </div>
+      </div>
+
+      <!-- Hint banner -->
+      <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between gap-2">
+        <span class="flex items-center gap-1.5">
+          <i class="fa-regular fa-lightbulb text-amber-500"></i>
+          點擊「線上預覽」另開分頁檢視，點擊「下載」儲存 PDF。
+        </span>
+        <span class="text-[10px] text-slate-400 font-mono shrink-0">PDF 格式</span>
+      </div>
+
+      <!-- Worksheets Container -->
+      <div class="space-y-2.5">
+        <div class="p-3.5 rounded-2xl bg-amber-50/80 border-2 border-amber-300 shadow-2xs space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-black bg-amber-600 text-white">推薦首選</span>
+              <span class="font-bold text-slate-900 text-xs sm:text-sm">透析臺北 跨文本比較與觀點思辨學習單</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-tight">四大名家經典篇章・五維度雷達圖分析・跨文本矩陣對照與觀點辯論學習單</p>
+          <div class="flex items-center gap-2 pt-1">
+            <a href="worksheet-student.pdf" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-100/70 border border-amber-300 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              <span>線上預覽 (另開新分頁)</span>
+            </a>
+            <a href="worksheet-student.pdf" download="[八上閱思龍門]03透析臺北文本比較與觀點思辨(學用學習單).pdf" class="py-1.5 px-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all" title="下載 PDF">
+              <i class="fa-solid fa-download text-[10px]"></i>
+              <span>下載</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">閱思龍門專用教材</span>
+        <button onclick="closeWorksheetModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer">
+          關閉視窗
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

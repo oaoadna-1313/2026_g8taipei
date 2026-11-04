@@ -10,6 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
   
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -103,7 +106,7 @@
           <div>
             <div class="flex items-center space-x-2">
               <span class="font-serif font-bold text-lg sm:text-xl text-slate-900 tracking-wide">探索臺北</span>
-              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">八上閱思龍門・地誌文學</span>
+              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">八上閱思龍門</span>
             </div>
             <p class="text-[11px] text-slate-500 font-medium hidden md:block">穿梭臺北十二行政區與文學地誌的文青漫遊</p>
           </div>
@@ -123,8 +126,12 @@
         <a href="#gallery" class="px-3 py-2 rounded-lg hover:text-purple-700 hover:bg-purple-50 transition-colors">官方圖鑑</a>
       </nav>
 
-      <!-- Quick Action: Jump to Units or Schedule -->
+      <!-- Quick Action: Jump to Units or Schedule & 學習單一鍵總覽 -->
       <div class="flex items-center space-x-2">
+        <button type="button" onclick="openAllWorksheetsModal()" class="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-sm hover:shadow transition-all cursor-pointer active:scale-95 whitespace-nowrap gap-1.5" title="開啟八上六大單元學習單一鍵總覽">
+          <i class="fa-solid fa-file-pdf text-amber-100 text-xs"></i>
+          <span>學習單一鍵總覽</span>
+        </button>
         <a href="#units" class="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-700 hover:bg-purple-800 text-white shadow-sm hover:shadow transition-all">
           <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
           單元教學入口
@@ -173,29 +180,7 @@
         </div>
       </div>
 
-      <!-- Quotes Banner (愛因斯坦 x 笛卡兒) -->
-      <div class="mt-12 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Quote 1 -->
-        <div class="bg-white/80 backdrop-blur rounded-2xl p-5 border border-purple-100 shadow-xs flex items-center space-x-4 hover:border-purple-300 transition-colors">
-          <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 shrink-0 font-serif font-black text-xl">
-            閱
-          </div>
-          <div>
-            <blockquote class="font-serif font-bold text-slate-800 text-base">「閱讀是孩子最珍貴的寶藏。」</blockquote>
-            <p class="text-xs text-slate-500 font-medium mt-1">—— 阿爾伯特・愛因斯坦 (Albert Einstein)</p>
-          </div>
-        </div>
-        <!-- Quote 2 -->
-        <div class="bg-white/80 backdrop-blur rounded-2xl p-5 border border-purple-100 shadow-xs flex items-center space-x-4 hover:border-purple-300 transition-colors">
-          <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 shrink-0 font-serif font-black text-xl">
-            思
-          </div>
-          <div>
-            <blockquote class="font-serif font-bold text-slate-800 text-base">「我思故我在。」</blockquote>
-            <p class="text-xs text-slate-500 font-medium mt-1">—— 勒內・笛卡兒 (René Descartes)</p>
-          </div>
-        </div>
-      </div>
+
 
     </div>
   </section>
@@ -323,6 +308,13 @@
         <p class="text-slate-600 mt-3 text-sm sm:text-base leading-relaxed">
           串聯音樂地誌、人物擴寫、跨文本思辨、行政區地景、數位媒體識讀與城市遊記文案，點擊即可直達各單元全功能互動課堂！
         </p>
+        <div class="mt-4 flex items-center justify-center gap-2">
+          <button type="button" onclick="openAllWorksheetsModal()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all cursor-pointer">
+            <i class="fa-solid fa-file-pdf text-amber-200"></i>
+            <span>八上【探索臺北】六大單元學習單一鍵總覽</span>
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </button>
+        </div>
       </div>
 
       <!-- 6 大單元平台卡片 Grid -->
@@ -358,10 +350,22 @@
               <span class="px-2 py-0.5 rounded bg-slate-100">學習單PDF</span>
             </div>
           </div>
-          <a href="gesong_taipei/index.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-blue-700">
-            <span>開啟【歌 SONG 臺北】教學網頁</span>
-            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-          </a>
+          <div class="space-y-2 mt-4 pt-3 border-t border-slate-100">
+            <a href="gesong_taipei/index.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-blue-700">
+              <span>開啟【歌 SONG 臺北】教學網頁</span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openWorksheetModal('gesong', 'student')" class="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs flex items-center justify-center gap-1.5 transition-all cursor-pointer" title="查看或下載學用學習單PDF">
+                <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                <span>學用學習單</span>
+              </button>
+              <button type="button" onclick="openWorksheetModal('gesong', 'teacher')" class="py-1.5 px-3 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 shadow-2xs flex items-center justify-center gap-1.5 transition-all cursor-pointer" title="查看或下載教用學習單PDF">
+                <i class="fa-solid fa-graduation-cap text-rose-600 text-xs"></i>
+                <span>教用</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- 單元 2: 故事．臺北．人 -->
@@ -394,10 +398,18 @@
               <span class="px-2 py-0.5 rounded bg-slate-100">AI寫作教練</span>
             </div>
           </div>
-          <a href="yes_composition/g8a-story-taipei-expansion.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-emerald-700">
-            <span>開啟【故事．臺北．人】教學網頁</span>
-            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-          </a>
+          <div class="space-y-2 mt-4 pt-3 border-t border-slate-100">
+            <a href="yes_composition/g8a-story-taipei-expansion.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-emerald-700">
+              <span>開啟【故事．臺北．人】教學網頁</span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openWorksheetModal('story', 'student')" class="w-full py-1.5 px-3 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs flex items-center justify-center gap-1.5 transition-all cursor-pointer" title="查看或下載學用學習單PDF">
+                <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                <span>學用學習單（線上預覽與下載）</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- 單元 3: 透析臺北――文本比較 -->
@@ -430,10 +442,18 @@
               <span class="px-2 py-0.5 rounded bg-slate-100">思辨反思</span>
             </div>
           </div>
-          <a href="analyze_taipei/index.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-teal-700">
-            <span>開啟【透析臺北】教學網頁</span>
-            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-          </a>
+          <div class="space-y-2 mt-4 pt-3 border-t border-slate-100">
+            <a href="analyze_taipei/index.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-teal-700">
+              <span>開啟【透析臺北】教學網頁</span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openWorksheetModal('analyze', 'student')" class="w-full py-1.5 px-3 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs flex items-center justify-center gap-1.5 transition-all cursor-pointer" title="查看或下載學用學習單PDF">
+                <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                <span>學用學習單（線上預覽與下載）</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- 單元 4: 臺北文青打卡趣 -->
@@ -466,10 +486,22 @@
               <span class="px-2 py-0.5 rounded bg-slate-100">美編排版</span>
             </div>
           </div>
-          <a href="wenchin_taipei/index.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-purple-700">
-            <span>開啟【臺北文青打卡趣】教學網頁</span>
-            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-          </a>
+          <div class="space-y-2 mt-4 pt-3 border-t border-slate-100">
+            <a href="wenchin_taipei/index.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-purple-700">
+              <span>開啟【臺北文青打卡趣】教學網頁</span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openWorksheetModal('wenchin', 'student')" class="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs flex items-center justify-center gap-1.5 transition-all cursor-pointer" title="查看或下載學用學習單PDF">
+                <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                <span>學用學習單</span>
+              </button>
+              <button type="button" onclick="openWorksheetModal('wenchin', 'teacher')" class="py-1.5 px-3 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 shadow-2xs flex items-center justify-center gap-1.5 transition-all cursor-pointer" title="查看或下載教用學習單PDF">
+                <i class="fa-solid fa-graduation-cap text-rose-600 text-xs"></i>
+                <span>教用</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- 單元 5: 網羅臺北 -->
@@ -502,10 +534,18 @@
               <span class="px-2 py-0.5 rounded bg-slate-100">主題確立</span>
             </div>
           </div>
-          <a href="wangluo_taipei/index.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-indigo-700">
-            <span>開啟【網羅臺北】教學網頁</span>
-            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-          </a>
+          <div class="space-y-2 mt-4 pt-3 border-t border-slate-100">
+            <a href="wangluo_taipei/index.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-indigo-700">
+              <span>開啟【網羅臺北】教學網頁</span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openWorksheetModal('wangluo', 'student')" class="w-full py-1.5 px-3 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs flex items-center justify-center gap-1.5 transition-all cursor-pointer" title="查看或下載學用學習單PDF">
+                <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                <span>學用學習單（線上預覽與下載）</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- 單元 6: 光點．臺北．城 -->
@@ -538,10 +578,18 @@
               <span class="px-2 py-0.5 rounded bg-slate-100">海報核心文案</span>
             </div>
           </div>
-          <a href="yes_composition/g8a-taipei-pleasure-trip.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-amber-700">
-            <span>開啟【光點．臺北．城】教學網頁</span>
-            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-          </a>
+          <div class="space-y-2 mt-4 pt-3 border-t border-slate-100">
+            <a href="yes_composition/g8a-taipei-pleasure-trip.html" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow transition-all group-hover:bg-amber-700">
+              <span>開啟【光點．臺北．城】教學網頁</span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openWorksheetModal('guangdian', 'student')" class="w-full py-1.5 px-3 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs flex items-center justify-center gap-1.5 transition-all cursor-pointer" title="查看或下載學用學習單PDF">
+                <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                <span>學用學習單（線上預覽與下載）</span>
+              </button>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -810,11 +858,19 @@
               <p class="text-xs text-slate-600 mt-1 leading-relaxed">
                 <strong>學習活動：</strong>能欣賞〈臺北的天空〉、〈臺北天晴〉、〈臺北調〉三首歌曲之美，並討論歌詞所承載的都會生活與人我意涵。
               </p>
-              <div class="mt-3">
+              <div class="mt-3 flex items-center gap-2 flex-wrap">
                 <a href="gesong_taipei/index.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all group">
                   <span>開啟【歌 SONG 臺北】教學網頁</span>
                   <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
+                <button type="button" onclick="openWorksheetModal('gesong', 'student')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 font-bold text-xs shadow-2xs hover:shadow transition-all cursor-pointer active:scale-95" title="歌 SONG 臺北 學習單線上預覽與下載">
+                  <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                  <span>該單元學習單（線上預覽與下載）</span>
+                </button>
+                <button type="button" onclick="openWorksheetModal('gesong', 'teacher')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 font-bold text-xs shadow-2xs hover:shadow transition-all cursor-pointer active:scale-95" title="教用學習單">
+                  <i class="fa-solid fa-graduation-cap text-rose-600 text-xs"></i>
+                  <span>教用</span>
+                </button>
               </div>
             </div>
           </div>
@@ -843,11 +899,15 @@
               <p class="text-xs text-slate-600 mt-1 leading-relaxed">
                 <strong>學習活動：</strong>1. 觀察臺北街頭的人文景觀；2. 體察臺北城中人我之間的緊密聯結；3. 運用擴寫技巧將抽象敘述具體化，詳述鮮明的臺北故事。
               </p>
-              <div class="mt-3">
+              <div class="mt-3 flex items-center gap-2 flex-wrap">
                 <a href="yes_composition/g8a-story-taipei-expansion.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-700 hover:bg-green-800 text-white font-bold text-xs shadow-xs hover:shadow transition-all group">
                   <span>開啟【故事．臺北．人】教學網頁</span>
                   <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
+                <button type="button" onclick="openWorksheetModal('story', 'student')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 font-bold text-xs shadow-2xs hover:shadow transition-all cursor-pointer active:scale-95" title="故事．臺北．人 學習單線上預覽與下載">
+                  <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                  <span>該單元學習單（線上預覽與下載）</span>
+                </button>
               </div>
             </div>
           </div>
@@ -876,11 +936,15 @@
               <p class="text-xs text-slate-600 mt-1 leading-relaxed">
                 <strong>學習活動：</strong>1. 針對以臺北為主題的文本，依據核心要點進行統整與比較；2. 運用圖表統整分析各類文本觀點；3. 清楚表達是否認同文章論述。
               </p>
-              <div class="mt-3">
+              <div class="mt-3 flex items-center gap-2 flex-wrap">
                 <a href="analyze_taipei/index.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all group">
                   <span>開啟【透析臺北】教學網頁</span>
                   <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
+                <button type="button" onclick="openWorksheetModal('analyze', 'student')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 font-bold text-xs shadow-2xs hover:shadow transition-all cursor-pointer active:scale-95" title="透析臺北 學習單線上預覽與下載">
+                  <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                  <span>該單元學習單（線上預覽與下載）</span>
+                </button>
               </div>
             </div>
           </div>
@@ -909,11 +973,19 @@
               <p class="text-xs text-slate-600 mt-1 leading-relaxed">
                 <strong>學習活動：</strong>1. 認識臺北十二行政區的特色；2. 欣賞並解析以臺北為主題的文學作品；3. 指導初階海報美編與版面構成技巧。
               </p>
-              <div class="mt-3">
+              <div class="mt-3 flex items-center gap-2 flex-wrap">
                 <a href="wenchin_taipei/index.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all group">
                   <span>開啟【臺北文青打卡趣】教學網頁</span>
                   <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
+                <button type="button" onclick="openWorksheetModal('wenchin', 'student')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 font-bold text-xs shadow-2xs hover:shadow transition-all cursor-pointer active:scale-95" title="臺北文青打卡趣 學習單線上預覽與下載">
+                  <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                  <span>該單元學習單（線上預覽與下載）</span>
+                </button>
+                <button type="button" onclick="openWorksheetModal('wenchin', 'teacher')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 font-bold text-xs shadow-2xs hover:shadow transition-all cursor-pointer active:scale-95" title="教用學習單">
+                  <i class="fa-solid fa-graduation-cap text-rose-600 text-xs"></i>
+                  <span>教用</span>
+                </button>
               </div>
             </div>
           </div>
@@ -942,11 +1014,15 @@
               <p class="text-xs text-slate-600 mt-1 leading-relaxed">
                 <strong>學習活動：</strong>1. 認識不同出處的臺北主題數位文本；2. 根據「權威和品質評鑑項目」辨別數位文本真偽與正確性；3. 檢索並選定感興趣的海報主題。
               </p>
-              <div class="mt-3">
+              <div class="mt-3 flex items-center gap-2 flex-wrap">
                 <a href="wangluo_taipei/index.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all group">
                   <span>開啟【網羅臺北】教學網頁</span>
                   <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
+                <button type="button" onclick="openWorksheetModal('wangluo', 'student')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 font-bold text-xs shadow-2xs hover:shadow transition-all cursor-pointer active:scale-95" title="網羅臺北 學習單線上預覽與下載">
+                  <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                  <span>該單元學習單（線上預覽與下載）</span>
+                </button>
               </div>
             </div>
           </div>
@@ -975,11 +1051,15 @@
               <p class="text-xs text-slate-600 mt-1 leading-relaxed">
                 <strong>學習活動：</strong>針對臺北相關主題文章，運用「聚焦」手法進行選取剪裁，凸顯文章核心主旨，呈現精鍊深刻的城市觀察心得。
               </p>
-              <div class="mt-3">
+              <div class="mt-3 flex items-center gap-2 flex-wrap">
                 <a href="yes_composition/g8a-taipei-pleasure-trip.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs hover:shadow transition-all group">
                   <span>開啟【光點．臺北．城】教學網頁</span>
                   <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
+                <button type="button" onclick="openWorksheetModal('guangdian', 'student')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 font-bold text-xs shadow-2xs hover:shadow transition-all cursor-pointer active:scale-95" title="光點．臺北．城 學習單線上預覽與下載">
+                  <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+                  <span>該單元學習單（線上預覽與下載）</span>
+                </button>
               </div>
             </div>
           </div>
@@ -1249,9 +1329,435 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeModal();
+        closeWorksheetModal();
+        closeAllWorksheetsModal();
       }
     });
+
+    // ==================== 八上六大單元學習單系統 (Worksheet Modal System) ====================
+    const unitWorksheetsData = {
+      "gesong": {
+        unitId: "01",
+        unitName: "八上・歌SONG臺北",
+        badgeClass: "bg-blue-100 text-blue-800",
+        title: "歌SONG臺北 全單元完整學習單",
+        desc: "全單元曲目合輯・歌詞挖洞・田字格注音與深層探究學習單",
+        student: "worksheets/worksheet-01-gesong-taipei-student.pdf",
+        teacher: "worksheets/worksheet-01-gesong-taipei-teacher.pdf",
+        songs: [
+          { id: 1, title: "台北天晴", artist: "嚴正嵐", student: "gesong_taipei/worksheet-taipei-sunny-student.pdf", teacher: "gesong_taipei/worksheet-taipei-sunny-teacher.pdf" },
+          { id: 2, title: "台北調", artist: "南西樂團", student: "gesong_taipei/worksheet-taipei-tune-student.pdf", teacher: "gesong_taipei/worksheet-taipei-tune-teacher.pdf" },
+          { id: 3, title: "台北的天空", artist: "王芷蕾", student: "gesong_taipei/worksheet-taipei-sky-student.pdf", teacher: "gesong_taipei/worksheet-taipei-sky-teacher.pdf" },
+          { id: 4, title: "台北直直撞", artist: "李英宏", student: "gesong_taipei/worksheet-taipei-crash-student.pdf", teacher: "gesong_taipei/worksheet-taipei-crash-teacher.pdf" },
+          { id: 5, title: "台北人", artist: "黃品源", student: "gesong_taipei/worksheet-taipei-person-student.pdf", teacher: "gesong_taipei/worksheet-taipei-person-teacher.pdf" }
+        ]
+      },
+      "story": {
+        unitId: "02",
+        unitName: "八上・故事．臺北．人",
+        badgeClass: "bg-emerald-100 text-emerald-800",
+        title: "故事．臺北．人 全單元完整學習單",
+        desc: "人物五感生動擴寫・街頭百態觀察・Before/After雙欄對照與課堂寫作任務學習單",
+        student: "worksheets/worksheet-02-story-taipei-student.pdf",
+        teacher: null
+      },
+      "analyze": {
+        unitId: "03",
+        unitName: "八上・透析臺北",
+        badgeClass: "bg-teal-100 text-teal-800",
+        title: "透析臺北 跨文本比較與觀點思辨學習單",
+        desc: "四大名家經典文本・五維度雷達分析・空間意象矩陣與觀點論辯學習單",
+        student: "worksheets/worksheet-03-analyze-taipei-student.pdf",
+        teacher: null
+      },
+      "wenchin": {
+        unitId: "04",
+        unitName: "八上・臺北文青打卡趣",
+        badgeClass: "bg-purple-100 text-purple-800",
+        title: "臺北文青打卡趣 全單元完整學習單",
+        desc: "十二行政區文化地景・地誌文學名作賞析・手繪空白地圖與美編排版學習單",
+        student: "worksheets/worksheet-04-wenchin-taipei-student.pdf",
+        teacher: "worksheets/worksheet-04-wenchin-taipei-teacher.pdf"
+      },
+      "wangluo": {
+        unitId: "05",
+        unitName: "八上・網羅臺北",
+        badgeClass: "bg-indigo-100 text-indigo-800",
+        title: "網羅臺北 數位媒體識讀探究任務單",
+        desc: "數位文本資料庫檢索・權威品質五大評鑑指標・求真辨偽案例擂台與專題探究學習單",
+        student: "worksheets/worksheet-05-wangluo-taipei-student.pdf",
+        teacher: null
+      },
+      "guangdian": {
+        unitId: "06",
+        unitName: "八上・光點．臺北．城",
+        badgeClass: "bg-amber-100 text-amber-800",
+        title: "光點．臺北．城 全單元完整學習單",
+        desc: "聚焦剪裁手法心法・城市微光特色觀察・臺北嬉遊記文案與海報核心總結學習單",
+        student: "worksheets/worksheet-06-guangdian-taipei-student.pdf",
+        teacher: null
+      }
+    };
+
+    function openWorksheetModal(unitKey, type) {
+      const data = unitWorksheetsData[unitKey];
+      if (!data) return;
+
+      const isStudent = (type === 'student');
+      const typeText = isStudent ? '學用學習單' : '教用學習單';
+      const iconClass = isStudent ? 'fa-solid fa-file-pen' : 'fa-solid fa-graduation-cap';
+      const iconBoxBg = isStudent ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800';
+      const typeTagBg = isStudent ? 'bg-amber-500 text-white' : 'bg-slate-800 text-white';
+
+      document.getElementById('wsModalBadge').textContent = data.unitName;
+      document.getElementById('wsModalBadge').className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold ' + data.badgeClass;
+
+      document.getElementById('wsModalTypeTag').textContent = typeText;
+      document.getElementById('wsModalTypeTag').className = 'px-2 py-0.5 rounded-full text-[10px] font-bold ' + typeTagBg;
+
+      document.getElementById('wsModalTitle').textContent = data.unitName + '・' + typeText;
+
+      const iconBox = document.getElementById('wsModalIconBox');
+      iconBox.className = 'w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-xs ' + iconBoxBg;
+      document.getElementById('wsModalIcon').className = iconClass;
+
+      const targetFile = data[type];
+      let listHtml = '';
+
+      if (targetFile) {
+        const cardBorder = isStudent ? 'border-amber-300 bg-amber-50/80' : 'border-rose-300 bg-rose-50/80';
+        const badgeBg = isStudent ? 'bg-amber-600 text-white' : 'bg-rose-600 text-white';
+        const previewBtnBg = isStudent ? 'border-amber-300 text-amber-900 hover:bg-amber-100/70' : 'border-rose-300 text-rose-900 hover:bg-rose-100/70';
+        const downloadBtnBg = isStudent ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-rose-600 hover:bg-rose-700 text-white';
+
+        listHtml += '<div class="p-3.5 rounded-2xl ' + cardBorder + ' border-2 shadow-2xs space-y-2">' +
+          '<div class="flex items-center justify-between">' +
+            '<div class="flex items-center gap-2">' +
+              '<span class="px-2 py-0.5 rounded-md text-[10px] font-black ' + badgeBg + '">推薦首選</span>' +
+              '<span class="font-bold text-slate-900 text-xs sm:text-sm">' + data.title + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<p class="text-[11px] text-slate-500 leading-tight">' + data.desc + '</p>' +
+          '<div class="flex items-center gap-2 pt-1">' +
+            '<a href="' + targetFile + '" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white ' + previewBtnBg + ' border font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">' +
+              '<i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>' +
+              '<span>線上預覽 (另開新分頁)</span>' +
+            '</a>' +
+            '<a href="' + targetFile + '" download class="py-1.5 px-3.5 rounded-xl ' + downloadBtnBg + ' font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all" title="下載 PDF">' +
+              '<i class="fa-solid fa-download text-[10px]"></i>' +
+              '<span>下載</span>' +
+            '</a>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // 如果有子項目（例如歌SONG臺北的 5 首單曲）
+      if (data.songs && data.songs.length > 0) {
+        listHtml += '<div class="pt-2">' +
+          '<div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">' +
+            '<span>單曲個別學習單 (' + data.songs.length + ' 首)</span>' +
+            '<span class="text-slate-400 font-normal text-[10px]">可獨立預覽或下載</span>' +
+          '</div>' +
+          '<div class="space-y-1.5">';
+
+        data.songs.forEach(function(song) {
+          const sFile = song[type];
+          listHtml += '<div class="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200 transition-all flex items-center justify-between gap-2">' +
+            '<div class="flex items-center gap-2.5 min-w-0">' +
+              '<span class="w-5 h-5 rounded-full bg-white text-slate-700 border border-slate-200 text-[10px] font-bold flex items-center justify-center shrink-0">' + song.id + '</span>' +
+              '<div class="min-w-0">' +
+                '<span class="font-bold text-slate-800 text-xs truncate block">' + song.title + '</span>' +
+                '<span class="text-[10px] text-slate-400 truncate block">' + song.artist + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="flex items-center gap-1.5 shrink-0">' +
+              '<a href="' + sFile + '" target="_blank" rel="noopener noreferrer" class="py-1 px-2.5 rounded-lg bg-white hover:bg-slate-200/70 border border-slate-200 text-slate-700 font-medium text-xs flex items-center gap-1 transition-all" title="線上預覽">' +
+                '<i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>' +
+                '<span>預覽</span>' +
+              '</a>' +
+              '<a href="' + sFile + '" download class="py-1 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-medium text-xs flex items-center gap-1 transition-all" title="下載 PDF">' +
+                '<i class="fa-solid fa-download text-[10px]"></i>' +
+                '<span>下載</span>' +
+              '</a>' +
+            '</div>' +
+          '</div>';
+        });
+
+        listHtml += '</div></div>';
+      }
+
+      document.getElementById('wsModalList').innerHTML = listHtml;
+      const modal = document.getElementById('worksheetModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeWorksheetModal() {
+      const modal = document.getElementById('worksheetModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // 全單元學習單一鍵總覽 Modal
+    function openAllWorksheetsModal() {
+      const modal = document.getElementById('allWorksheetsModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeAllWorksheetsModal() {
+      const modal = document.getElementById('allWorksheetsModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+      }
+    }
   </script>
+
+  <!-- ==================== 單元學習單 Modal (完全符合使用者規範與截圖樣式) ==================== -->
+  <div id="worksheetModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-100 relative space-y-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      
+      <!-- Close button -->
+      <button onclick="closeWorksheetModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer" aria-label="關閉">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 pr-8">
+        <div id="wsModalIconBox" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-xs bg-amber-100 text-amber-800">
+          <i id="wsModalIcon" class="fa-solid fa-file-pen"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span id="wsModalBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-100 text-sky-800">單元</span>
+            <span id="wsModalTypeTag" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white">學用學習單</span>
+          </div>
+          <h3 id="wsModalTitle" class="text-lg sm:text-xl font-serif font-bold text-slate-900 mt-1 truncate">學習單線上預覽與下載</h3>
+        </div>
+      </div>
+
+      <!-- Hint banner -->
+      <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between gap-2">
+        <span class="flex items-center gap-1.5">
+          <i class="fa-regular fa-lightbulb text-amber-500"></i>
+          點擊「線上預覽」另開分頁檢視，點擊「下載」儲存 PDF。
+        </span>
+        <span class="text-[10px] text-slate-400 font-mono shrink-0">PDF 格式</span>
+      </div>
+
+      <!-- Worksheets Container -->
+      <div id="wsModalList" class="space-y-2.5">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">閱思龍門專用教材</span>
+        <button onclick="closeWorksheetModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer">
+          關閉視窗
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 全六大單元學習單一鍵總覽 Modal ==================== -->
+  <div id="allWorksheetsModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl border border-slate-100 relative space-y-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      
+      <!-- Close button -->
+      <button onclick="closeAllWorksheetsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer" aria-label="關閉">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 pr-8">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-xs bg-amber-500 text-white">
+          <i class="fa-solid fa-folder-open"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800">八年級上學期</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-white">全套學習單</span>
+          </div>
+          <h3 class="text-lg sm:text-xl font-serif font-bold text-slate-900 mt-1">
+            八上【探索臺北】六大單元學習單總覽
+          </h3>
+        </div>
+      </div>
+
+      <!-- Hint banner -->
+      <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between gap-2">
+        <span class="flex items-center gap-1.5">
+          <i class="fa-regular fa-lightbulb text-amber-500"></i>
+          點擊「線上預覽」立即於新分頁開啟，點擊「下載」儲存各單元 PDF 檔案。
+        </span>
+        <span class="text-[10px] text-slate-400 font-mono shrink-0">6 大單元全收錄</span>
+      </div>
+
+      <!-- 6 大單元清單 -->
+      <div class="space-y-3">
+        
+        <!-- 01 歌 SONG 臺北 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-blue-300 transition-all space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+              <span class="font-bold text-slate-900 text-sm">歌 SONG 臺北 全單元學習單</span>
+            </div>
+            <span class="text-[11px] text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full font-semibold">音樂地誌</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-tight">全單元曲目合輯・歌詞挖洞・田字格注音與深層探究學習單</p>
+          <div class="flex items-center gap-2 pt-1">
+            <a href="worksheets/worksheet-01-gesong-taipei-student.pdf" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 border border-amber-300 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">
+              <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+              <span>學用線上預覽</span>
+            </a>
+            <a href="worksheets/worksheet-01-gesong-taipei-student.pdf" download class="py-1.5 px-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all" title="下載學用PDF">
+              <i class="fa-solid fa-download text-xs"></i>
+              <span>學用下載</span>
+            </a>
+            <a href="worksheets/worksheet-01-gesong-taipei-teacher.pdf" target="_blank" rel="noopener noreferrer" class="py-1.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-800 font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all" title="教用預覽">
+              <i class="fa-solid fa-graduation-cap text-rose-600 text-xs"></i>
+              <span>教用版</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 02 故事．臺北．人 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-emerald-300 transition-all space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+              <span class="font-bold text-slate-900 text-sm">故事．臺北．人 全單元學習單</span>
+            </div>
+            <span class="text-[11px] text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full font-semibold">人物擴寫</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-tight">人物五感生動擴寫・街頭百態觀察・Before/After雙欄對照與課堂寫作任務</p>
+          <div class="flex items-center gap-2 pt-1">
+            <a href="worksheets/worksheet-02-story-taipei-student.pdf" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 border border-amber-300 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              <span>線上預覽 (另開新分頁)</span>
+            </a>
+            <a href="worksheets/worksheet-02-story-taipei-student.pdf" download class="py-1.5 px-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all" title="下載 PDF">
+              <i class="fa-solid fa-download text-[10px]"></i>
+              <span>下載 PDF</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 03 透析臺北 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-teal-300 transition-all space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">3</span>
+              <span class="font-bold text-slate-900 text-sm">透析臺北 跨文本比較與觀點思辨學習單</span>
+            </div>
+            <span class="text-[11px] text-teal-700 bg-teal-100 px-2 py-0.5 rounded-full font-semibold">多元文本</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-tight">四大名家經典文本・五維度雷達分析・空間意象矩陣與觀點論辯學習單</p>
+          <div class="flex items-center gap-2 pt-1">
+            <a href="worksheets/worksheet-03-analyze-taipei-student.pdf" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 border border-amber-300 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              <span>線上預覽 (另開新分頁)</span>
+            </a>
+            <a href="worksheets/worksheet-03-analyze-taipei-student.pdf" download class="py-1.5 px-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all" title="下載 PDF">
+              <i class="fa-solid fa-download text-[10px]"></i>
+              <span>下載 PDF</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 04 臺北文青打卡趣 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-purple-300 transition-all space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-purple-600 text-white text-xs font-bold flex items-center justify-center">4</span>
+              <span class="font-bold text-slate-900 text-sm">臺北文青打卡趣 全單元學習單</span>
+            </div>
+            <span class="text-[11px] text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full font-semibold">地誌文學</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-tight">十二行政區文化地景・地誌文學名作賞析・手繪空白地圖與美編排版實作</p>
+          <div class="flex items-center gap-2 pt-1">
+            <a href="worksheets/worksheet-04-wenchin-taipei-student.pdf" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 border border-amber-300 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">
+              <i class="fa-solid fa-file-pen text-amber-600 text-xs"></i>
+              <span>學用線上預覽</span>
+            </a>
+            <a href="worksheets/worksheet-04-wenchin-taipei-student.pdf" download class="py-1.5 px-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all" title="下載學用PDF">
+              <i class="fa-solid fa-download text-xs"></i>
+              <span>學用下載</span>
+            </a>
+            <a href="worksheets/worksheet-04-wenchin-taipei-teacher.pdf" target="_blank" rel="noopener noreferrer" class="py-1.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-800 font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all" title="教用預覽">
+              <i class="fa-solid fa-graduation-cap text-rose-600 text-xs"></i>
+              <span>教用版</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 05 網羅臺北 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-indigo-300 transition-all space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">5</span>
+              <span class="font-bold text-slate-900 text-sm">網羅臺北 數位媒體識讀探究任務單</span>
+            </div>
+            <span class="text-[11px] text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full font-semibold">媒體素養</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-tight">數位文本資料庫檢索・權威品質五大評鑑指標・求真辨偽案例擂台與專題確立</p>
+          <div class="flex items-center gap-2 pt-1">
+            <a href="worksheets/worksheet-05-wangluo-taipei-student.pdf" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 border border-amber-300 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              <span>線上預覽 (另開新分頁)</span>
+            </a>
+            <a href="worksheets/worksheet-05-wangluo-taipei-student.pdf" download class="py-1.5 px-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all" title="下載 PDF">
+              <i class="fa-solid fa-download text-[10px]"></i>
+              <span>下載 PDF</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 06 光點．臺北．城 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-300 transition-all space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center">6</span>
+              <span class="font-bold text-slate-900 text-sm">光點．臺北．城 全單元學習單</span>
+            </div>
+            <span class="text-[11px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full font-semibold">聚焦剪裁</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-tight">聚焦剪裁手法心法・城市微光特色觀察・臺北嬉遊記文案與海報核心總結</p>
+          <div class="flex items-center gap-2 pt-1">
+            <a href="worksheets/worksheet-06-guangdian-taipei-student.pdf" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white hover:bg-amber-50 border border-amber-300 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              <span>線上預覽 (另開新分頁)</span>
+            </a>
+            <a href="worksheets/worksheet-06-guangdian-taipei-student.pdf" download class="py-1.5 px-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all" title="下載 PDF">
+              <i class="fa-solid fa-download text-[10px]"></i>
+              <span>下載 PDF</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">閱思龍門專用教材</span>
+        <button onclick="closeAllWorksheetsModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer">
+          關閉視窗
+        </button>
+      </div>
+    </div>
+  </div>
+
 
 </body>
 </html>

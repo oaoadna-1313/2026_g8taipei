@@ -1,9 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>臺北文青打卡趣 —— 穿梭行政區與文學地誌的文青漫遊</title>
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -178,6 +181,18 @@
           <i data-lucide="award" class="w-4 h-4 text-amber-500"></i>素養挑戰
         </a>
       </nav>
+
+      <!-- 學習單快捷按鈕 -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" onclick="openWorksheetModal('student')" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-600 text-white shadow-sm hover:shadow transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-95" title="查看或下載學用學習單PDF">
+          <i class="fa-solid fa-file-pen text-amber-100"></i>
+          <span>學用學習單</span>
+        </button>
+        <button type="button" onclick="openWorksheetModal('teacher')" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 hover:bg-slate-900 text-white shadow-sm hover:shadow transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-95" title="查看或下載教用學習單PDF">
+          <i class="fa-solid fa-graduation-cap text-rose-300"></i>
+          <span>教用版</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -2198,6 +2213,119 @@
 
     // Default select Datong on load
     selectDistrict('datong');
+
+    // ================= 學習單 Modal 系統 =================
+    function openWorksheetModal(type) {
+      const isStudent = (type === 'student');
+      const typeText = isStudent ? '學用學習單' : '教用學習單';
+      const iconClass = isStudent ? 'fa-solid fa-file-pen' : 'fa-solid fa-graduation-cap';
+      const iconBoxBg = isStudent ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800';
+      const typeTagBg = isStudent ? 'bg-amber-500 text-white' : 'bg-slate-800 text-white';
+      const cardBorder = isStudent ? 'border-amber-300 bg-amber-50/80' : 'border-rose-300 bg-rose-50/80';
+      const badgeBg = isStudent ? 'bg-amber-600 text-white' : 'bg-rose-600 text-white';
+      const previewBtnBg = isStudent ? 'border-amber-300 text-amber-900 hover:bg-amber-100/70' : 'border-rose-300 text-rose-900 hover:bg-rose-100/70';
+      const downloadBtnBg = isStudent ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-rose-600 hover:bg-rose-700 text-white';
+      const pdfFile = isStudent ? 'worksheet-student.pdf' : 'worksheet-teacher.pdf';
+      const downloadName = isStudent ? '[八上閱思龍門]04臺北文青打卡趣(學用學習單).pdf' : '[八上閱思龍門]04臺北文青打卡趣(教用學習單).pdf';
+
+      document.getElementById('wsModalTypeTag').textContent = typeText;
+      document.getElementById('wsModalTypeTag').className = 'px-2 py-0.5 rounded-full text-[10px] font-bold ' + typeTagBg;
+
+      document.getElementById('wsModalTitle').textContent = '八上・臺北文青打卡趣・' + typeText;
+
+      const iconBox = document.getElementById('wsModalIconBox');
+      iconBox.className = 'w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-xs ' + iconBoxBg;
+      document.getElementById('wsModalIcon').className = iconClass;
+
+      let listHtml = '<div class="p-3.5 rounded-2xl ' + cardBorder + ' border-2 shadow-2xs space-y-2">' +
+        '<div class="flex items-center justify-between">' +
+          '<div class="flex items-center gap-2">' +
+            '<span class="px-2 py-0.5 rounded-md text-[10px] font-black ' + badgeBg + '">推薦首選</span>' +
+            '<span class="font-bold text-slate-900 text-xs sm:text-sm">臺北文青打卡趣 全單元完整學習單</span>' +
+          '</div>' +
+        '</div>' +
+        '<p class="text-[11px] text-slate-500 leading-tight">十二行政區文化地景・地誌文學名作賞析・手繪空白地圖與美編排版實作學習單</p>' +
+        '<div class="flex items-center gap-2 pt-1">' +
+          '<a href="' + pdfFile + '" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-xl bg-white ' + previewBtnBg + ' border font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all">' +
+            '<i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>' +
+            '<span>線上預覽 (另開新分頁)</span>' +
+          '</a>' +
+          '<a href="' + pdfFile + '" download="' + downloadName + '" class="py-1.5 px-3.5 rounded-xl ' + downloadBtnBg + ' font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all" title="下載 PDF">' +
+            '<i class="fa-solid fa-download text-[10px]"></i>' +
+            '<span>下載</span>' +
+          '</a>' +
+        '</div>' +
+      '</div>';
+
+      document.getElementById('wsModalList').innerHTML = listHtml;
+      const modal = document.getElementById('worksheetModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeWorksheetModal() {
+      const modal = document.getElementById('worksheetModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeWorksheetModal();
+      }
+    });
   </script>
+
+  <!-- ==================== 學習單 Modal (完全符合使用者圖片樣式) ==================== -->
+  <div id="worksheetModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-100 relative space-y-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      
+      <!-- Close button -->
+      <button onclick="closeWorksheetModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer" aria-label="關閉">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 pr-8">
+        <div id="wsModalIconBox" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-xs bg-amber-100 text-amber-800">
+          <i id="wsModalIcon" class="fa-solid fa-file-pen"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800">八上・臺北文青打卡趣</span>
+            <span id="wsModalTypeTag" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white">學用學習單</span>
+          </div>
+          <h3 id="wsModalTitle" class="text-lg sm:text-xl font-serif font-bold text-slate-900 mt-1 truncate">八上・臺北文青打卡趣・學用學習單</h3>
+        </div>
+      </div>
+
+      <!-- Hint banner -->
+      <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between gap-2">
+        <span class="flex items-center gap-1.5">
+          <i class="fa-regular fa-lightbulb text-amber-500"></i>
+          點擊「線上預覽」另開分頁檢視，點擊「下載」儲存 PDF。
+        </span>
+        <span class="text-[10px] text-slate-400 font-mono shrink-0">PDF 格式</span>
+      </div>
+
+      <!-- Worksheets Container -->
+      <div id="wsModalList" class="space-y-2.5">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">閱思龍門專用教材</span>
+        <button onclick="closeWorksheetModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer">
+          關閉視窗
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
